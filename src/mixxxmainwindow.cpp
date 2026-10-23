@@ -39,6 +39,11 @@
 #include "control/controlindicatortimer.h"
 #include "control/controlproxy.h"
 #include "control/controlpushbutton.h"
+#include "effects/backends/effectsbackendmanager.h"
+#include "effects/effectchain.h"
+#include "effects/effectslot.h"
+#include "effects/effectsmanager.h"
+#include "effects/visibleeffectslist.h"
 #include "library/library.h"
 #include "library/library_decl.h"
 #include "library/library_prefs.h"
@@ -755,6 +760,59 @@ void MixxxMainWindow::createSkinSettingsControls() {
     pLoadedEffect->connectValueChanged(this, [pFxPickerRaw](double) {
         pFxPickerRaw->set(0.0);
     });
+
+    // Beat FX selection by effect id for the first effect of EffectUnit1.
+    // [Skin],fx_select_N loads the Nth effect of
+    // VisibleEffectsList::beatFxEffectIds(), and [Skin],fx_current is the
+    // number of the loaded one (0 if none or another effect). Unlike
+    // loaded_effect this does not depend on the order of the visible effects
+    // list in the preferences.
+    std::shared_ptr<EffectsManager> pEffectsManager = m_pCoreServices->getEffectsManager();
+    EffectChainPointer pChain = pEffectsManager->getStandardEffectChain(0);
+    EffectSlotPointer pSlot = pChain ? pChain->getEffectSlot(0) : EffectSlotPointer();
+    if (!pSlot) {
+        return;
+    }
+    const QStringList& beatFxIds = VisibleEffectsList::beatFxEffectIds();
+
+    auto pFxCurrent = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_current")));
+    ControlObject* pFxCurrentRaw = pFxCurrent.get();
+    m_skinSettingsControls.push_back(std::move(pFxCurrent));
+    // Weak references, the effect slots are owned by the EffectsManager
+    const QWeakPointer<EffectSlot> pWeakSlot = pSlot;
+    const std::weak_ptr<EffectsManager> pWeakEffectsManager = pEffectsManager;
+    const auto updateFxCurrent = [pWeakSlot, pFxCurrentRaw, beatFxIds]() {
+        const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
+        const EffectManifestPointer pManifest = pSlot ? pSlot->getManifest() : nullptr;
+        pFxCurrentRaw->set(pManifest ? beatFxIds.indexOf(pManifest->id()) + 1 : 0);
+    };
+    connect(pSlot.data(), &EffectSlot::effectChanged, this, updateFxCurrent);
+    updateFxCurrent();
+
+    for (int i = 0; i < beatFxIds.size(); ++i) {
+        auto pSelect = std::make_unique<ControlPushButton>(
+                ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_select_%1").arg(i + 1)));
+        const QString id = beatFxIds.at(i);
+        connect(pSelect.get(),
+                &ControlObject::valueChanged,
+                this,
+                [pWeakEffectsManager, pWeakSlot, pFxPickerRaw, id](double value) {
+                    const auto pEffectsManager = pWeakEffectsManager.lock();
+                    const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
+                    if (value <= 0 || !pEffectsManager || !pSlot) {
+                        return;
+                    }
+                    const EffectManifestPointer pManifest =
+                            pEffectsManager->getBackendManager()->getManifest(
+                                    id, EffectBackendType::BuiltIn);
+                    if (pManifest) {
+                        pSlot->loadEffectWithDefaults(pManifest);
+                    }
+                    pFxPickerRaw->set(0.0);
+                });
+        m_skinSettingsControls.push_back(std::move(pSelect));
+    }
 }
 
 QDialog::DialogCode MixxxMainWindow::soundDeviceErrorDlg(

@@ -154,7 +154,7 @@
                       <ConnectValueToWidget>false</ConnectValueToWidget>
                     </Connection>
                     <Connection>
-                      <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+                      <ConfigKey>[Skin],fx_current</ConfigKey>
                       <ConnectValueFromWidget>false</ConnectValueFromWidget>
                     </Connection>
                   </PushButton>

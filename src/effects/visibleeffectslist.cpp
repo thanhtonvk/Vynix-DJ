@@ -47,6 +47,24 @@ const EffectManifestPointer VisibleEffectsList::previous(
     return m_list.at(index);
 }
 
+// static
+const QStringList& VisibleEffectsList::beatFxEffectIds() {
+    static const QStringList kBeatFxIds = {
+            QStringLiteral("org.mixxx.effects.echo"),
+            QStringLiteral("org.mixxx.effects.reverb"),
+            QStringLiteral("org.mixxx.effects.flanger"),
+            QStringLiteral("org.mixxx.effects.phaser"),
+            QStringLiteral("org.mixxx.effects.filter"),
+            QStringLiteral("org.mixxx.effects.tremolo"),
+            QStringLiteral("org.mixxx.effects.autopan"),
+            QStringLiteral("org.mixxx.effects.glitch"),
+            QStringLiteral("org.mixxx.effects.pitchshift"),
+            QStringLiteral("org.mixxx.effects.bitcrusher"),
+            QStringLiteral("org.mixxx.effects.whitenoise"),
+    };
+    return kBeatFxIds;
+}
+
 void VisibleEffectsList::readEffectsXml(
         const QDomDocument& doc,
         EffectsBackendManagerPointer pBackendManager) {
@@ -59,25 +77,11 @@ void VisibleEffectsList::readEffectsXml(
             pBackendManager,
             EffectXml::kHiddenEffects);
 
-#ifdef __ANDROID__
     // First start: show a compact, DJ-hardware-like Beat FX set instead of
     // every built-in effect. The others can be unhidden in the preferences.
     if (visibleEffects.isEmpty() && hiddenEffects.isEmpty()) {
-        const QStringList kBeatFxIds = {
-                QStringLiteral("org.mixxx.effects.echo"),
-                QStringLiteral("org.mixxx.effects.reverb"),
-                QStringLiteral("org.mixxx.effects.flanger"),
-                QStringLiteral("org.mixxx.effects.phaser"),
-                QStringLiteral("org.mixxx.effects.filter"),
-                QStringLiteral("org.mixxx.effects.tremolo"),
-                QStringLiteral("org.mixxx.effects.autopan"),
-                QStringLiteral("org.mixxx.effects.glitch"),
-                QStringLiteral("org.mixxx.effects.pitchshift"),
-                QStringLiteral("org.mixxx.effects.bitcrusher"),
-                QStringLiteral("org.mixxx.effects.whitenoise"),
-        };
         QList<EffectManifestPointer> beatFx;
-        for (const QString& id : kBeatFxIds) {
+        for (const QString& id : beatFxEffectIds()) {
             EffectManifestPointer pManifest =
                     pBackendManager->getManifest(id, EffectBackendType::BuiltIn);
             if (pManifest) {
@@ -89,7 +93,6 @@ void VisibleEffectsList::readEffectsXml(
             return;
         }
     }
-#endif
 
     // New effects will remain hidden since they are neither in the VisibleEffects
     // nor in the newly introduced HiddenEffects list.

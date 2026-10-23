@@ -2,6 +2,7 @@
 
 #include <QList>
 #include <QObject>
+#include <QStringList>
 
 #include "effects/defs.h"
 
@@ -11,6 +12,10 @@ class VisibleEffectsList : public QObject {
     Q_OBJECT
 
   public:
+    /// Ids of the built-in effects offered as Beat FX by touch skins, in the
+    /// order they are shown. Also the default visible effects on first start.
+    static const QStringList& beatFxEffectIds();
+
     const QList<EffectManifestPointer>& getList() const {
         return m_list;
     }

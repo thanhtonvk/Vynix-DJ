@@ -1,9 +1,9 @@
 <!--
   Full screen Beat FX picker (Denon DJ SC Live style), shown instead of the tab
   pages while [Skin],fx_picker is set. Opened from the current effect button in
-  effects.xml; loading an effect or Close hides it again. Each tile loads the
-  visible effect at its position (loaded_effect is 1-based); the order matches
-  the default visible effects list on Android (src/effects/visibleeffectslist.cpp).
+  effects.xml; loading an effect or Close hides it again. Tile N uses
+  [Skin],fx_select_N and [Skin],fx_current, which refer to the Nth effect of
+  VisibleEffectsList::beatFxEffectIds() (src/effects/visibleeffectslist.cpp).
 -->
 <Template>
   <WidgetGroup>
@@ -28,9 +28,14 @@
             <State><Number>0</Number><Text>Echo</Text></State>
             <State><Number>1</Number><Text>Echo</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_1</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>1</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -40,9 +45,14 @@
             <State><Number>0</Number><Text>Reverb</Text></State>
             <State><Number>1</Number><Text>Reverb</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_2</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>2</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -52,9 +62,14 @@
             <State><Number>0</Number><Text>Flanger</Text></State>
             <State><Number>1</Number><Text>Flanger</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_3</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>3</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -64,9 +79,14 @@
             <State><Number>0</Number><Text>Phaser</Text></State>
             <State><Number>1</Number><Text>Phaser</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_4</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>4</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
         </Children>
@@ -83,9 +103,14 @@
             <State><Number>0</Number><Text>Filter</Text></State>
             <State><Number>1</Number><Text>Filter</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_5</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>5</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -95,9 +120,14 @@
             <State><Number>0</Number><Text>Tremolo / Trans</Text></State>
             <State><Number>1</Number><Text>Tremolo / Trans</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_6</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>6</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -107,9 +137,14 @@
             <State><Number>0</Number><Text>Auto Pan</Text></State>
             <State><Number>1</Number><Text>Auto Pan</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_7</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>7</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -119,9 +154,14 @@
             <State><Number>0</Number><Text>Glitch / Roll</Text></State>
             <State><Number>1</Number><Text>Glitch / Roll</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_8</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>8</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
         </Children>
@@ -138,9 +178,14 @@
             <State><Number>0</Number><Text>Pitch Shift</Text></State>
             <State><Number>1</Number><Text>Pitch Shift</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_9</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>9</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -150,9 +195,14 @@
             <State><Number>0</Number><Text>Bitcrusher</Text></State>
             <State><Number>1</Number><Text>Bitcrusher</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_10</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>10</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
@@ -162,9 +212,14 @@
             <State><Number>0</Number><Text>White Noise</Text></State>
             <State><Number>1</Number><Text>White Noise</Text></State>
             <Connection>
-              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <ConfigKey>[Skin],fx_select_11</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],fx_current</ConfigKey>
               <Transform><IsEqual>11</IsEqual></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
           </PushButton>
           <PushButton>
