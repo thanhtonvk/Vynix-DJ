@@ -71,7 +71,9 @@
 #include <X11/XKBlib.h>
 #endif
 #if defined(Q_OS_ANDROID)
-#include <QtCore/private/qandroidextras_p.h>
+#include <android/api-level.h>
+
+#include <QJniObject>
 #endif
 
 #if defined(Q_OS_LINUX) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -656,37 +658,15 @@ void CoreServices::initialize(QApplication* pApp) {
             dir.mkpath(".");
         }
 #elif defined(Q_OS_ANDROID)
-        // if(QOperatingSystemVersion::current() <
-        // QOperatingSystemVersion(QOperatingSystemVersion::Android, 11)) {
-        //     qDebug() << "it is less then Android 11 - ALL FILES permission
-        //     isn't possible!";
-        // }
+        // Storage access is requested by StoragePermissionActivity before the
+        // app starts. Requesting it here would leave Mixxx initializing in the
+        // background while the system settings screen is shown.
         QString fd;
-        jboolean value = QJniObject::callStaticMethod<jboolean>(
-                "android/os/Environment", "isExternalStorageManager");
-        if (value == false) {
-            qDebug() << "requesting ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION";
-            QJniObject ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION =
-                    QJniObject::getStaticObjectField(
-                            "android/provider/Settings",
-                            "ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION",
-                            "Ljava/lang/String;");
-            QJniObject intent("android/content/Intent",
-                    "(Ljava/lang/String;)V",
-                    ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION.object());
-            QJniObject jniPath = QJniObject::fromString(
-                    QStringLiteral("package:%1").arg(ANDROID_PACKAGE_NAME));
-            QJniObject jniUri =
-                    QJniObject::callStaticObjectMethod("android/net/Uri",
-                            "parse",
-                            "(Ljava/lang/String;)Landroid/net/Uri;",
-                            jniPath.object<jstring>());
-            QJniObject jniResult = intent.callObjectMethod("setData",
-                    "(Landroid/net/Uri;)Landroid/content/Intent;",
-                    jniUri.object<jobject>());
-            QtAndroidPrivate::startActivity(intent, 0);
-        } else {
-            qDebug() << "Got ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION";
+        if (android_get_device_api_level() >= 30 &&
+                !QJniObject::callStaticMethod<jboolean>(
+                        "android/os/Environment", "isExternalStorageManager")) {
+            qWarning() << "No access to external storage, the music library "
+                          "will be empty until it is granted";
         }
         fd = "/storage/emulated/0/Music/";
         QDir dir = fd;

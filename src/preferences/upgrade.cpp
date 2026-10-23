@@ -337,24 +337,6 @@ UserSettingsPointer Upgrade::versionUpgrade(const QString& settingsPath) {
             configVersion = config->getValueString(ConfigKey("[Config]","Version"));
         }
         else {
-#elif defined(__WINDOWS__)
-        qDebug() << "Config version is empty, trying to read pre-1.12.0 config";
-        // Try to read the config from the pre-1.12.0 final directory on Windows (we moved it in 1.12.0 final)
-        QScopedPointer<QFile> oldConfigFile(new QFile(QDir::homePath().append("/Local Settings/Application Data/Mixxx/mixxx.cfg")));
-        if (oldConfigFile->exists() && ! CmdlineArgs::Instance().getSettingsPathSet()) {
-            qDebug() << "Found pre-1.12.0 config for Windows";
-            // Note: We changed MIXXX_SETTINGS_PATH in 1.12.0 final on Windows
-            // so it must be hardcoded to "Local Settings/Application
-            // Data/Mixxx/" here for legacy.
-            config = UserSettingsPointer(new ConfigObject<ConfigValue>(
-                QDir::homePath().append("/Local Settings/Application Data/Mixxx/mixxx.cfg")));
-            // Just to be sure all files like logs and soundconfig go with mixxx.cfg
-            // TODO(XXX) Trailing slash not needed anymore as we switches from String::append
-            // to QDir::filePath elsewhere in the code. This is candidate for removal.
-            CmdlineArgs::Instance().setSettingsPath(QDir::homePath().append("/Local Settings/Application Data/Mixxx/"));
-            configVersion = config->getValueString(ConfigKey("[Config]","Version"));
-        }
-        else {
 #endif
             // This must have been the first run... right? :)
 #ifdef MIXXX_USE_QML
@@ -374,8 +356,6 @@ UserSettingsPointer Upgrade::versionUpgrade(const QString& settingsPath) {
             m_bFirstRun = true;
             return config;
 #ifdef __APPLE__
-        }
-#elif defined(__WINDOWS__)
         }
 #endif
     }

@@ -1,0 +1,80 @@
+name: Desktop builds
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    name: Windows x64
+    runs-on: windows-2025-vs2026
+    env:
+      BUILDENV_BASEPATH: C:\buildenv
+      BUILDENV_RELEASE: TRUE
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up cmake
+        uses: jwlawson/actions-setup-cmake@v2.2
+        with:
+          cmake-version: "3.30.x"
+
+      - name: Set up MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Set up build environment
+        run: tools/windows_buildenv.bat setup
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Configure
+        working-directory: build
+        run: >-
+          cmake
+          -DCMAKE_BUILD_TYPE=Release
+          -DVCPKG_TARGET_TRIPLET=x64-windows-release
+          -DBULK=ON -DHID=ON -DHSS1394=ON -DLOCALECOMPARE=ON
+          -DMAD=ON -DMEDIAFOUNDATION=ON -DMODPLUG=ON -DWAVPACK=ON
+          -DQT6=ON -DQML=ON -DKEYFINDER=ON -DLILV=ON -DOPUS=ON
+          -DQTKEYCHAIN=ON -DVINYLCONTROL=ON -DBATTERY=ON -DBROADCAST=ON
+          -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF
+          ..
+        env:
+          CC: cl
+          CXX: cl
+
+      - name: Build
+        working-directory: build
+        run: cmake --build . --config Release
+        env:
+          CC: cl
+          CXX: cl
+
+      - name: Package
+        working-directory: build
+        shell: pwsh
+        run: |
+          cpack -G ZIP -V
+          $zip = Get-ChildItem *.zip | Select-Object -First 1
+          Rename-Item $zip.FullName "VynixDJ-${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}-windows-x64.zip"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: VynixDJ-windows-x64
+          path: build/VynixDJ-*-windows-x64.zip
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/VynixDJ-*-windows-x64.zip
+          prerelease: true
