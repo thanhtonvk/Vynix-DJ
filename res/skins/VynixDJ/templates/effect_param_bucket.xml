@@ -1,0 +1,39 @@
+<!--
+  One bucket button in the BeatFX beat-division picker.
+  Variables:
+    EffectGroup: parent slot group (e.g. [EffectRack1_EffectUnit1_Effect1])
+    param: 1-indexed knob parameter slot
+    Label: bucket text (e.g. "¼")
+    Value: period in beats written on press, and the value the highlight
+           binding compares against.
+
+  Bound to parameter{param}_beat_period, the fork's period-in-beats alias of
+  parameter{param}. It converts to the effect's native encoding (Tremolo's
+  rate is cycles per beat, Echo's delay_time and Phaser's lfo_period are
+  already periods, and their quantizers need 0 to select the minimum) and
+  mirrors the value the effect actually clamped to, so the highlight tells
+  the truth when an effect doesn't support a bucket. The DDJ-400 / FLX2 /
+  FLX4 Beat left/right buttons step the same control.
+-->
+<Template>
+  <PushButton>
+    <ObjectName>BeatFX_BucketButton</ObjectName>
+    <Size>0me,32f</Size>
+    <NumberStates>2</NumberStates>
+    <State>
+      <Number>0</Number>
+      <Text><Variable name="Label"/></Text>
+    </State>
+    <State>
+      <Number>1</Number>
+      <Text><Variable name="Label"/></Text>
+    </State>
+    <Connection>
+      <ConfigKey><Variable name="EffectGroup"/>,parameter<Variable name="param"/>_beat_period</ConfigKey>
+      <EmitOnDownPress>true</EmitOnDownPress>
+      <Transform>
+        <IsEqual><Variable name="Value"/></IsEqual>
+      </Transform>
+    </Connection>
+  </PushButton>
+</Template>

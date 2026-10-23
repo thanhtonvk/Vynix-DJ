@@ -1,0 +1,188 @@
+<!--
+  Full screen Beat FX picker (Denon DJ SC Live style), shown instead of the tab
+  pages while [Skin],fx_picker is set. Opened from the current effect button in
+  effects.xml; loading an effect or Close hides it again. Each tile loads the
+  visible effect at its position (loaded_effect is 1-based); the order matches
+  the default visible effects list on Android (src/effects/visibleeffectslist.cpp).
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>FxPicker</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+      <Label>
+        <ObjectName>FxPicker_Header</ObjectName>
+        <Text>Select Beat FX</Text>
+        <Size>0me,48f</Size>
+      </Label>
+      <WidgetGroup>
+        <ObjectName>FxPicker_Row</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Echo</Text></State>
+            <State><Number>1</Number><Text>Echo</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>1</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Reverb</Text></State>
+            <State><Number>1</Number><Text>Reverb</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>2</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Flanger</Text></State>
+            <State><Number>1</Number><Text>Flanger</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>3</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Phaser</Text></State>
+            <State><Number>1</Number><Text>Phaser</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>4</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>FxPicker_Row</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Filter</Text></State>
+            <State><Number>1</Number><Text>Filter</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>5</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Tremolo / Trans</Text></State>
+            <State><Number>1</Number><Text>Tremolo / Trans</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>6</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Auto Pan</Text></State>
+            <State><Number>1</Number><Text>Auto Pan</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>7</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Glitch / Roll</Text></State>
+            <State><Number>1</Number><Text>Glitch / Roll</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>8</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>FxPicker_Row</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Pitch Shift</Text></State>
+            <State><Number>1</Number><Text>Pitch Shift</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>9</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Bitcrusher</Text></State>
+            <State><Number>1</Number><Text>Bitcrusher</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>10</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Tile</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>White Noise</Text></State>
+            <State><Number>1</Number><Text>White Noise</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit1_Effect1],loaded_effect</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+              <Transform><IsEqual>11</IsEqual></Transform>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>FxPicker_Close</ObjectName>
+            <Size>0me,0me</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Close</Text></State>
+            <State><Number>1</Number><Text>Close</Text></State>
+            <Connection>
+              <ConfigKey>[Skin],fx_picker</ConfigKey>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+    </Children>
+    <Connection>
+      <ConfigKey>[Skin],fx_picker</ConfigKey>
+      <BindProperty>visible</BindProperty>
+    </Connection>
+  </WidgetGroup>
+</Template>

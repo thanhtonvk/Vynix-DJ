@@ -1,0 +1,113 @@
+<!--
+  One Beats-typed parameter row (parameter{N}_units == 1) in the BeatFX
+  parameter list: label over a bucket picker, two rows of three. These come first
+  in the list so the parameter the controller's Beat buttons step is on top.
+  Every other knob parameter is rendered by effect_knob_param_row.xml and
+  button parameters (Quantize, Triplets, ...) by effect_button_param_row.xml.
+
+  Bucket values are periods in beats; see effect_param_bucket.xml.
+
+  The row collapses unless the loaded effect's slot N is Beats-typed.
+
+  See src/effects/effectknobparameterslot.cpp for the controls that
+  expose parameter{N}_units and parameter{N}_beat_period.
+-->
+<Template>
+  <SetVariable name="EffectGroup">[EffectRack<Variable name="rack"/>_EffectUnit<Variable name="unit"/>_Effect<Variable name="effect"/>]</SetVariable>
+  <WidgetGroup>
+    <ObjectName>BeatFX_ParamRow</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <!-- Label above the buckets: side by side, the six buckets don't fit
+           the narrow panel next to the scroll bar. -->
+      <WidgetGroup>
+        <Layout>vertical</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+
+          <EffectParameterName>
+            <ObjectName>BeatFX_ParamLabel</ObjectName>
+            <Size>0me,24f</Size>
+            <Alignment>left</Alignment>
+            <Elide>right</Elide>
+            <EffectRack><Variable name="rack"/></EffectRack>
+            <EffectUnit><Variable name="unit"/></EffectUnit>
+            <Effect><Variable name="effect"/></Effect>
+            <EffectParameter><Variable name="param"/></EffectParameter>
+          </EffectParameterName>
+
+          <WidgetGroup>
+            <ObjectName>BeatFX_BucketRow</ObjectName>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <Size>0me,36f</Size>
+                <Children>
+                  <Template src="skin:templates/effect_param_bucket.xml">
+                    <SetVariable name="EffectGroup"><Variable name="EffectGroup"/></SetVariable>
+                    <SetVariable name="param"><Variable name="param"/></SetVariable>
+                    <SetVariable name="Label">⅛</SetVariable>
+                    <SetVariable name="Value">0.125</SetVariable>
+                  </Template>
+                  <Template src="skin:templates/effect_param_bucket.xml">
+                    <SetVariable name="EffectGroup"><Variable name="EffectGroup"/></SetVariable>
+                    <SetVariable name="param"><Variable name="param"/></SetVariable>
+                    <SetVariable name="Label">¼</SetVariable>
+                    <SetVariable name="Value">0.25</SetVariable>
+                  </Template>
+                  <Template src="skin:templates/effect_param_bucket.xml">
+                    <SetVariable name="EffectGroup"><Variable name="EffectGroup"/></SetVariable>
+                    <SetVariable name="param"><Variable name="param"/></SetVariable>
+                    <SetVariable name="Label">½</SetVariable>
+                    <SetVariable name="Value">0.5</SetVariable>
+                  </Template>
+                </Children>
+              </WidgetGroup>
+              <WidgetGroup>
+                <Layout>horizontal</Layout>
+                <Size>0me,36f</Size>
+                <Children>
+                  <Template src="skin:templates/effect_param_bucket.xml">
+                    <SetVariable name="EffectGroup"><Variable name="EffectGroup"/></SetVariable>
+                    <SetVariable name="param"><Variable name="param"/></SetVariable>
+                    <SetVariable name="Label">1</SetVariable>
+                    <SetVariable name="Value">1</SetVariable>
+                  </Template>
+                  <Template src="skin:templates/effect_param_bucket.xml">
+                    <SetVariable name="EffectGroup"><Variable name="EffectGroup"/></SetVariable>
+                    <SetVariable name="param"><Variable name="param"/></SetVariable>
+                    <SetVariable name="Label">2</SetVariable>
+                    <SetVariable name="Value">2</SetVariable>
+                  </Template>
+                  <Template src="skin:templates/effect_param_bucket.xml">
+                    <SetVariable name="EffectGroup"><Variable name="EffectGroup"/></SetVariable>
+                    <SetVariable name="param"><Variable name="param"/></SetVariable>
+                    <SetVariable name="Label">4</SetVariable>
+                    <SetVariable name="Value">4</SetVariable>
+                  </Template>
+                </Children>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+
+    <!-- An unloaded slot reports Unknown units, so this also hides it. One
+         binding on the outermost group: a hidden inner group would leave
+         an empty, padded row behind. -->
+    <Connection>
+      <ConfigKey><Variable name="EffectGroup"/>,parameter<Variable name="param"/>_units</ConfigKey>
+      <BindProperty>visible</BindProperty>
+      <Transform>
+        <IsEqual>1</IsEqual>
+      </Transform>
+    </Connection>
+  </WidgetGroup>
+</Template>
