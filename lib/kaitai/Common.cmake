@@ -29,9 +29,5 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         # If we run into false positives in the future, we can increase the level, but let's
         # start with the most aggressive option to make sure we don't miss anything.
         -fstrict-aliasing -Wstrict-aliasing=1
-
-        # GCC 13 on aarch64 reports false positives ("writing 1 byte into a
-        # region of size 0") in inlined standard library code.
-        $<$<CXX_COMPILER_ID:GNU>:-Wno-error=stringop-overflow>
     >
 )
