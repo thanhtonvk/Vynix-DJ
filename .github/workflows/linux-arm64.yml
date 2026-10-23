@@ -31,6 +31,7 @@ jobs:
           mkdir build && cd build &&
           cmake
           -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_CXX_FLAGS=-Wno-error=stringop-overflow
           -DQT6=ON -DQML=ON -DBULK=ON -DHID=ON -DFFMPEG=ON
           -DLOCALECOMPARE=ON -DMAD=ON -DMODPLUG=ON -DWAVPACK=ON
           -DINSTALL_USER_UDEV_RULES=OFF
