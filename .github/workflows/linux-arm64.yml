@@ -27,15 +27,14 @@ jobs:
         run: tools/debian_buildenv.sh setup
 
       - name: Configure
-        # -Wno-stringop-overflow: GCC 13 on aarch64 reports false positives
-        # ("writing 1 byte into a region of size 0") in the Kaitai runtime,
-        # which builds with -Werror
+        # ENGINEPRIME=OFF: the bundled libdjinterop (Engine DJ export) fails
+        # to build with GCC 13 on aarch64, which reports false positives
+        # ("writing 1 byte into a region of size 0") as errors
         run: >-
           mkdir build && cd build &&
           cmake
           -DCMAKE_BUILD_TYPE=Release
-          "-DCMAKE_CXX_FLAGS=-Wno-stringop-overflow"
-          "-DCMAKE_C_FLAGS=-Wno-stringop-overflow"
+          -DENGINEPRIME=OFF
           -DQT6=ON -DQML=ON -DBULK=ON -DHID=ON -DFFMPEG=ON
           -DLOCALECOMPARE=ON -DMAD=ON -DMODPLUG=ON -DWAVPACK=ON
           -DINSTALL_USER_UDEV_RULES=OFF
