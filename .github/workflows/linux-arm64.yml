@@ -39,9 +39,13 @@ jobs:
           -DCPACK_DEBIAN_PACKAGE_CONFLICTS=mixxx
           ..
 
+      - name: Set up gcc problem matcher
+        uses: ammaraskar/gcc-problem-matcher@0.3.0
+
       - name: Build
         working-directory: build
-        run: cmake --build . --parallel "$(nproc)"
+        # Keep going after errors so that all of them are reported at once
+        run: cmake --build . --parallel "$(nproc)" -- -k
 
       - name: Package
         id: package
