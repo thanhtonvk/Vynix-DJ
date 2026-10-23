@@ -1,0 +1,72 @@
+name: Linux ARM64 build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - main
+    paths:
+      - ".github/workflows/linux-arm64.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  linux-arm64:
+    name: Linux ARM64 DEB
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up build environment
+        run: tools/debian_buildenv.sh setup
+
+      - name: Configure
+        run: >-
+          mkdir build && cd build &&
+          cmake
+          -DCMAKE_BUILD_TYPE=Release
+          -DQT6=ON -DQML=ON -DBULK=ON -DHID=ON -DFFMPEG=ON
+          -DLOCALECOMPARE=ON -DMAD=ON -DMODPLUG=ON -DWAVPACK=ON
+          -DINSTALL_USER_UDEV_RULES=OFF
+          -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF
+          -DCPACK_DEBIAN_PACKAGE_NAME=vynixdj
+          -DCPACK_DEBIAN_PACKAGE_CONFLICTS=mixxx
+          ..
+
+      - name: Build
+        working-directory: build
+        run: cmake --build . --parallel "$(nproc)"
+
+      - name: Package
+        id: package
+        working-directory: build
+        run: |
+          cpack -G DEB
+          TAG="$(git describe --tags --abbrev=0)"
+          FILE="VynixDJ-${TAG#v}-linux-arm64.deb"
+          mv "$(ls *.deb | head -1)" "$FILE"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "file=build/$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: VynixDJ-linux-arm64
+          path: ${{ steps.package.outputs.file }}
+          if-no-files-found: error
+
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+          FILE: ${{ steps.package.outputs.file }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 ||
+            gh release create "$TAG" --verify-tag --title "Vynix DJ ${TAG#v}" --notes ""
+          gh release upload "$TAG" "$FILE" --clobber
