@@ -10,6 +10,7 @@
 
 #include "moc_wlibrarytableview.cpp"
 #include "util/math.h"
+#include "widget/touchscrolling.h"
 #include "widget/wtracktableviewheader.h"
 
 class QFocusEvent;
@@ -25,7 +26,8 @@ WLibraryTableView::WLibraryTableView(QWidget* parent,
           m_prevRow(-1),
           m_prevColumn(-1),
           m_pConfig(pConfig),
-          m_modelStateCache(kModelCacheSize) {
+          m_modelStateCache(kModelCacheSize),
+          m_trackTableRowHeight(0) {
     // Setup properties for table
 
     // Editing starts when clicking on an already selected item.
@@ -56,6 +58,8 @@ WLibraryTableView::WLibraryTableView(QWidget* parent,
             &WLibraryTableView::scrollValueChanged);
 
     setTabKeyNavigation(false);
+
+    mixxx::enableTouchScrolling(this);
 }
 
 WLibraryTableView::~WLibraryTableView() {
@@ -234,8 +238,23 @@ void WLibraryTableView::setTrackTableFont(const QFont& font) {
 }
 
 void WLibraryTableView::setTrackTableRowHeight(int rowHeight) {
+    m_trackTableRowHeight = rowHeight;
+    applyTrackTableRowHeight();
+}
+
+void WLibraryTableView::applyTrackTableRowHeight() {
+    // Never cut off the text, e.g. when a skin sets a large font size
+    const int minRowHeight = fontMetrics().height() + 8;
     verticalHeader()->setDefaultSectionSize(math_max(
-            rowHeight, verticalHeader()->minimumSectionSize()));
+            math_max(m_trackTableRowHeight, minRowHeight),
+            verticalHeader()->minimumSectionSize()));
+}
+
+void WLibraryTableView::changeEvent(QEvent* pEvent) {
+    QTableView::changeEvent(pEvent);
+    if (pEvent->type() == QEvent::FontChange) {
+        applyTrackTableRowHeight();
+    }
 }
 
 void WLibraryTableView::setSelectedClick(bool enable) {

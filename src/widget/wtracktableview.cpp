@@ -363,6 +363,12 @@ void WTrackTableView::loadTrackModel(QAbstractItemModel* pNewModel, bool restore
     } else {
         setDragDropMode(QAbstractItemView::DragOnly);
     }
+#ifdef __ANDROID__
+    // A finger drag scrolls the list, see mixxx::enableTouchScrolling().
+    // Dragging tracks would start a drag & drop operation instead.
+    setDragEnabled(false);
+    setDragDropMode(QAbstractItemView::NoDragDrop);
+#endif
 
     // Possible giant fuckup alert - It looks like Qt has something like these
     // caps built-in, see http://doc.trolltech.com/4.5/qt.html#ItemFlag-enum and

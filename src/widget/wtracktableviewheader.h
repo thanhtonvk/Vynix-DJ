@@ -3,7 +3,10 @@
 #include <QHeaderView>
 #include <QMap>
 #include <QMenu>
+#include <QString>
+#include <QVector>
 
+#include "library/trackmodel.h"
 #include "proto/headers.pb.h"
 
 class TrackModel;
@@ -56,6 +59,15 @@ private:
 class WTrackTableViewHeader : public QHeaderView {
     Q_OBJECT
   public:
+    /// A library column that skins can show or hide with the persistent
+    /// toggle control [Library],show_column_<name>.
+    struct ColumnControl {
+        QString name;
+        TrackModel::SortColumnId column;
+        bool visibleByDefault;
+    };
+    static const QVector<ColumnControl>& columnControls();
+
     explicit WTrackTableViewHeader(Qt::Orientation orientation, QWidget* pParent = nullptr);
 
     void contextMenuEvent(QContextMenuEvent* event) override;
@@ -94,6 +106,7 @@ class WTrackTableViewHeader : public QHeaderView {
     void showOrHideColumn(int);
 
   private:
+    void connectColumnControls(TrackModel* pTrackModel);
     int hiddenCount();
     void clearActions();
     TrackModel* getTrackModel();

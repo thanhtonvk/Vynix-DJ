@@ -233,6 +233,20 @@ QList<QSharedPointer<ControlDoublePrivate>> ControlDoublePrivate::getAllInstance
 }
 
 // static
+void ControlDoublePrivate::storeAllPersistentValues() {
+    UserSettingsPointer pConfig = s_pUserConfig;
+    if (!pConfig) {
+        return;
+    }
+    const auto controls = getAllInstances();
+    for (const auto& pControl : controls) {
+        if (pControl->m_bPersistInConfiguration) {
+            pConfig->set(pControl->m_key, QString::number(pControl->get()));
+        }
+    }
+}
+
+// static
 QList<QSharedPointer<ControlDoublePrivate>> ControlDoublePrivate::takeAllInstances() {
     QList<QSharedPointer<ControlDoublePrivate>> result;
     MMutexLocker locker(&s_qCOHashMutex);

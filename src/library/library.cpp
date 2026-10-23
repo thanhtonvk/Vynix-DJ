@@ -57,7 +57,12 @@ const QString Library::m_sTrackViewName = QStringLiteral("WTrackTableView");
 const QString Library::kAutoDJViewName = QStringLiteral("Auto DJ");
 
 // The default row height of the library.
+#ifdef __ANDROID__
+// Rows must be large enough to hit with a finger
+const int Library::kDefaultRowHeightPx = 64;
+#else
 const int Library::kDefaultRowHeightPx = 20;
+#endif
 
 Library::Library(
         QObject* parent,

@@ -36,194 +36,278 @@
         <Children>
           <WidgetGroup trigger="[SettingsTab],general">
             <ObjectName>SettingsPanel</ObjectName>
-            <Layout>horizontal</Layout>
+            <Layout>vertical</Layout>
             <SizePolicy>me,me</SizePolicy>
             <Children>
               <WidgetGroup>
-                <ObjectName>GeneralCol</ObjectName>
-                <Layout>vertical</Layout>
-                <SizePolicy>me,me</SizePolicy>
+                <Layout>horizontal</Layout>
+                <SizePolicy>me,min</SizePolicy>
                 <Children>
                   <WidgetGroup>
-                    <ObjectName>SettingsRow</ObjectName>
-                    <Layout>horizontal</Layout>
-                    <Size>0me,52f</Size>
+                    <ObjectName>GeneralCol</ObjectName>
+                    <Layout>vertical</Layout>
+                    <SizePolicy>me,me</SizePolicy>
                     <Children>
-                      <Label>
-                        <ObjectName>SettingsRowLabel</ObjectName>
-                        <Text>Key</Text>
-                        <Size>0me,0me</Size>
-                      </Label>
                       <WidgetGroup>
-                        <ObjectName>SettingsSegmented</ObjectName>
+                        <ObjectName>SettingsRow</ObjectName>
                         <Layout>horizontal</Layout>
-                        <Size>160f,40f</Size>
+                        <Size>0me,52f</Size>
                         <Children>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
-                            <SetVariable name="Text">Camelot</SetVariable>
-                            <SetVariable name="ConfigKey">[Library],key_notation</SetVariable>
-                            <SetVariable name="Value">3</SetVariable>
-                          </Template>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
-                            <SetVariable name="Text">Trad</SetVariable>
-                            <SetVariable name="ConfigKey">[Library],key_notation</SetVariable>
-                            <SetVariable name="Value">4</SetVariable>
-                          </Template>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Key</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>160f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">Camelot</SetVariable>
+                                <SetVariable name="ConfigKey">[Library],key_notation</SetVariable>
+                                <SetVariable name="Value">3</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">Trad</SetVariable>
+                                <SetVariable name="ConfigKey">[Library],key_notation</SetVariable>
+                                <SetVariable name="Value">4</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
                         </Children>
                       </WidgetGroup>
-                    </Children>
-                  </WidgetGroup>
-                  <WidgetGroup>
-                    <ObjectName>SettingsRow</ObjectName>
-                    <Layout>horizontal</Layout>
-                    <Size>0me,52f</Size>
-                    <Children>
-                      <Label>
-                        <ObjectName>SettingsRowLabel</ObjectName>
-                        <Text>Xfader</Text>
-                        <Size>0me,0me</Size>
-                      </Label>
-                      <PushButton>
-                        <ObjectName>SettingsActionButton</ObjectName>
-                        <Size>64f,40f</Size>
-                        <NumberStates>3</NumberStates>
-                        <State>
-                          <Number>0</Number>
-                          <Text>1: A</Text>
-                        </State>
-                        <State>
-                          <Number>1</Number>
-                          <Text>1: Thru</Text>
-                        </State>
-                        <State>
-                          <Number>2</Number>
-                          <Text>1: B</Text>
-                        </State>
-                        <Connection>
-                          <ConfigKey>[Channel1],orientation</ConfigKey>
-                          <EmitOnDownPress>true</EmitOnDownPress>
-                          <ButtonState>LeftButton</ButtonState>
-                        </Connection>
-                      </PushButton>
                       <WidgetGroup>
-                        <Size>8f,0me</Size>
-                      </WidgetGroup>
-                      <PushButton>
-                        <ObjectName>SettingsActionButton</ObjectName>
-                        <Size>64f,40f</Size>
-                        <NumberStates>3</NumberStates>
-                        <State>
-                          <Number>0</Number>
-                          <Text>2: A</Text>
-                        </State>
-                        <State>
-                          <Number>1</Number>
-                          <Text>2: Thru</Text>
-                        </State>
-                        <State>
-                          <Number>2</Number>
-                          <Text>2: B</Text>
-                        </State>
-                        <Connection>
-                          <ConfigKey>[Channel2],orientation</ConfigKey>
-                          <EmitOnDownPress>true</EmitOnDownPress>
-                          <ButtonState>LeftButton</ButtonState>
-                        </Connection>
-                      </PushButton>
-                    </Children>
-                  </WidgetGroup>
-                  <WidgetGroup>
-                    <ObjectName>SettingsRow</ObjectName>
-                    <Layout>horizontal</Layout>
-                    <Size>0me,52f</Size>
-                    <Children>
-                      <Label>
-                        <ObjectName>SettingsRowLabel</ObjectName>
-                        <Text>Load Gate</Text>
-                        <Size>0me,0me</Size>
-                      </Label>
-                      <WidgetGroup>
-                        <ObjectName>SettingsSegmented</ObjectName>
+                        <ObjectName>SettingsRow</ObjectName>
                         <Layout>horizontal</Layout>
-                        <Size>150f,40f</Size>
+                        <Size>0me,52f</Size>
                         <Children>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
-                            <SetVariable name="Text">Allow</SetVariable>
-                            <SetVariable name="ConfigKey">[Controls],load_when_deck_playing</SetVariable>
-                            <SetVariable name="Value">1</SetVariable>
-                          </Template>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentMid</SetVariable>
-                            <SetVariable name="Text">Stop</SetVariable>
-                            <SetVariable name="ConfigKey">[Controls],load_when_deck_playing</SetVariable>
-                            <SetVariable name="Value">2</SetVariable>
-                          </Template>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
-                            <SetVariable name="Text">Block</SetVariable>
-                            <SetVariable name="ConfigKey">[Controls],load_when_deck_playing</SetVariable>
-                            <SetVariable name="Value">0</SetVariable>
-                          </Template>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Xfader</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <PushButton>
+                            <ObjectName>SettingsActionButton</ObjectName>
+                            <Size>64f,40f</Size>
+                            <NumberStates>3</NumberStates>
+                            <State>
+                              <Number>0</Number>
+                              <Text>1: A</Text>
+                            </State>
+                            <State>
+                              <Number>1</Number>
+                              <Text>1: Thru</Text>
+                            </State>
+                            <State>
+                              <Number>2</Number>
+                              <Text>1: B</Text>
+                            </State>
+                            <Connection>
+                              <ConfigKey>[Channel1],orientation</ConfigKey>
+                              <EmitOnDownPress>true</EmitOnDownPress>
+                              <ButtonState>LeftButton</ButtonState>
+                            </Connection>
+                          </PushButton>
+                          <WidgetGroup>
+                            <Size>8f,0me</Size>
+                          </WidgetGroup>
+                          <PushButton>
+                            <ObjectName>SettingsActionButton</ObjectName>
+                            <Size>64f,40f</Size>
+                            <NumberStates>3</NumberStates>
+                            <State>
+                              <Number>0</Number>
+                              <Text>2: A</Text>
+                            </State>
+                            <State>
+                              <Number>1</Number>
+                              <Text>2: Thru</Text>
+                            </State>
+                            <State>
+                              <Number>2</Number>
+                              <Text>2: B</Text>
+                            </State>
+                            <Connection>
+                              <ConfigKey>[Channel2],orientation</ConfigKey>
+                              <EmitOnDownPress>true</EmitOnDownPress>
+                              <ButtonState>LeftButton</ButtonState>
+                            </Connection>
+                          </PushButton>
                         </Children>
                       </WidgetGroup>
+                      <WidgetGroup>
+                        <ObjectName>SettingsRow</ObjectName>
+                        <Layout>horizontal</Layout>
+                        <Size>0me,52f</Size>
+                        <Children>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Load Gate</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>150f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">Allow</SetVariable>
+                                <SetVariable name="ConfigKey">[Controls],load_when_deck_playing</SetVariable>
+                                <SetVariable name="Value">1</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentMid</SetVariable>
+                                <SetVariable name="Text">Stop</SetVariable>
+                                <SetVariable name="ConfigKey">[Controls],load_when_deck_playing</SetVariable>
+                                <SetVariable name="Value">2</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">Block</SetVariable>
+                                <SetVariable name="ConfigKey">[Controls],load_when_deck_playing</SetVariable>
+                                <SetVariable name="Value">0</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
+                        </Children>
+                      </WidgetGroup>
+                      <WidgetGroup>
+                        <ObjectName>SettingsSpacer</ObjectName>
+                        <Size>0me,0me</Size>
+                      </WidgetGroup>
                     </Children>
                   </WidgetGroup>
                   <WidgetGroup>
-                    <ObjectName>SettingsSpacer</ObjectName>
-                    <Size>0me,0me</Size>
+                    <ObjectName>GeneralCol</ObjectName>
+                    <Layout>vertical</Layout>
+                    <SizePolicy>me,me</SizePolicy>
+                    <Children>
+                      <WidgetGroup>
+                        <ObjectName>SettingsRow</ObjectName>
+                        <Layout>horizontal</Layout>
+                        <Size>0me,52f</Size>
+                        <Children>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Wave</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>150f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">RGB</SetVariable>
+                                <SetVariable name="ConfigKey">[Waveform],waveform_type</SetVariable>
+                                <SetVariable name="Value">12</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentMid</SetVariable>
+                                <SetVariable name="Text">Filt</SetVariable>
+                                <SetVariable name="ConfigKey">[Waveform],waveform_type</SetVariable>
+                                <SetVariable name="Value">7</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">HSV</SetVariable>
+                                <SetVariable name="ConfigKey">[Waveform],waveform_type</SetVariable>
+                                <SetVariable name="Value">8</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
+                        </Children>
+                      </WidgetGroup>
+                      <WidgetGroup>
+                        <ObjectName>SettingsSpacer</ObjectName>
+                        <Size>0me,0me</Size>
+                      </WidgetGroup>
+                    </Children>
                   </WidgetGroup>
                 </Children>
               </WidgetGroup>
               <WidgetGroup>
-                <ObjectName>GeneralCol</ObjectName>
+                <ObjectName>SettingsColumnSection</ObjectName>
                 <Layout>vertical</Layout>
-                <SizePolicy>me,me</SizePolicy>
+                <SizePolicy>me,min</SizePolicy>
                 <Children>
+                  <Label>
+                    <ObjectName>SettingsRowLabel</ObjectName>
+                    <Text>Track list columns</Text>
+                    <Size>0me,32f</Size>
+                  </Label>
                   <WidgetGroup>
-                    <ObjectName>SettingsRow</ObjectName>
+                    <ObjectName>SettingsColumnChecks</ObjectName>
                     <Layout>horizontal</Layout>
-                    <Size>0me,52f</Size>
+                    <Size>0me,48f</Size>
                     <Children>
-                      <Label>
-                        <ObjectName>SettingsRowLabel</ObjectName>
-                        <Text>Wave</Text>
-                        <Size>0me,0me</Size>
-                      </Label>
-                      <WidgetGroup>
-                        <ObjectName>SettingsSegmented</ObjectName>
-                        <Layout>horizontal</Layout>
-                        <Size>150f,40f</Size>
-                        <Children>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
-                            <SetVariable name="Text">RGB</SetVariable>
-                            <SetVariable name="ConfigKey">[Waveform],waveform_type</SetVariable>
-                            <SetVariable name="Value">12</SetVariable>
-                          </Template>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentMid</SetVariable>
-                            <SetVariable name="Text">Filt</SetVariable>
-                            <SetVariable name="ConfigKey">[Waveform],waveform_type</SetVariable>
-                            <SetVariable name="Value">7</SetVariable>
-                          </Template>
-                          <Template src="skin:templates/setting_segment_button.xml">
-                            <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
-                            <SetVariable name="Text">HSV</SetVariable>
-                            <SetVariable name="ConfigKey">[Waveform],waveform_type</SetVariable>
-                            <SetVariable name="Value">8</SetVariable>
-                          </Template>
-                        </Children>
-                      </WidgetGroup>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">cover</SetVariable>
+                        <SetVariable name="Text">Cover</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">artist</SetVariable>
+                        <SetVariable name="Text">Artist</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">title</SetVariable>
+                        <SetVariable name="Text">Title</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">album</SetVariable>
+                        <SetVariable name="Text">Album</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">genre</SetVariable>
+                        <SetVariable name="Text">Genre</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">year</SetVariable>
+                        <SetVariable name="Text">Year</SetVariable>
+                      </Template>
                     </Children>
                   </WidgetGroup>
                   <WidgetGroup>
-                    <ObjectName>SettingsSpacer</ObjectName>
-                    <Size>0me,0me</Size>
+                    <ObjectName>SettingsColumnChecks</ObjectName>
+                    <Layout>horizontal</Layout>
+                    <Size>0me,48f</Size>
+                    <Children>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">key</SetVariable>
+                        <SetVariable name="Text">Key</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">bpm</SetVariable>
+                        <SetVariable name="Text">BPM</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">duration</SetVariable>
+                        <SetVariable name="Text">Time</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">rating</SetVariable>
+                        <SetVariable name="Text">Rating</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">comment</SetVariable>
+                        <SetVariable name="Text">Comment</SetVariable>
+                      </Template>
+                      <Template src="skin:templates/setting_column_check.xml">
+                        <SetVariable name="Column">date_added</SetVariable>
+                        <SetVariable name="Text">Added</SetVariable>
+                      </Template>
+                    </Children>
                   </WidgetGroup>
                 </Children>
+              </WidgetGroup>
+              <WidgetGroup>
+                <ObjectName>SettingsSpacer</ObjectName>
+                <Size>0me,0me</Size>
               </WidgetGroup>
             </Children>
           </WidgetGroup>

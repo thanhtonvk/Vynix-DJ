@@ -77,6 +77,7 @@ class WLibraryTableView : public QTableView, public virtual LibraryView {
 
   protected:
     void focusInEvent(QFocusEvent* event) override;
+    void changeEvent(QEvent* pEvent) override;
     QModelIndex moveCursor(CursorAction cursorAction,
             Qt::KeyboardModifiers modifiers) override;
     virtual QString getModelStateKey() const = 0;
@@ -85,6 +86,9 @@ class WLibraryTableView : public QTableView, public virtual LibraryView {
     int m_prevColumn;
 
   private:
+    void applyTrackTableRowHeight();
+
     const UserSettingsPointer m_pConfig;
     QCache<QString, ModelState> m_modelStateCache;
+    int m_trackTableRowHeight;
 };

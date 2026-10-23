@@ -1,6 +1,7 @@
 #include "widget/wlibrarysidebar.h"
 
 #include <QHeaderView>
+#include <QScroller>
 #include <QUrl>
 #include <QtDebug>
 
@@ -10,6 +11,7 @@
 #include "moc_wlibrarysidebar.cpp"
 #include "util/defs.h"
 #include "util/dnd.h"
+#include "widget/touchscrolling.h"
 
 WLibrarySidebar::WLibrarySidebar(QWidget* parent)
         : QTreeView(parent),
@@ -30,6 +32,8 @@ WLibrarySidebar::WLibrarySidebar(QWidget* parent)
     header()->setStretchLastSection(false);
     header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     header()->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    connect(this, &QAbstractItemView::clicked, this, &WLibrarySidebar::slotItemTapped);
+    mixxx::enableTouchScrolling(this);
 }
 
 void WLibrarySidebar::contextMenuEvent(QContextMenuEvent* pEvent) {
@@ -371,14 +375,21 @@ void WLibrarySidebar::mousePressEvent(QMouseEvent* pEvent) {
         return;
     }
     QTreeView::mousePressEvent(pEvent);
+}
 
-#ifdef __ANDROID__
+void WLibrarySidebar::slotItemTapped(const QModelIndex& index) {
     // Touch ergonomics: tapping a leaf row (or a feature root with its own
     // track table, e.g. Tracks or Auto DJ) hides the sidebar via
     // [Sidebar],sidebar_visible, so that skins can show the track table
-    // in its place.
-    const QModelIndex index = indexAt(pEvent->pos());
-    if (!index.isValid()) {
+    // in its place. Only skins that define the control use this.
+    const ConfigKey sidebarVisibleKey(
+            QStringLiteral("[Sidebar]"), QStringLiteral("sidebar_visible"));
+    if (!index.isValid() || !ControlObject::exists(sidebarVisibleKey)) {
+        return;
+    }
+    // Ignore the end of a swipe
+    if (QScroller::hasScroller(viewport()) &&
+            QScroller::scroller(viewport())->state() != QScroller::Inactive) {
         return;
     }
     bool showTrackTable = !index.model()->hasChildren(index);
@@ -387,11 +398,8 @@ void WLibrarySidebar::mousePressEvent(QMouseEvent* pEvent) {
         showTrackTable = pSidebarModel && pSidebarModel->hasTrackTable(index);
     }
     if (showTrackTable) {
-        ControlObject::set(ConfigKey(QStringLiteral("[Sidebar]"),
-                                   QStringLiteral("sidebar_visible")),
-                0);
+        ControlObject::set(sidebarVisibleKey, 0);
     }
-#endif
 }
 
 void WLibrarySidebar::focusInEvent(QFocusEvent* pEvent) {

@@ -1,0 +1,26 @@
+<!--
+  One tick button of Settings -> General -> Track list columns. Toggles
+  [Library],show_column_<Column>, see WTrackTableViewHeader::columnControls().
+  Variables:
+    Column: the column control name suffix, e.g. artist
+    Text: the label
+-->
+<Template>
+  <PushButton>
+    <ObjectName>SettingsColumnCheck</ObjectName>
+    <Size>0me,44f</Size>
+    <NumberStates>2</NumberStates>
+    <State>
+      <Number>0</Number>
+      <Text><Variable name="Text"/></Text>
+    </State>
+    <State>
+      <Number>1</Number>
+      <Text>✓ <Variable name="Text"/></Text>
+    </State>
+    <Connection>
+      <ConfigKey>[Library],show_column_<Variable name="Column"/></ConfigKey>
+      <ButtonState>LeftButton</ButtonState>
+    </Connection>
+  </PushButton>
+</Template>

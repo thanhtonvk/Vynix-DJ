@@ -355,10 +355,9 @@ QList<int> BaseTrackTableModel::pasteTracks(const QModelIndex& insertionIndex) {
 
 bool BaseTrackTableModel::isColumnHiddenByDefault(
         int column) {
-#ifdef __ANDROID__
-    // Phone screens only fit a few columns. Keep artist, title, BPM, key and
-    // duration visible by default, the others can still be enabled from the
-    // header context menu.
+    // The Vynix DJ library view and phone screens only fit a few columns.
+    // Keep artist, title, BPM, key and duration visible by default, the
+    // others can still be enabled from the header context menu.
     if (column == fieldIndex(ColumnCache::COLUMN_LIBRARYTABLE_PREVIEW) ||
             column == fieldIndex(ColumnCache::COLUMN_LIBRARYTABLE_COVERART) ||
             column == fieldIndex(ColumnCache::COLUMN_LIBRARYTABLE_LAST_PLAYED_AT) ||
@@ -373,7 +372,6 @@ bool BaseTrackTableModel::isColumnHiddenByDefault(
             column == fieldIndex(ColumnCache::COLUMN_PLAYLISTTRACKSTABLE_DATETIMEADDED)) {
         return true;
     }
-#endif
     return column == fieldIndex(ColumnCache::COLUMN_LIBRARYTABLE_ALBUMARTIST) ||
             column == fieldIndex(ColumnCache::COLUMN_LIBRARYTABLE_BPM_LOCK) ||
             column == fieldIndex(ColumnCache::COLUMN_LIBRARYTABLE_BITRATE) ||

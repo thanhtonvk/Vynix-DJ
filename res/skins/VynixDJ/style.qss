@@ -1131,8 +1131,10 @@ WEffectSelector QAbstractItemView {
   gridline-color: transparent;
 }
 
+/* No vertical padding: the row height (Preferences > Library) provides the
+   spacing, padding would cut off the text in short rows. */
 #LibraryWrapper QTableView::item {
-  padding: 14px 12px;
+  padding: 0 12px;
   border: 0;
   border-bottom: 1px solid #343d4c;
 }
@@ -1476,6 +1478,30 @@ WBeatSpinBox::up-button {
 
 #SettingsSegmented {
   qproperty-layoutAlignment: 'AlignRight | AlignVCenter';
+}
+
+/* General -> Track list columns: a grid of tick buttons */
+#SettingsColumnSection {
+  background-color: #151a21;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+#SettingsColumnCheck {
+  background-color: transparent;
+  border: 2px solid #3a4250;
+  border-radius: 6px;
+  color: #a7a9ac;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 2px 4px;
+  text-transform: uppercase;
+}
+
+#SettingsColumnCheck[displayValue="1"] {
+  background-color: #488ab3;
+  border-color: #488ab3;
+  color: #ffffff;
 }
 
 #SettingsSegmentLeft,

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QOpenGLContext>
+#include <QGuiApplication>
 #include <QTimer>
 #include <QUrl>
 
@@ -33,10 +34,12 @@
 #include "moc_mixxxmainwindow.cpp"
 #include "preferences/dialog/dlgpreferences.h"
 #include "preferences/interface.h"
+#include "widget/wtracktableviewheader.h"
 #ifdef __BROADCAST__
 #include "broadcast/broadcastmanager.h"
 #endif
 #include "control/controlindicatortimer.h"
+#include "control/control.h"
 #include "control/controlproxy.h"
 #include "control/controlpushbutton.h"
 #include "effects/backends/effectsbackendmanager.h"
@@ -673,6 +676,22 @@ void MixxxMainWindow::alwaysHideMenuBarDlg() {
 #endif
 
 void MixxxMainWindow::createSkinSettingsControls() {
+#ifdef __ANDROID__
+    // Android may kill the app at any time while it is in the background,
+    // without the regular shutdown that saves the settings. Save them
+    // whenever the app leaves the foreground.
+    connect(qApp,
+            &QGuiApplication::applicationStateChanged,
+            this,
+            [this](Qt::ApplicationState state) {
+                if (state == Qt::ApplicationActive) {
+                    return;
+                }
+                ControlDoublePrivate::storeAllPersistentValues();
+                m_pCoreServices->getSettings()->save();
+            });
+#endif
+
     // Buttons that open a specific preferences page, so touch skins can
     // offer them on their own settings pages. The index is the position in
     // the preferences page list.
@@ -731,6 +750,17 @@ void MixxxMainWindow::createSkinSettingsControls() {
                         true);
             });
     m_skinSettingsControls.push_back(std::move(pWaveformType));
+
+    // Visible track table columns, see WTrackTableViewHeader::columnControls()
+    for (const auto& columnControl : WTrackTableViewHeader::columnControls()) {
+        auto pShowColumn = std::make_unique<ControlPushButton>(
+                ConfigKey(QStringLiteral("[Library]"),
+                        QStringLiteral("show_column_") + columnControl.name),
+                true,
+                columnControl.visibleByDefault ? 1.0 : 0.0);
+        pShowColumn->setButtonMode(mixxx::control::ButtonMode::Toggle);
+        m_skinSettingsControls.push_back(std::move(pShowColumn));
+    }
 
     // Full screen effect picker for touch skins: [Skin],fx_picker shows it,
     // [Skin],fx_picker_open (a push button) opens it, and loading an effect

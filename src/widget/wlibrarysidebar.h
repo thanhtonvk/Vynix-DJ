@@ -46,6 +46,9 @@ class WLibrarySidebar : public QTreeView, public WBaseWidget {
   protected:
     bool event(QEvent* pEvent) override;
 
+  private slots:
+    void slotItemTapped(const QModelIndex& index);
+
   private:
     void focusSelectedIndex();
     QModelIndex selectedIndex();

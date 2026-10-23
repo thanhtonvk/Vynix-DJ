@@ -61,6 +61,11 @@ class ControlDoublePrivate : public QObject {
 
     // Returns a list of all existing instances.
     static QList<QSharedPointer<ControlDoublePrivate>> getAllInstances();
+
+    /// Writes the values of all persistent controls to the user settings,
+    /// which otherwise only happens when the controls are destroyed. Call
+    /// before saving the settings while the application keeps running.
+    static void storeAllPersistentValues();
     // Clears all existing instances and returns them as a list.
     static QList<QSharedPointer<ControlDoublePrivate>> takeAllInstances();
 

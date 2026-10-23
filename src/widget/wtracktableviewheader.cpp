@@ -8,6 +8,8 @@
 #include <QTextOption>
 #include <QWidgetAction>
 
+#include "control/controlobject.h"
+#include "control/controlproxy.h"
 #include "library/trackmodel.h"
 #include "moc_wtracktableviewheader.cpp"
 #include "util/math.h"
@@ -171,6 +173,64 @@ void WTrackTableViewHeader::contextMenuEvent(QContextMenuEvent* pEvent) {
     m_menu.popup(pEvent->globalPos());
 }
 
+namespace {
+
+ConfigKey columnControlKey(const QString& name) {
+    return ConfigKey(QStringLiteral("[Library]"), QStringLiteral("show_column_") + name);
+}
+
+} // namespace
+
+// static
+const QVector<WTrackTableViewHeader::ColumnControl>& WTrackTableViewHeader::columnControls() {
+    static const QVector<ColumnControl> kColumnControls = {
+            {QStringLiteral("cover"), TrackModel::SortColumnId::CoverArt, false},
+            {QStringLiteral("artist"), TrackModel::SortColumnId::Artist, true},
+            {QStringLiteral("title"), TrackModel::SortColumnId::Title, true},
+            {QStringLiteral("album"), TrackModel::SortColumnId::Album, false},
+            {QStringLiteral("genre"), TrackModel::SortColumnId::Genre, false},
+            {QStringLiteral("year"), TrackModel::SortColumnId::Year, false},
+            {QStringLiteral("key"), TrackModel::SortColumnId::Key, true},
+            {QStringLiteral("bpm"), TrackModel::SortColumnId::Bpm, true},
+            {QStringLiteral("duration"), TrackModel::SortColumnId::Duration, true},
+            {QStringLiteral("rating"), TrackModel::SortColumnId::Rating, false},
+            {QStringLiteral("comment"), TrackModel::SortColumnId::Comment, false},
+            {QStringLiteral("date_added"), TrackModel::SortColumnId::DateTimeAdded, false},
+    };
+    return kColumnControls;
+}
+
+void WTrackTableViewHeader::connectColumnControls(TrackModel* pTrackModel) {
+    for (const ColumnControl& columnControl : columnControls()) {
+        const ConfigKey key = columnControlKey(columnControl.name);
+        // Only skins that offer these settings create the controls
+        if (!ControlObject::exists(key)) {
+            continue;
+        }
+        const int column = pTrackModel->columnIndexFromSortColumnId(columnControl.column);
+        const auto it = m_columnCheckBoxes.constFind(column);
+        if (it == m_columnCheckBoxes.constEnd()) {
+            continue;
+        }
+        QCheckBox* pCheckBox = it.value();
+        auto* pProxy = new ControlProxy(key, this);
+        // Toggling the checkbox shows or hides the column
+        pCheckBox->setChecked(pProxy->toBool());
+        pProxy->connectValueChanged(this, [pCheckBox](double value) {
+            pCheckBox->setChecked(value > 0);
+        });
+        // Keep the control in sync when the column is toggled from the
+        // header context menu (or the last visible column was kept shown)
+        connect(pCheckBox,
+                &QCheckBox::toggled,
+                this,
+                [pProxy, pCheckBox] {
+                    pProxy->set(pCheckBox->isChecked() ? 1.0 : 0.0);
+                });
+        pProxy->set(pCheckBox->isChecked() ? 1.0 : 0.0);
+    }
+}
+
 void WTrackTableViewHeader::setModel(QAbstractItemModel* pModel) {
     TrackModel* pOldTrackModel = getTrackModel();
 
@@ -203,8 +263,7 @@ void WTrackTableViewHeader::setModel(QAbstractItemModel* pModel) {
     m_hiddenColumnSizes.clear();
     restoreHeaderState();
 
-#ifdef __ANDROID__
-    // Phone screens show only a few columns, let the title fill the free space
+    // Only a few columns are shown by default, let the title fill the free space
     const int titleColumn = pTrackModel->columnIndexFromSortColumnId(
             TrackModel::SortColumnId::Title);
     if (titleColumn >= 0 && titleColumn < count()) {
@@ -219,7 +278,6 @@ void WTrackTableViewHeader::setModel(QAbstractItemModel* pModel) {
             setSectionResizeMode(column, QHeaderView::ResizeToContents);
         }
     }
-#endif
 
     // Here we can override values to prevent restoring corrupt values from database
     setSectionsMovable(true);
@@ -280,6 +338,8 @@ void WTrackTableViewHeader::setModel(QAbstractItemModel* pModel) {
     }
 
     m_menu.addSeparator();
+
+    connectColumnControls(pTrackModel);
 
     // Only show the shuffle action in models that allow sorting.
     if (pTrackModel->hasCapabilities(TrackModel::Capability::Sorting)) {
