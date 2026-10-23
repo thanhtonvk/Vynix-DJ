@@ -34,7 +34,8 @@ jobs:
           mkdir build && cd build &&
           cmake
           -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_CXX_FLAGS=-Wno-stringop-overflow
+          "-DCMAKE_CXX_FLAGS=-Wno-stringop-overflow"
+          "-DCMAKE_C_FLAGS=-Wno-stringop-overflow"
           -DQT6=ON -DQML=ON -DBULK=ON -DHID=ON -DFFMPEG=ON
           -DLOCALECOMPARE=ON -DMAD=ON -DMODPLUG=ON -DWAVPACK=ON
           -DINSTALL_USER_UDEV_RULES=OFF
@@ -49,7 +50,19 @@ jobs:
       - name: Build
         working-directory: build
         # Keep going after errors so that all of them are reported at once
-        run: cmake --build . --parallel "$(nproc)" -- -k
+        run: |
+          set -o pipefail
+          cmake --build . --parallel "$(nproc)" -- -k 2>&1 | tee build.log
+
+      - name: Report build errors
+        if: failure()
+        working-directory: build
+        run: |
+          # Publish the compiler output around the first errors as one
+          # annotation, the raw log needs admin rights to download
+          grep -n -B8 -A2 "error" build.log | head -120 > errors.txt || true
+          msg="$(sed -e 's/%/%25/g' errors.txt | awk '{printf "%s%%0A", $0}')"
+          echo "::error title=Build errors::${msg}"
 
       - name: Package
         id: package
