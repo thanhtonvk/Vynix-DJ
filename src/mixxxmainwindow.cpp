@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QOpenGLContext>
+#include <QSet>
 #include <QGuiApplication>
 #include <QTimer>
 #include <QUrl>
@@ -55,6 +56,7 @@
 #endif
 #include "library/library_prefs.h"
 #include "library/trackcollectionmanager.h"
+#include "mixer/basetrackplayer.h"
 #include "mixer/playerinfo.h"
 #include "mixer/playermanager.h"
 #include "recording/recordingmanager.h"
@@ -762,6 +764,79 @@ void MixxxMainWindow::createSkinSettingsControls() {
         m_skinSettingsControls.push_back(std::move(pShowColumn));
     }
 
+    // Touch skins with a page per tab ([Tab],library / [Tab],overview, created
+    // by the skin): with [Skin],auto_browse set, browsing the library from a
+    // controller opens the library page, and loading a track into a deck
+    // from there goes back to the deck page.
+    m_skinSettingsControls.push_back(std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("auto_browse")),
+            true,
+            false,
+            true,
+            1.0));
+    const auto setTabIfAutoBrowse = [](const QString& tab, bool onlyFromLibrary) {
+        const auto* pAutoBrowse = ControlObject::getControl(
+                QStringLiteral("[Skin]"), QStringLiteral("auto_browse"));
+        if (!pAutoBrowse || pAutoBrowse->get() <= 0) {
+            return;
+        }
+        if (onlyFromLibrary) {
+            const auto* pLibraryTab = ControlObject::getControl(QStringLiteral("[Tab]"),
+                    QStringLiteral("library"),
+                    ControlFlag::NoWarnIfMissing);
+            if (!pLibraryTab || pLibraryTab->get() <= 0) {
+                return;
+            }
+        }
+        // Skins without such a page don't have the control
+        auto* pTab = ControlObject::getControl(
+                QStringLiteral("[Tab]"), tab, ControlFlag::NoWarnIfMissing);
+        if (pTab && pTab->get() <= 0) {
+            pTab->set(1.0);
+        }
+    };
+    const QList<ConfigKey> browseKeys = {
+            ConfigKey(QStringLiteral("[Library]"), QStringLiteral("MoveVertical")),
+            ConfigKey(QStringLiteral("[Library]"), QStringLiteral("MoveUp")),
+            ConfigKey(QStringLiteral("[Library]"), QStringLiteral("MoveDown")),
+            ConfigKey(QStringLiteral("[Library]"), QStringLiteral("ScrollVertical")),
+            ConfigKey(QStringLiteral("[Playlist]"), QStringLiteral("SelectTrackKnob")),
+            ConfigKey(QStringLiteral("[Playlist]"), QStringLiteral("SelectNextTrack")),
+            ConfigKey(QStringLiteral("[Playlist]"), QStringLiteral("SelectPrevTrack")),
+    };
+    for (const auto& key : browseKeys) {
+        auto* pBrowse = new ControlProxy(key, this, ControlFlag::NoAssertIfMissing);
+        pBrowse->connectValueChanged(this, [setTabIfAutoBrowse](double value) {
+            if (value != 0) {
+                setTabIfAutoBrowse(QStringLiteral("library"), false);
+            }
+        });
+    }
+    // Decks are added later on (e.g. by the skin's [App],num_decks), and
+    // Qt::UniqueConnection does not work with lambdas.
+    auto pConnectedDecks = std::make_shared<QSet<BaseTrackPlayer*>>();
+    const auto connectDecks = [this, setTabIfAutoBrowse, pConnectedDecks]() {
+        const auto pPlayerManager = m_pCoreServices->getPlayerManager();
+        for (int i = 0; i < pPlayerManager->numberOfDecks(); ++i) {
+            BaseTrackPlayer* pDeck = pPlayerManager->getDeckBase(i);
+            if (!pDeck || pConnectedDecks->contains(pDeck)) {
+                continue;
+            }
+            pConnectedDecks->insert(pDeck);
+            connect(pDeck,
+                    &BaseTrackPlayer::newTrackLoaded,
+                    this,
+                    [setTabIfAutoBrowse](TrackPointer) {
+                        setTabIfAutoBrowse(QStringLiteral("overview"), true);
+                    });
+        }
+    };
+    connectDecks();
+    connect(m_pCoreServices->getPlayerManager().get(),
+            &PlayerManager::numberOfDecksChanged,
+            this,
+            connectDecks);
+
     // Full screen effect picker for touch skins: [Skin],fx_picker shows it,
     // [Skin],fx_picker_open (a push button) opens it, and loading an effect
     // closes it again.
@@ -771,55 +846,106 @@ void MixxxMainWindow::createSkinSettingsControls() {
     ControlPushButton* pFxPickerRaw = pFxPicker.get();
     m_skinSettingsControls.push_back(std::move(pFxPicker));
 
-    auto pFxPickerOpen = std::make_unique<ControlPushButton>(
-            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_open")));
-    connect(pFxPickerOpen.get(),
-            &ControlObject::valueChanged,
-            this,
-            [pFxPickerRaw](double value) {
-                if (value > 0) {
-                    pFxPickerRaw->set(1.0);
-                }
-            });
-    m_skinSettingsControls.push_back(std::move(pFxPickerOpen));
+    // [Skin],fx_dual shows the second Beat FX unit (EffectUnit2) next to the
+    // first one, e.g. for controllers with an FX section per deck side.
+    // Not a toggle button, the skin selects 0 or 1 with segment buttons.
+    m_skinSettingsControls.push_back(std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_dual")),
+            true,
+            false,
+            true));
 
-    auto* pLoadedEffect = new ControlProxy(
-            QStringLiteral("[EffectRack1_EffectUnit1_Effect1]"),
-            QStringLiteral("loaded_effect"),
-            this);
-    pLoadedEffect->connectValueChanged(this, [pFxPickerRaw](double) {
-        pFxPickerRaw->set(0.0);
-    });
+    // The effect unit (1 or 2) the picker loads into, set by the
+    // [Skin],fx_picker_open (unit 1) and fx_picker_open2 (unit 2) buttons.
+    auto pFxPickerUnit = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_unit")),
+            true,
+            false,
+            false,
+            1.0);
+    ControlObject* pFxPickerUnitRaw = pFxPickerUnit.get();
+    m_skinSettingsControls.push_back(std::move(pFxPickerUnit));
 
-    // Beat FX selection by effect id for the first effect of EffectUnit1.
-    // [Skin],fx_select_N loads the Nth effect of
-    // VisibleEffectsList::beatFxEffectIds(), and [Skin],fx_current is the
-    // number of the loaded one (0 if none or another effect). Unlike
-    // loaded_effect this does not depend on the order of the visible effects
-    // list in the preferences.
+    // [Skin],fx_picker_current is fx_current of the unit the picker is open
+    // for, so the picker highlights the effect loaded in that unit.
+    auto pFxPickerCurrent = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_current")));
+    ControlObject* pFxPickerCurrentRaw = pFxPickerCurrent.get();
+    m_skinSettingsControls.push_back(std::move(pFxPickerCurrent));
+
+    // Beat FX selection by effect id for the first effect of EffectUnit1 and
+    // EffectUnit2. [Skin],fx_select_N loads the Nth effect of
+    // VisibleEffectsList::beatFxEffectIds() into the unit of the picker, and
+    // [Skin],fx_current / fx_current2 is the number of the effect loaded in
+    // unit 1 / 2 (0 if none or another effect). Unlike loaded_effect this
+    // does not depend on the order of the visible effects list in the
+    // preferences.
+    constexpr int kNumFxUnits = 2;
     std::shared_ptr<EffectsManager> pEffectsManager = m_pCoreServices->getEffectsManager();
-    EffectChainPointer pChain = pEffectsManager->getStandardEffectChain(0);
-    EffectSlotPointer pSlot = pChain ? pChain->getEffectSlot(0) : EffectSlotPointer();
-    if (!pSlot) {
-        return;
-    }
     const QStringList& beatFxIds = VisibleEffectsList::beatFxEffectIds();
-
-    auto pFxCurrent = std::make_unique<ControlObject>(
-            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_current")));
-    ControlObject* pFxCurrentRaw = pFxCurrent.get();
-    m_skinSettingsControls.push_back(std::move(pFxCurrent));
     // Weak references, the effect slots are owned by the EffectsManager
-    const QWeakPointer<EffectSlot> pWeakSlot = pSlot;
-    const std::weak_ptr<EffectsManager> pWeakEffectsManager = pEffectsManager;
-    const auto updateFxCurrent = [pWeakSlot, pFxCurrentRaw, beatFxIds]() {
-        const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
-        const EffectManifestPointer pManifest = pSlot ? pSlot->getManifest() : nullptr;
-        pFxCurrentRaw->set(pManifest ? beatFxIds.indexOf(pManifest->id()) + 1 : 0);
-    };
-    connect(pSlot.data(), &EffectSlot::effectChanged, this, updateFxCurrent);
-    updateFxCurrent();
+    QList<QWeakPointer<EffectSlot>> weakSlots;
+    QList<ControlObject*> fxCurrentControls;
+    for (int unit = 1; unit <= kNumFxUnits; ++unit) {
+        const QString suffix = unit == 1 ? QString() : QString::number(unit);
 
+        auto pFxPickerOpen = std::make_unique<ControlPushButton>(
+                ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_open") + suffix));
+        connect(pFxPickerOpen.get(),
+                &ControlObject::valueChanged,
+                this,
+                [pFxPickerRaw, pFxPickerUnitRaw, unit](double value) {
+                    if (value > 0) {
+                        pFxPickerUnitRaw->set(unit);
+                        pFxPickerRaw->set(1.0);
+                    }
+                });
+        m_skinSettingsControls.push_back(std::move(pFxPickerOpen));
+
+        auto* pLoadedEffect = new ControlProxy(
+                QStringLiteral("[EffectRack1_EffectUnit%1_Effect1]").arg(unit),
+                QStringLiteral("loaded_effect"),
+                this);
+        pLoadedEffect->connectValueChanged(this, [pFxPickerRaw](double) {
+            pFxPickerRaw->set(0.0);
+        });
+
+        auto pFxCurrent = std::make_unique<ControlObject>(
+                ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_current") + suffix));
+        fxCurrentControls.append(pFxCurrent.get());
+        m_skinSettingsControls.push_back(std::move(pFxCurrent));
+
+        EffectChainPointer pChain = pEffectsManager->getStandardEffectChain(unit - 1);
+        EffectSlotPointer pSlot = pChain ? pChain->getEffectSlot(0) : EffectSlotPointer();
+        weakSlots.append(pSlot);
+    }
+
+    const auto updateFxPickerCurrent = [pFxPickerUnitRaw, pFxPickerCurrentRaw, fxCurrentControls]() {
+        const int index = static_cast<int>(pFxPickerUnitRaw->get()) - 1;
+        pFxPickerCurrentRaw->set(index >= 0 && index < fxCurrentControls.size()
+                        ? fxCurrentControls.at(index)->get()
+                        : 0);
+    };
+    connect(pFxPickerUnitRaw, &ControlObject::valueChanged, this, updateFxPickerCurrent);
+
+    for (int i = 0; i < weakSlots.size(); ++i) {
+        const EffectSlotPointer pSlot = weakSlots.at(i).toStrongRef();
+        if (!pSlot) {
+            continue;
+        }
+        const QWeakPointer<EffectSlot> pWeakSlot = weakSlots.at(i);
+        ControlObject* pFxCurrentRaw = fxCurrentControls.at(i);
+        const auto updateFxCurrent = [pWeakSlot, pFxCurrentRaw, beatFxIds, updateFxPickerCurrent]() {
+            const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
+            const EffectManifestPointer pManifest = pSlot ? pSlot->getManifest() : nullptr;
+            pFxCurrentRaw->set(pManifest ? beatFxIds.indexOf(pManifest->id()) + 1 : 0);
+            updateFxPickerCurrent();
+        };
+        connect(pSlot.data(), &EffectSlot::effectChanged, this, updateFxCurrent);
+        updateFxCurrent();
+    }
+
+    const std::weak_ptr<EffectsManager> pWeakEffectsManager = pEffectsManager;
     for (int i = 0; i < beatFxIds.size(); ++i) {
         auto pSelect = std::make_unique<ControlPushButton>(
                 ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_select_%1").arg(i + 1)));
@@ -827,10 +953,16 @@ void MixxxMainWindow::createSkinSettingsControls() {
         connect(pSelect.get(),
                 &ControlObject::valueChanged,
                 this,
-                [pWeakEffectsManager, pWeakSlot, pFxPickerRaw, id](double value) {
+                [pWeakEffectsManager, weakSlots, pFxPickerRaw, pFxPickerUnitRaw, id](
+                        double value) {
                     const auto pEffectsManager = pWeakEffectsManager.lock();
-                    const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
-                    if (value <= 0 || !pEffectsManager || !pSlot) {
+                    const int index = static_cast<int>(pFxPickerUnitRaw->get()) - 1;
+                    if (value <= 0 || !pEffectsManager || index < 0 ||
+                            index >= weakSlots.size()) {
+                        return;
+                    }
+                    const EffectSlotPointer pSlot = weakSlots.at(index).toStrongRef();
+                    if (!pSlot) {
                         return;
                     }
                     const EffectManifestPointer pManifest =

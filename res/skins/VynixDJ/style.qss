@@ -672,6 +672,50 @@ WPushButton[value="1"]:hover {
   color: #1a1a1a;
 }
 
+/* Dual FX mode ([Skin],fx_dual): one compact block per effect unit, see
+ * templates/fx_unit_compact.xml. */
+#BeatFX_UnitBlock {
+  padding: 0 0 10px 0;
+}
+
+#BeatFX_UnitHeader {
+  qproperty-layoutAlignment: 'AlignVCenter';
+  qproperty-layoutSpacing: 4;
+}
+
+#BeatFX_UnitLabel {
+  color: #a7a9ac;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#BeatFX_UnitEffect {
+  color: #ffffff;
+  background-color: #262d39;
+  border: 2px solid #3d8bfd;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#BeatFX_UnitToggle {
+  color: #8a94a6;
+  background-color: #1a1f27;
+  border: 2px solid #3a4352;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#BeatFX_UnitToggle[value="1"] {
+  color: #ffffff;
+  background-color: #f15921;
+  border-color: #ff8a5c;
+}
+
 #BeatFX_WetRow {
   qproperty-layoutAlignment: 'AlignVCenter';
   qproperty-layoutSpacing: 4;

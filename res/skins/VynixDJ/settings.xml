@@ -224,6 +224,75 @@
                         </Children>
                       </WidgetGroup>
                       <WidgetGroup>
+                        <ObjectName>SettingsRow</ObjectName>
+                        <Layout>horizontal</Layout>
+                        <Size>0me,52f</Size>
+                        <Children>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>FX</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <!-- 2 FX shows FX 1 and FX 2 on the Play page, e.g.
+                               for the left and right FX sections of a
+                               controller. See effects.xml. -->
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>150f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">1 FX</SetVariable>
+                                <SetVariable name="ConfigKey">[Skin],fx_dual</SetVariable>
+                                <SetVariable name="Value">0</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">2 FX</SetVariable>
+                                <SetVariable name="ConfigKey">[Skin],fx_dual</SetVariable>
+                                <SetVariable name="Value">1</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
+                        </Children>
+                      </WidgetGroup>
+                      <WidgetGroup>
+                        <ObjectName>SettingsRow</ObjectName>
+                        <Layout>horizontal</Layout>
+                        <Size>0me,52f</Size>
+                        <Children>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Auto Browse</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <!-- On: turning the controller's browse knob opens
+                               Browse, loading a track from there goes back to
+                               Play. See [Skin],auto_browse in
+                               src/mixxxmainwindow.cpp. -->
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>150f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">On</SetVariable>
+                                <SetVariable name="ConfigKey">[Skin],auto_browse</SetVariable>
+                                <SetVariable name="Value">1</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">Off</SetVariable>
+                                <SetVariable name="ConfigKey">[Skin],auto_browse</SetVariable>
+                                <SetVariable name="Value">0</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
+                        </Children>
+                      </WidgetGroup>
+                      <WidgetGroup>
                         <ObjectName>SettingsSpacer</ObjectName>
                         <Size>0me,0me</Size>
                       </WidgetGroup>

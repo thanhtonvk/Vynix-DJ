@@ -1,0 +1,114 @@
+<!--
+  Compact Beat FX block for one effect unit, two of which share the FX page
+  of effects.xml while [Skin],fx_dual is set: unit label, the loaded effect
+  (tap to open the picker for this unit), deck routing, on/off and the
+  Level/Depth metaknob. The full parameter list is only shown in single FX
+  mode, there is no room for two of them in the 180px panel.
+
+  Variables:
+    unit:        effect unit number, 1 or 2
+    current_key: [Skin] control with the number of the loaded effect
+                 (fx_current / fx_current2)
+    open_key:    [Skin] control that opens the picker for this unit
+                 (fx_picker_open / fx_picker_open2)
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>BeatFX_UnitBlock</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>BeatFX_UnitHeader</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,36f</Size>
+        <Children>
+          <Label>
+            <ObjectName>BeatFX_UnitLabel</ObjectName>
+            <Text>FX<Variable name="unit"/></Text>
+            <Size>40f,36f</Size>
+          </Label>
+          <PushButton>
+            <ObjectName>BeatFX_UnitEffect</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>12</NumberStates>
+            <State><Number>0</Number><Text>Select ›</Text></State>
+            <State><Number>1</Number><Text>Echo ›</Text></State>
+            <State><Number>2</Number><Text>Reverb ›</Text></State>
+            <State><Number>3</Number><Text>Flanger ›</Text></State>
+            <State><Number>4</Number><Text>Phaser ›</Text></State>
+            <State><Number>5</Number><Text>Filter ›</Text></State>
+            <State><Number>6</Number><Text>Trans ›</Text></State>
+            <State><Number>7</Number><Text>Pan ›</Text></State>
+            <State><Number>8</Number><Text>Glitch ›</Text></State>
+            <State><Number>9</Number><Text>Pitch ›</Text></State>
+            <State><Number>10</Number><Text>Crush ›</Text></State>
+            <State><Number>11</Number><Text>Noise ›</Text></State>
+            <Connection>
+              <ConfigKey>[Skin],<Variable name="open_key"/></ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],<Variable name="current_key"/></ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <ObjectName>BeatFX_DeckRouting</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,40f</Size>
+        <Children>
+          <PushButton>
+            <ObjectName>BeatFX_DeckAssign1</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>D1</Text></State>
+            <State><Number>1</Number><Text>D1</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit<Variable name="unit"/>],group_[Channel1]_enable</ConfigKey>
+              <ConnectValueToWidget>true</ConnectValueToWidget>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>BeatFX_DeckAssign2</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>D2</Text></State>
+            <State><Number>1</Number><Text>D2</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit<Variable name="unit"/>],group_[Channel2]_enable</ConfigKey>
+              <ConnectValueToWidget>true</ConnectValueToWidget>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>BeatFX_UnitToggle</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Off</Text></State>
+            <State><Number>1</Number><Text>On</Text></State>
+            <Connection>
+              <ConfigKey>[EffectRack1_EffectUnit<Variable name="unit"/>_Effect1],enabled</ConfigKey>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <SliderComposed>
+        <ObjectName>BeatFX_MixSlider</ObjectName>
+        <Size>0me,36f</Size>
+        <Slider scalemode="STRETCH">icons/mix_slider_groove.svg</Slider>
+        <Handle scalemode="STRETCH_ASPECT">icons/mix_slider_handle.svg</Handle>
+        <Horizontal>true</Horizontal>
+        <Connection>
+          <ConfigKey>[EffectRack1_EffectUnit<Variable name="unit"/>_Effect1],meta</ConfigKey>
+        </Connection>
+      </SliderComposed>
+
+    </Children>
+  </WidgetGroup>
+</Template>
