@@ -26,6 +26,18 @@
                         set to 3 with audio buffer set to 5ms
                     </description>
                 </option>
+                <option
+                    variable="jogScrollsMaximizedLibrary"
+                    type="boolean"
+                    default="false"
+                    label="Scroll the library with the jogwheels while it is maximized">
+                    <description>
+                        If enabled, turning a jogwheel moves the library selection
+                        instead of scratching or bending the pitch while the
+                        library is maximized. Keep this disabled on small screens
+                        (e.g. phones), where the library is usually maximized.
+                    </description>
+                </option>
             </group>
             <group label="Acceleration">
                 <option
