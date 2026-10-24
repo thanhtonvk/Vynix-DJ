@@ -42,6 +42,8 @@ class SidebarModel : public QAbstractItemModel {
     bool dragMoveAccept(const QModelIndex& index, const QList<QUrl>& urls) const;
     bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
     bool hasTrackTable(const QModelIndex& index) const;
+    /// See LibraryFeature::listsDevices()
+    bool listsDevices(const QModelIndex& index) const;
     QModelIndex translateChildIndex(const QModelIndex& index) {
         return translateIndex(index, index.model());
     }

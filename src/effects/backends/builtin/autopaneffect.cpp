@@ -32,7 +32,8 @@ EffectManifestPointer AutoPanEffect::getManifest() {
             "1/4 - 4 beats rounded to 1/2 beat if tempo is detected\n"
             "1/4 - 4 seconds if no tempo is detected"));
     period->setValueScaler(EffectManifestParameter::ValueScaler::Linear);
-    period->setUnitsHint(EffectManifestParameter::UnitsHint::Unknown);
+    // Beats if tempo is detected, so the Beat FX BEAT knob can step it
+    period->setUnitsHint(EffectManifestParameter::UnitsHint::Beats);
     period->setDefaultLinkType(EffectManifestParameter::LinkType::Linked);
     period->setDefaultLinkInversion(EffectManifestParameter::LinkInversion::Inverted);
     period->setRange(0.0, 2.0, 4.0);

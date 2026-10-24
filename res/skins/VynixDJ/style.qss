@@ -688,6 +688,84 @@ WPushButton[value="1"]:hover {
   padding: 0 1px;
 }
 
+/* Both FX units stacked with [Skin],dual_fx, see beatfx_unit_compact.xml */
+/* Framed like the waveform boxes next to them */
+#BeatFXCompact_Unit {
+  background-color: #10141a;
+  border: 1px solid #2a313d;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+/* Same gap as between the two waveform boxes. Keep the pad of unit 2 in
+ * effects.xml in sync. */
+#BeatFX_UnitWrapper {
+  qproperty-layoutSpacing: 24;
+}
+
+#BeatFXCompact_Row {
+  qproperty-layoutSpacing: 4;
+  margin-bottom: 4px;
+}
+
+#BeatFXCompact_UnitLabel {
+  color: #e7e8e9;
+  background-color: #32323c;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#BeatFXCompact_Effect {
+  color: #ffffff;
+  background-color: #262d39;
+  border: 2px solid #3d8bfd;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#BeatFXCompact_Toggle {
+  color: #8a94a6;
+  background-color: #1a1f27;
+  border: 2px solid #3a4352;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#BeatFXCompact_Toggle[value="1"] {
+  color: #ffffff;
+  background-color: #f15921;
+  border-color: #ff8a5c;
+}
+
+/* BEAT and LEVEL knobs, side by side under the FX On toggle */
+#BeatFX_KnobRow {
+  qproperty-layoutSpacing: 6;
+  padding: 2px 0;
+}
+
+#BeatFX_KnobLabel {
+  color: #a7a9ac;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Readouts under the knobs. The beat readout is a display-only push button
+ * so it can show text per division. */
+#BeatFX_KnobValue,
+#BeatFX_KnobNumber {
+  color: #f15921;
+  background-color: transparent;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+}
+
 /* KEY page: one stacked block per deck, +/-2 semitone nudges and reset. */
 #KeyFX_DeckBlock {
   padding: 0 0 10px 0;
@@ -1166,6 +1244,19 @@ WEffectSelector QAbstractItemView {
   color: #ffffff;
 }
 
+/* Large expand arrows and indentation, readable and easy to aim at */
+#LibraryWrapper WLibrarySidebar {
+  qproperty-indentation: 44;
+}
+
+#LibraryWrapper WLibrarySidebar::branch:has-children:closed {
+  image: url(skin:/icons/chevron_right.svg);
+}
+
+#LibraryWrapper WLibrarySidebar::branch:has-children:open {
+  image: url(skin:/icons/chevron_down.svg);
+}
+
 /* Track info panel next to the track list (track_info.xml) */
 #TrackInfoPanel {
   background-color: #1d232d;
@@ -1227,6 +1318,34 @@ WEffectSelector QAbstractItemView {
   margin-top: 8px;
 }
 
+/* Load buttons in the deck colors of the FX routing buttons */
+#TrackInfoLoadRow {
+  qproperty-layoutSpacing: 8;
+  margin: 4px 0;
+}
+
+#TrackInfoLoad1,
+#TrackInfoLoad2 {
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#TrackInfoLoad1 {
+  background-color: #488ab3;
+}
+
+#TrackInfoLoad2 {
+  background-color: #f15921;
+}
+
+#TrackInfoLoad1[value="1"],
+#TrackInfoLoad2[value="1"] {
+  background-color: #2a313d;
+}
+
 #LibraryWrapper QPushButton,
 #LibraryWrapper QSpinBox,
 #LibraryWrapper QComboBox,
@@ -1240,13 +1359,28 @@ WLabel {
 }
 
 /* Library Search */
-#SearchBox {
-  background-color: #112f5c;
-  border-radius: 0;
-  font-size: 20px;
-  font-weight: bold;
+#SearchBoxContainer {
   padding: 4px;
-  text-transform: uppercase;
+}
+
+#SearchBox {
+  background-color: #262d39;
+  border: 2px solid #3d4a5c;
+  border-radius: 8px;
+  color: #e6e9ef;
+  font-size: 24px;
+  padding: 2px 12px;
+}
+
+#SearchBox:focus {
+  border-color: #3d8bfd;
+}
+
+/* WSearchLineEdit sets the track table font on its line edit, the style
+ * sheet font takes precedence */
+#SearchBox QLineEdit {
+  font-size: 24px;
+  color: #e6e9ef;
 }
 
 /* Sidebar (hide/show) */
@@ -1257,11 +1391,12 @@ WLabel {
 #SidebarButton {
   background-color: #3d8bfd;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 22px;
   font-weight: bold;
   margin: 4px;
+  text-transform: uppercase;
 }
 #SidebarButton:pressed {
   background-color: #1f5fae;

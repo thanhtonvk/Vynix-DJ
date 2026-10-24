@@ -8,6 +8,8 @@
 #include <QGuiApplication>
 #include <QTimer>
 #include <QUrl>
+#include <array>
+#include <cmath>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QGLFormat>
@@ -40,6 +42,7 @@
 #endif
 #include "control/controlindicatortimer.h"
 #include "control/control.h"
+#include "control/controlpotmeter.h"
 #include "control/controlproxy.h"
 #include "control/controlpushbutton.h"
 #include "effects/backends/effectsbackendmanager.h"
@@ -84,6 +87,128 @@
 namespace {
 const ConfigKey kHideMenuBarConfigKey = ConfigKey("[Config]", "hide_menubar");
 const ConfigKey kMenuBarHintConfigKey = ConfigKey("[Config]", "show_menubar_hint");
+
+// Number of Beat FX units touch skins can show, see [Skin],dual_fx
+constexpr int kBeatFxUnitCount = 2;
+// Knob parameter slots an effect slot has, see kDefaultMaxParameters
+constexpr int kEffectKnobParameterCount = 16;
+// Beat divisions of the BEAT knob, as periods in beats
+constexpr std::array<double, 8> kBeatFxBeatPeriods = {
+        0.125, 0.25, 0.5, 1, 2, 4, 8, 16};
+
+/// On-screen BEAT knob of a Beat FX unit, like on Pioneer DJM mixers. It
+/// steps through kBeatFxBeatPeriods for the first Beats-typed parameter of
+/// the effect loaded in the first slot of the unit, whichever parameter slot
+/// that is for the loaded effect.
+///
+/// [Skin],<prefix>_beat is the knob (0..1) and [Skin],<prefix>_beat_index
+/// the selected division for the label: 0 if the effect has no Beats-typed
+/// parameter, otherwise 1 + the index into kBeatFxBeatPeriods.
+class BeatFxBeatKnob : public QObject {
+  public:
+    BeatFxBeatKnob(const QString& effectGroup,
+            ControlObject* pKnob,
+            ControlObject* pIndex,
+            QObject* pParent)
+            : QObject(pParent),
+              m_pKnob(pKnob),
+              m_pIndex(pIndex) {
+        for (int i = 0; i < kEffectKnobParameterCount; ++i) {
+            const QString item = QStringLiteral("parameter%1").arg(i + 1);
+            m_units.push_back(new ControlProxy(
+                    effectGroup, item + QStringLiteral("_units"), this));
+            m_beatPeriods.push_back(new ControlProxy(
+                    effectGroup, item + QStringLiteral("_beat_period"), this));
+            m_units.back()->connectValueChanged(this, [this](double) {
+                sync();
+            });
+            m_beatPeriods.back()->connectValueChanged(this, [this](double) {
+                sync();
+            });
+        }
+        connect(m_pKnob, &ControlObject::valueChanged, this, &BeatFxBeatKnob::slotKnobChanged);
+        sync();
+    }
+
+  private:
+    /// Index of the parameter slot the knob controls, or -1
+    int beatParameter() const {
+        for (int i = 0; i < kEffectKnobParameterCount; ++i) {
+            // EffectManifestParameter::UnitsHint::Beats
+            if (m_units[i]->get() == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    static int nearestDivision(double period) {
+        if (period <= 0) {
+            return 0;
+        }
+        int nearest = 0;
+        for (int i = 1; i < static_cast<int>(kBeatFxBeatPeriods.size()); ++i) {
+            if (std::abs(std::log2(period / kBeatFxBeatPeriods[i])) <
+                    std::abs(std::log2(period / kBeatFxBeatPeriods[nearest]))) {
+                nearest = i;
+            }
+        }
+        return nearest;
+    }
+
+    static double knobPosition(int division) {
+        return static_cast<double>(division) / (kBeatFxBeatPeriods.size() - 1);
+    }
+
+    void slotKnobChanged(double value) {
+        if (m_updatingKnob) {
+            return;
+        }
+        const int parameter = beatParameter();
+        if (parameter < 0) {
+            return;
+        }
+        const int division = static_cast<int>(
+                std::round(value * (kBeatFxBeatPeriods.size() - 1)));
+        if (division + 1 == static_cast<int>(m_pIndex->get())) {
+            return;
+        }
+        // Leave the knob where the finger is, snapping it would stop small
+        // drags from ever reaching the next division. The effect reports
+        // the period it uses back synchronously, from within set().
+        m_settingPeriod = true;
+        m_beatPeriods[parameter]->set(kBeatFxBeatPeriods[division]);
+        m_settingPeriod = false;
+        sync(false);
+    }
+
+    /// Follows the loaded effect and beat changes from the parameter list,
+    /// controllers and the knob itself
+    void sync(bool moveKnob = true) {
+        const int parameter = beatParameter();
+        if (parameter < 0) {
+            m_pIndex->set(0);
+            return;
+        }
+        // The effect may clamp the requested period, so show what it uses
+        const int division = nearestDivision(m_beatPeriods[parameter]->get());
+        m_pIndex->set(division + 1);
+        if (!moveKnob || m_settingPeriod) {
+            return;
+        }
+        m_updatingKnob = true;
+        m_pKnob->set(knobPosition(division));
+        m_updatingKnob = false;
+    }
+
+    ControlObject* const m_pKnob;
+    ControlObject* const m_pIndex;
+    std::vector<ControlProxy*> m_units;
+    std::vector<ControlProxy*> m_beatPeriods;
+    bool m_updatingKnob = false;
+    bool m_settingPeriod = false;
+};
+
 } // namespace
 
 MixxxMainWindow::MixxxMainWindow(std::shared_ptr<mixxx::CoreServices> pCoreServices)
@@ -762,63 +887,133 @@ void MixxxMainWindow::createSkinSettingsControls() {
         m_skinSettingsControls.push_back(std::move(pShowColumn));
     }
 
+    // Touch skins with [Tab] pages: show the decks again after a track was
+    // loaded from the library, so a controller's load buttons work without
+    // touching the screen. Turning the browse knob opens the library page,
+    // see LibraryControl::showTouchSkinLibrary().
+    const auto showDecksPage = []() {
+        const ConfigKey overviewTabKey(QStringLiteral("[Tab]"), QStringLiteral("overview"));
+        if (ControlObject::exists(overviewTabKey)) {
+            ControlObject::set(overviewTabKey, 1);
+        }
+    };
+    connect(m_pCoreServices->getLibrary().get(),
+            &Library::loadTrackToPlayer,
+            this,
+            showDecksPage);
+    connect(m_pCoreServices->getLibrary().get(),
+            &Library::loadTrack,
+            this,
+            showDecksPage);
+
+    // One Beat FX unit like on DDJ controllers, or one per side like on
+    // Denon DJ and Numark controllers ([EffectRack1_EffectUnit1] for the left
+    // and [EffectRack1_EffectUnit2] for the right side). Persisted.
+    m_skinSettingsControls.push_back(std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("dual_fx")),
+            true,
+            false,
+            true));
+
     // Full screen effect picker for touch skins: [Skin],fx_picker shows it,
-    // [Skin],fx_picker_open (a push button) opens it, and loading an effect
-    // closes it again.
+    // [Skin],fx_picker_open / fx2_picker_open (push buttons) open it for the
+    // first effect of EffectUnit1 / EffectUnit2, and loading an effect closes
+    // it again. [Skin],fx_picker_unit is the unit it is open for.
     auto pFxPicker = std::make_unique<ControlPushButton>(
             ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker")));
     pFxPicker->setButtonMode(mixxx::control::ButtonMode::Toggle);
     ControlPushButton* pFxPickerRaw = pFxPicker.get();
     m_skinSettingsControls.push_back(std::move(pFxPicker));
 
-    auto pFxPickerOpen = std::make_unique<ControlPushButton>(
-            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_open")));
-    connect(pFxPickerOpen.get(),
-            &ControlObject::valueChanged,
-            this,
-            [pFxPickerRaw](double value) {
-                if (value > 0) {
-                    pFxPickerRaw->set(1.0);
-                }
-            });
-    m_skinSettingsControls.push_back(std::move(pFxPickerOpen));
+    auto pFxPickerUnit = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_unit")));
+    pFxPickerUnit->set(1);
+    ControlObject* pFxPickerUnitRaw = pFxPickerUnit.get();
+    m_skinSettingsControls.push_back(std::move(pFxPickerUnit));
 
-    auto* pLoadedEffect = new ControlProxy(
-            QStringLiteral("[EffectRack1_EffectUnit1_Effect1]"),
-            QStringLiteral("loaded_effect"),
-            this);
-    pLoadedEffect->connectValueChanged(this, [pFxPickerRaw](double) {
-        pFxPickerRaw->set(0.0);
-    });
-
-    // Beat FX selection by effect id for the first effect of EffectUnit1.
+    // Beat FX selection by effect id for the first effect of each unit.
     // [Skin],fx_select_N loads the Nth effect of
-    // VisibleEffectsList::beatFxEffectIds(), and [Skin],fx_current is the
-    // number of the loaded one (0 if none or another effect). Unlike
+    // VisibleEffectsList::beatFxEffectIds() into the unit the picker is open
+    // for. [Skin],fx_current / fx2_current are the numbers of the effects
+    // loaded in the units (0 if none or another effect) and
+    // [Skin],fx_picker_current the one of the picker's unit. Unlike
     // loaded_effect this does not depend on the order of the visible effects
     // list in the preferences.
-    std::shared_ptr<EffectsManager> pEffectsManager = m_pCoreServices->getEffectsManager();
-    EffectChainPointer pChain = pEffectsManager->getStandardEffectChain(0);
-    EffectSlotPointer pSlot = pChain ? pChain->getEffectSlot(0) : EffectSlotPointer();
-    if (!pSlot) {
-        return;
-    }
-    const QStringList& beatFxIds = VisibleEffectsList::beatFxEffectIds();
+    auto pFxPickerCurrent = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker_current")));
+    ControlObject* pFxPickerCurrentRaw = pFxPickerCurrent.get();
+    m_skinSettingsControls.push_back(std::move(pFxPickerCurrent));
 
-    auto pFxCurrent = std::make_unique<ControlObject>(
-            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("fx_current")));
-    ControlObject* pFxCurrentRaw = pFxCurrent.get();
-    m_skinSettingsControls.push_back(std::move(pFxCurrent));
-    // Weak references, the effect slots are owned by the EffectsManager
-    const QWeakPointer<EffectSlot> pWeakSlot = pSlot;
+    std::shared_ptr<EffectsManager> pEffectsManager = m_pCoreServices->getEffectsManager();
     const std::weak_ptr<EffectsManager> pWeakEffectsManager = pEffectsManager;
-    const auto updateFxCurrent = [pWeakSlot, pFxCurrentRaw, beatFxIds]() {
-        const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
-        const EffectManifestPointer pManifest = pSlot ? pSlot->getManifest() : nullptr;
-        pFxCurrentRaw->set(pManifest ? beatFxIds.indexOf(pManifest->id()) + 1 : 0);
-    };
-    connect(pSlot.data(), &EffectSlot::effectChanged, this, updateFxCurrent);
-    updateFxCurrent();
+    const QStringList& beatFxIds = VisibleEffectsList::beatFxEffectIds();
+    // Weak references, the effect slots are owned by the EffectsManager
+    QList<QWeakPointer<EffectSlot>> weakSlots;
+
+    for (int unit = 1; unit <= kBeatFxUnitCount; ++unit) {
+        EffectChainPointer pChain = pEffectsManager->getStandardEffectChain(unit - 1);
+        EffectSlotPointer pSlot = pChain ? pChain->getEffectSlot(0) : EffectSlotPointer();
+        weakSlots.append(pSlot);
+        if (!pSlot) {
+            continue;
+        }
+        // "fx" for the first unit keeps the controls the skin used before
+        // there were two
+        const QString prefix = unit == 1 ? QStringLiteral("fx")
+                                         : QStringLiteral("fx%1").arg(unit);
+
+        auto pFxCurrent = std::make_unique<ControlObject>(
+                ConfigKey(QStringLiteral("[Skin]"), prefix + QStringLiteral("_current")));
+        ControlObject* pFxCurrentRaw = pFxCurrent.get();
+        m_skinSettingsControls.push_back(std::move(pFxCurrent));
+        const QWeakPointer<EffectSlot> pWeakSlot = pSlot;
+        const auto updateFxCurrent = [pWeakSlot,
+                                             pFxCurrentRaw,
+                                             pFxPickerUnitRaw,
+                                             pFxPickerCurrentRaw,
+                                             beatFxIds,
+                                             unit]() {
+            const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
+            const EffectManifestPointer pManifest = pSlot ? pSlot->getManifest() : nullptr;
+            pFxCurrentRaw->set(pManifest ? beatFxIds.indexOf(pManifest->id()) + 1 : 0);
+            if (pFxPickerUnitRaw->get() == unit) {
+                pFxPickerCurrentRaw->set(pFxCurrentRaw->get());
+            }
+        };
+        connect(pSlot.data(), &EffectSlot::effectChanged, this, updateFxCurrent);
+        connect(pSlot.data(), &EffectSlot::effectChanged, this, [pFxPickerRaw]() {
+            pFxPickerRaw->set(0.0);
+        });
+        updateFxCurrent();
+
+        auto pFxPickerOpen = std::make_unique<ControlPushButton>(
+                ConfigKey(QStringLiteral("[Skin]"), prefix + QStringLiteral("_picker_open")));
+        connect(pFxPickerOpen.get(),
+                &ControlObject::valueChanged,
+                this,
+                [pFxPickerRaw,
+                        pFxPickerUnitRaw,
+                        pFxPickerCurrentRaw,
+                        pFxCurrentRaw,
+                        unit](double value) {
+                    if (value > 0) {
+                        pFxPickerUnitRaw->set(unit);
+                        pFxPickerCurrentRaw->set(pFxCurrentRaw->get());
+                        pFxPickerRaw->set(1.0);
+                    }
+                });
+        m_skinSettingsControls.push_back(std::move(pFxPickerOpen));
+
+        auto pBeatKnob = std::make_unique<ControlPotmeter>(
+                ConfigKey(QStringLiteral("[Skin]"), prefix + QStringLiteral("_beat")),
+                0.0,
+                1.0);
+        auto pBeatIndex = std::make_unique<ControlObject>(
+                ConfigKey(QStringLiteral("[Skin]"), prefix + QStringLiteral("_beat_index")));
+        new BeatFxBeatKnob(pSlot->getGroup(), pBeatKnob.get(), pBeatIndex.get(), this);
+        m_skinSettingsControls.push_back(std::move(pBeatKnob));
+        m_skinSettingsControls.push_back(std::move(pBeatIndex));
+    }
 
     for (int i = 0; i < beatFxIds.size(); ++i) {
         auto pSelect = std::make_unique<ControlPushButton>(
@@ -827,10 +1022,16 @@ void MixxxMainWindow::createSkinSettingsControls() {
         connect(pSelect.get(),
                 &ControlObject::valueChanged,
                 this,
-                [pWeakEffectsManager, pWeakSlot, pFxPickerRaw, id](double value) {
+                [pWeakEffectsManager, weakSlots, pFxPickerRaw, pFxPickerUnitRaw, id](
+                        double value) {
                     const auto pEffectsManager = pWeakEffectsManager.lock();
-                    const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
-                    if (value <= 0 || !pEffectsManager || !pSlot) {
+                    const int unitIndex = static_cast<int>(pFxPickerUnitRaw->get()) - 1;
+                    if (value <= 0 || !pEffectsManager || unitIndex < 0 ||
+                            unitIndex >= weakSlots.size()) {
+                        return;
+                    }
+                    const EffectSlotPointer pSlot = weakSlots.at(unitIndex).toStrongRef();
+                    if (!pSlot) {
                         return;
                     }
                     const EffectManifestPointer pManifest =

@@ -41,6 +41,8 @@ EffectManifestPointer FlangerEffect::getManifest() {
             "32 - 1/4 beats rounded to 1/2 beat per LFO cycle if tempo is detected\n"
             "1/32 - 4 Hz if no tempo is detected"));
     speed->setValueScaler(EffectManifestParameter::ValueScaler::LogarithmicInverse);
+    // Beats per LFO cycle, so the Beat FX BEAT knob can step it
+    speed->setUnitsHint(EffectManifestParameter::UnitsHint::Beats);
     speed->setRange(kMinLfoBeats, 8, kMaxLfoBeats);
 
     EffectManifestParameterPointer width = pManifest->addParameter();

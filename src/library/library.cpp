@@ -103,6 +103,23 @@ Library::Library(
             Qt::DirectConnection /* signal-to-signal */);
 #endif
 
+    // Rekordbox and Serato right after Tracks: DJ USB drives are the usual
+    // music source on the go, so they should be reachable with a few turns of
+    // the controller's browse knob.
+    // TODO(XXX) Rekordbox feature added persistently as the only way to enable it to
+    // dynamically appear/disappear when correctly prepared removable devices
+    // are mounted/unmounted would be to have some form of timed thread to check
+    // periodically. Not ideal performance wise.
+    if (m_pConfig->getValue(
+                ConfigKey(kConfigGroup, "ShowRekordboxLibrary"), true)) {
+        addFeature(new RekordboxFeature(this, m_pConfig));
+    }
+
+    if (m_pConfig->getValue(
+                ConfigKey(kConfigGroup, "ShowSeratoLibrary"), true)) {
+        addFeature(new SeratoFeature(this, m_pConfig));
+    }
+
     m_pAutoDJFeature = make_parented<AutoDJFeature>(this, m_pConfig, pPlayerManager);
     addFeature(m_pAutoDJFeature);
 
@@ -211,20 +228,6 @@ Library::Library(
         addFeature(new TraktorFeature(this, m_pConfig));
     }
 
-    // TODO(XXX) Rekordbox feature added persistently as the only way to enable it to
-    // dynamically appear/disappear when correctly prepared removable devices
-    // are mounted/unmounted would be to have some form of timed thread to check
-    // periodically. Not ideal performance wise.
-    if (m_pConfig->getValue(
-                ConfigKey(kConfigGroup, "ShowRekordboxLibrary"), true)) {
-        addFeature(new RekordboxFeature(this, m_pConfig));
-    }
-
-    if (m_pConfig->getValue(
-                ConfigKey(kConfigGroup, "ShowSeratoLibrary"), true)) {
-        addFeature(new SeratoFeature(this, m_pConfig));
-    }
-
     for (const auto& externalTrackCollection : m_pTrackCollectionManager->externalCollections()) {
         auto* feature = externalTrackCollection->newLibraryFeature(this, m_pConfig);
         if (feature) {
@@ -327,11 +330,22 @@ void Library::bindSearchboxWidget(WSearchLineEdit* pSearchboxWidget) {
     connect(pSearchboxWidget,
             &WSearchLineEdit::search,
             this,
-            &Library::search);
+            &Library::slotSearchboxSearch);
     connect(this,
             &Library::disableSearch,
             pSearchboxWidget,
-            &WSearchLineEdit::slotDisableSearch);
+            [pSearchboxWidget]() {
+                // Touch skins keep the search box usable while they show the
+                // sidebar instead of the activated feature's view: searching
+                // from there searches all tracks, see slotSearchboxSearch()
+                const ConfigKey sidebarVisibleKey(
+                        QStringLiteral("[Sidebar]"), QStringLiteral("sidebar_visible"));
+                if (ControlObject::exists(sidebarVisibleKey) &&
+                        ControlObject::get(sidebarVisibleKey) > 0) {
+                    return;
+                }
+                pSearchboxWidget->slotDisableSearch();
+            });
     connect(this,
             &Library::restoreSearch,
             pSearchboxWidget,
@@ -762,6 +776,22 @@ void Library::setRowHeight(int rowHeight) {
 void Library::setEditMetadataSelectedClick(bool enabled) {
     m_editMetadataSelectedClick = enabled;
     emit setSelectedClick(enabled);
+}
+
+void Library::slotSearchboxSearch(const QString& text) {
+    // Touch skins show either the sidebar or the track table in its place,
+    // see WLibrarySidebar::slotItemTapped(). While the sidebar is shown there
+    // is no current view to search in, so search all tracks instead.
+    const ConfigKey sidebarVisibleKey(
+            QStringLiteral("[Sidebar]"), QStringLiteral("sidebar_visible"));
+    if (!text.isEmpty() &&
+            ControlObject::exists(sidebarVisibleKey) &&
+            ControlObject::get(sidebarVisibleKey) > 0) {
+        ControlObject::set(sidebarVisibleKey, 0);
+        searchTracksInCollection(text);
+        return;
+    }
+    emit search(text);
 }
 
 void Library::slotSearchInCurrentView() {

@@ -65,6 +65,9 @@ class RekordboxFeature : public BaseExternalLibraryFeature {
             KeyboardEventFilter* keyboard) override;
 
     TreeItemModel* sidebarModel() const override;
+    bool listsDevices() override {
+        return true;
+    }
 
   public slots:
     void activate() override;

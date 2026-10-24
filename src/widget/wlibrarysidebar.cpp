@@ -223,17 +223,19 @@ void WLibrarySidebar::renameSelectedItem() {
 void WLibrarySidebar::toggleSelectedItem() {
     QModelIndex index = selectedIndex();
     if (index.isValid()) {
+        // Before clicked(): slotItemTapped() may expand device lists
+        const bool expanded = isExpanded(index);
         // Activate the item so its content shows in the main library.
         emit clicked(index);
         // Expand or collapse the item as necessary.
-        setExpanded(index, !isExpanded(index));
+        setExpanded(index, !expanded);
     }
 }
 
 bool WLibrarySidebar::isLeafNodeSelected() {
     QModelIndex index = selectedIndex();
     if (index.isValid()) {
-        if(!index.model()->hasChildren(index)) {
+        if (isLeaf(index)) {
             return true;
         }
         const SidebarModel* pSidebarModel = qobject_cast<const SidebarModel*>(index.model());
@@ -392,13 +394,35 @@ void WLibrarySidebar::slotItemTapped(const QModelIndex& index) {
             QScroller::scroller(viewport())->state() != QScroller::Inactive) {
         return;
     }
-    bool showTrackTable = !index.model()->hasChildren(index);
+    const auto* pSidebarModel = qobject_cast<const SidebarModel*>(index.model());
+    if (pSidebarModel && pSidebarModel->listsDevices(index)) {
+        // Stay in the sidebar and show the devices below the item as soon as
+        // the scan triggered by the tap has found them, see rowsInserted()
+        m_expandOnDevicesFound = index;
+        expand(index);
+        return;
+    }
+    bool showTrackTable = isLeaf(index);
     if (!showTrackTable && !index.parent().isValid()) {
-        const auto* pSidebarModel = qobject_cast<const SidebarModel*>(index.model());
         showTrackTable = pSidebarModel && pSidebarModel->hasTrackTable(index);
     }
     if (showTrackTable) {
         ControlObject::set(sidebarVisibleKey, 0);
+    }
+}
+
+bool WLibrarySidebar::isLeaf(const QModelIndex& index) const {
+    const auto* pSidebarModel = qobject_cast<const SidebarModel*>(index.model());
+    if (pSidebarModel && pSidebarModel->listsDevices(index)) {
+        return false;
+    }
+    return !index.model()->hasChildren(index);
+}
+
+void WLibrarySidebar::rowsInserted(const QModelIndex& parent, int start, int end) {
+    QTreeView::rowsInserted(parent, start, end);
+    if (m_expandOnDevicesFound.isValid() && parent == m_expandOnDevicesFound) {
+        expand(parent);
     }
 }
 

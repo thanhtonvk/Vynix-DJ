@@ -45,6 +45,7 @@ class WLibrarySidebar : public QTreeView, public WBaseWidget {
 
   protected:
     bool event(QEvent* pEvent) override;
+    void rowsInserted(const QModelIndex& parent, int start, int end) override;
 
   private slots:
     void slotItemTapped(const QModelIndex& index);
@@ -52,6 +53,8 @@ class WLibrarySidebar : public QTreeView, public WBaseWidget {
   private:
     void focusSelectedIndex();
     QModelIndex selectedIndex();
+    /// Like !hasChildren(), but see LibraryFeature::listsDevices()
+    bool isLeaf(const QModelIndex& index) const;
 
     void toggleDragHoverPropertyAndUpdateStyle(bool enabled);
     void resetHoverIndexAndDragMoveResult();
@@ -60,4 +63,6 @@ class WLibrarySidebar : public QTreeView, public WBaseWidget {
     int m_hoverExpandDelay;
     QModelIndex m_hoverIndex;
     bool m_lastDragMoveAccepted;
+    /// Feature item tapped last whose found devices are shown right away
+    QPersistentModelIndex m_expandOnDevicesFound;
 };

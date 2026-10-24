@@ -1,0 +1,369 @@
+<!--
+  One Beat FX unit: the first effect of [EffectRack1_EffectUnit<unit>].
+  The header pins the effect picker, deck routing, Active toggle and the
+  BEAT / LEVEL knobs; below it a drag-scrollable list exposes every loaded
+  parameter: Beats-typed bucket pickers first (effect_param_row.xml), then
+  button parameters such as Quantize and Triplets
+  (effect_button_param_row.xml), then the remaining knobs
+  (effect_knob_param_row.xml).
+
+  Shown once on the right in single FX mode, and as FX 1 on the left and
+  FX 2 on the right with [Skin],dual_fx (Settings > General > FX units).
+
+  Variables:
+    unit: effect unit number, 1 or 2
+    prefix: prefix of the [Skin] controls of the unit, "fx" for unit 1 and
+            "fx2" for unit 2 (see MixxxMainWindow::createSkinSettingsControls)
+-->
+<Template>
+  <SetVariable name="UnitGroup">[EffectRack1_EffectUnit<Variable name="unit"/>]</SetVariable>
+  <SetVariable name="EffectGroup">[EffectRack1_EffectUnit<Variable name="unit"/>_Effect1]</SetVariable>
+  <WidgetGroup>
+    <ObjectName>BeatFX_Unit</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>BeatFX_Header</ObjectName>
+        <Layout>vertical</Layout>
+        <!-- Never taller than its content, the spacer below or the
+             parameter list take the rest of the panel -->
+        <SizePolicy>me,max</SizePolicy>
+        <Children>
+
+          <!-- Shows the loaded effect; tapping it opens the full screen
+               effect picker (fx_picker.xml) for this unit, like the FX
+               selection of Denon DJ SC Live units. -->
+          <PushButton>
+            <ObjectName>BeatFX_CurrentEffect</ObjectName>
+            <Size>0me,44f</Size>
+            <NumberStates>12</NumberStates>
+            <State><Number>0</Number><Text>Select FX ›</Text></State>
+            <State><Number>1</Number><Text>Echo ›</Text></State>
+            <State><Number>2</Number><Text>Reverb ›</Text></State>
+            <State><Number>3</Number><Text>Flanger ›</Text></State>
+            <State><Number>4</Number><Text>Phaser ›</Text></State>
+            <State><Number>5</Number><Text>Filter ›</Text></State>
+            <State><Number>6</Number><Text>Trans ›</Text></State>
+            <State><Number>7</Number><Text>Pan ›</Text></State>
+            <State><Number>8</Number><Text>Glitch ›</Text></State>
+            <State><Number>9</Number><Text>Pitch ›</Text></State>
+            <State><Number>10</Number><Text>Crush ›</Text></State>
+            <State><Number>11</Number><Text>Noise ›</Text></State>
+            <Connection>
+              <ConfigKey>[Skin],<Variable name="prefix"/>_picker_open</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],<Variable name="prefix"/>_current</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </PushButton>
+
+          <WidgetGroup>
+            <ObjectName>BeatFX_DeckRouting</ObjectName>
+            <Layout>horizontal</Layout>
+            <Size>0me,40f</Size>
+            <Children>
+              <PushButton>
+                <ObjectName>BeatFX_DeckAssign1</ObjectName>
+                <Size>0me,40f</Size>
+                <NumberStates>2</NumberStates>
+                <State>
+                  <Number>0</Number>
+                  <Text>Deck 1</Text>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>Deck 1</Text>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="UnitGroup"/>,group_[Channel1]_enable</ConfigKey>
+                  <ConnectValueToWidget>true</ConnectValueToWidget>
+                </Connection>
+              </PushButton>
+              <PushButton>
+                <ObjectName>BeatFX_DeckAssign2</ObjectName>
+                <Size>0me,40f</Size>
+                <NumberStates>2</NumberStates>
+                <State>
+                  <Number>0</Number>
+                  <Text>Deck 2</Text>
+                </State>
+                <State>
+                  <Number>1</Number>
+                  <Text>Deck 2</Text>
+                </State>
+                <Connection>
+                  <ConfigKey><Variable name="UnitGroup"/>,group_[Channel2]_enable</ConfigKey>
+                  <ConnectValueToWidget>true</ConnectValueToWidget>
+                </Connection>
+              </PushButton>
+            </Children>
+          </WidgetGroup>
+
+          <!-- The effect's on/off switch gets its own full-width row: next
+               to the deck buttons it read as a third routing choice. -->
+          <PushButton>
+            <ObjectName>BeatFX_ActiveToggle</ObjectName>
+            <Size>0me,48f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>FX Off</Text>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>FX On</Text>
+            </State>
+            <Connection>
+              <ConfigKey><Variable name="EffectGroup"/>,enabled</ConfigKey>
+            </Connection>
+          </PushButton>
+
+          <!-- BEAT and LEVEL/DEPTH knobs like on Pioneer DJM mixers. Drag up
+               or right to turn them clockwise. -->
+          <WidgetGroup>
+            <ObjectName>BeatFX_KnobRow</ObjectName>
+            <Layout>horizontal</Layout>
+            <Size>0me,98f</Size>
+            <Children>
+
+              <!-- Steps the beat division of whichever parameter of the
+                   loaded effect is Beats-typed. The readout shows the
+                   division the effect actually uses, "–" if it has none. -->
+              <WidgetGroup>
+                <ObjectName>BeatFX_Knob</ObjectName>
+                <Layout>vertical</Layout>
+                <SizePolicy>me,me</SizePolicy>
+                <Children>
+                  <Label>
+                    <ObjectName>BeatFX_KnobLabel</ObjectName>
+                    <Text>Beat</Text>
+                    <Size>0me,18f</Size>
+                    <Alignment>center</Alignment>
+                  </Label>
+                  <KnobComposed>
+                    <ObjectName>BeatFX_KnobDial</ObjectName>
+                    <Size>0me,56f</Size>
+                    <Knob scalemode="STRETCH_ASPECT">icons/knob.svg</Knob>
+                    <MinAngle>-140</MinAngle>
+                    <MaxAngle>140</MaxAngle>
+                    <Connection>
+                      <ConfigKey>[Skin],<Variable name="prefix"/>_beat</ConfigKey>
+                    </Connection>
+                  </KnobComposed>
+                  <PushButton>
+                    <ObjectName>BeatFX_KnobValue</ObjectName>
+                    <Size>0me,22f</Size>
+                    <NumberStates>9</NumberStates>
+                    <State><Number>0</Number><Text>–</Text></State>
+                    <State><Number>1</Number><Text>1/8</Text></State>
+                    <State><Number>2</Number><Text>1/4</Text></State>
+                    <State><Number>3</Number><Text>1/2</Text></State>
+                    <State><Number>4</Number><Text>1</Text></State>
+                    <State><Number>5</Number><Text>2</Text></State>
+                    <State><Number>6</Number><Text>4</Text></State>
+                    <State><Number>7</Number><Text>8</Text></State>
+                    <State><Number>8</Number><Text>16</Text></State>
+                    <Connection>
+                      <ConfigKey>[Skin],<Variable name="prefix"/>_beat_index</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </PushButton>
+                </Children>
+              </WidgetGroup>
+
+              <!-- Depth of the loaded effect: its metaknob, which drives the
+                   parameters the effect links to it (flanger depth, filter
+                   cutoff, white noise amount, ...). Controllers move the
+                   same control with their Beat FX level knob. -->
+              <WidgetGroup>
+                <ObjectName>BeatFX_Knob</ObjectName>
+                <Layout>vertical</Layout>
+                <SizePolicy>me,me</SizePolicy>
+                <Children>
+                  <Label>
+                    <ObjectName>BeatFX_KnobLabel</ObjectName>
+                    <Text>Level</Text>
+                    <Size>0me,18f</Size>
+                    <Alignment>center</Alignment>
+                  </Label>
+                  <KnobComposed>
+                    <ObjectName>BeatFX_KnobDial</ObjectName>
+                    <Size>0me,56f</Size>
+                    <Knob scalemode="STRETCH_ASPECT">icons/knob.svg</Knob>
+                    <MinAngle>-140</MinAngle>
+                    <MaxAngle>140</MaxAngle>
+                    <Connection>
+                      <ConfigKey><Variable name="EffectGroup"/>,meta</ConfigKey>
+                    </Connection>
+                  </KnobComposed>
+                  <Number>
+                    <ObjectName>BeatFX_KnobNumber</ObjectName>
+                    <Size>0me,22f</Size>
+                    <NumberOfDigits>2</NumberOfDigits>
+                    <Alignment>center</Alignment>
+                    <Connection>
+                      <ConfigKey><Variable name="EffectGroup"/>,meta</ConfigKey>
+                      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                    </Connection>
+                  </Number>
+                </Children>
+              </WidgetGroup>
+
+            </Children>
+          </WidgetGroup>
+
+        </Children>
+      </WidgetGroup>
+
+      <!--
+        Parameter list, drag-scrollable (ContentDragScroller) so an effect
+        can expose all of its parameters below the pinned header. Mixxx
+        allocates kDefaultMaxParameters (16) knob and 16 button parameter
+        slots per effect; every row collapses when its slot isn't loaded, so
+        the list packs from the top.
+      -->
+      <Scrollable>
+        <ObjectName>BeatFX_Parameters</ObjectName>
+        <!-- Expanding, not MinimumExpanding: the list's full height must
+             never be the floor, or the page would outgrow the panel instead
+             of scrolling. -->
+        <SizePolicy>e,e</SizePolicy>
+        <WidgetResizable>true</WidgetResizable>
+        <ScrollToTopOn><Variable name="EffectGroup"/>,loaded_effect</ScrollToTopOn>
+        <HorizontalScrollBarPolicy>off</HorizontalScrollBarPolicy>
+        <Children>
+          <WidgetGroup>
+            <ObjectName>BeatFX_ParameterList</ObjectName>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,min</SizePolicy>
+            <Children>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">1</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">2</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">3</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">4</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">5</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">6</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">7</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">8</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">9</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">10</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">11</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">12</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">13</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">14</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">15</SetVariable>
+              </Template>
+              <Template src="skin:templates/effect_param_row.xml">
+                <SetVariable name="rack">1</SetVariable>
+                <SetVariable name="unit"><Variable name="unit"/></SetVariable>
+                <SetVariable name="effect">1</SetVariable>
+                <SetVariable name="param">16</SetVariable>
+              </Template>
+              <WidgetGroup>
+                <ObjectName>BeatFX_Spacer</ObjectName>
+                <Size>0me,0me</Size>
+              </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+        </Children>
+        <Connection>
+          <ConfigKey><Variable name="EffectGroup"/>,loaded</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </Scrollable>
+
+      <!-- Takes the parameter list's space while no effect is loaded, so the
+           header stays at the top. Layout alignment can't do this, see the
+           LevelKnobLabel note in style.qss. -->
+      <WidgetGroup>
+        <ObjectName>BeatFX_Spacer</ObjectName>
+        <Size>0me,0me</Size>
+        <Connection>
+          <ConfigKey><Variable name="EffectGroup"/>,loaded</ConfigKey>
+          <BindProperty>visible</BindProperty>
+          <Transform><Not/></Transform>
+        </Connection>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

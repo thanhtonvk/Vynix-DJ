@@ -477,6 +477,13 @@ bool SidebarModel::hasTrackTable(const QModelIndex& index) const {
     return false;
 }
 
+bool SidebarModel::listsDevices(const QModelIndex& index) const {
+    if (index.internalPointer() == this) {
+        return m_sFeatures[index.row()]->listsDevices();
+    }
+    return false;
+}
+
 bool SidebarModel::dragMoveAccept(const QModelIndex& index, const QList<QUrl>& urls) const {
     if constexpr (kDebug) {
         qDebug() << "SidebarModel::dragMoveAccept() index=" << index << urls;

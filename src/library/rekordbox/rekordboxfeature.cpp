@@ -12,6 +12,14 @@
 #include <QStringList>
 #include <QTextCodec>
 #include <QtDebug>
+#ifdef __ANDROID__
+#include <QCoreApplication>
+#include <QJniEnvironment>
+#include <QJniObject>
+#include <QPointer>
+#include <QStandardPaths>
+#include <QtJniTypes>
+#endif
 
 #include "engine/engine.h"
 #include "library/dao/trackschema.h"
@@ -36,6 +44,9 @@
 
 #define IS_RECORDBOX_DEVICE "::isRecordboxDevice::"
 #define IS_NOT_RECORDBOX_DEVICE "::isNotRecordboxDevice::"
+// Android: the 1st element is the UUID of a volume the user needs to grant
+// access to
+#define IS_USB_ACCESS_REQUEST "::isUsbAccessRequest::"
 
 namespace {
 
@@ -61,6 +72,67 @@ QString findRekordboxPdbPath(const QString& devicePath) {
     }
     return {};
 }
+
+#ifdef __ANDROID__
+// USB drives are often not mounted below /storage on Android, they can only
+// be read through the Storage Access Framework. The files needed from such a
+// drive are copied to a mirror in the cache directory, the Rekordbox database
+// when the device is found and the audio and analysis files when a track is
+// loaded.
+constexpr char kStorageVolumesClass[] = "com/tondz/vynixdj/StorageVolumes";
+constexpr jlong kUsbMirrorMaxBytes = 2LL * 1024 * 1024 * 1024;
+
+QString usbMirrorRoot() {
+    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation) +
+            QStringLiteral("/usb");
+}
+
+bool copyFromUsb(const QString& uuid,
+        const QString& relativePath,
+        const QString& destPath,
+        bool force) {
+    const jboolean copied = QJniObject::callStaticMethod<jboolean>(kStorageVolumesClass,
+            "copyFile",
+            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;"
+            "Ljava/lang/String;Z)Z",
+            QNativeInterface::QAndroidApplication::context().object(),
+            QJniObject::fromString(uuid).object<jstring>(),
+            QJniObject::fromString(relativePath).object<jstring>(),
+            QJniObject::fromString(destPath).object<jstring>(),
+            static_cast<jboolean>(force));
+    QJniEnvironment env;
+    return !env.checkAndClearExceptions() && copied;
+}
+
+bool isUsbMirrorPath(const QString& path) {
+    return path.startsWith(usbMirrorRoot() + QChar('/'));
+}
+
+/// Copies a file of the USB mirror from the drive, unless it is up to date.
+bool fetchUsbMirrorFile(const QString& path) {
+    if (!isUsbMirrorPath(path)) {
+        return false;
+    }
+    // <mirror root>/<volume uuid>/<path on the volume>
+    const QString relativeToRoot = path.mid(usbMirrorRoot().size() + 1);
+    const int separator = relativeToRoot.indexOf(QChar('/'));
+    if (separator <= 0) {
+        return false;
+    }
+    QJniObject::callStaticMethod<void>(kStorageVolumesClass,
+            "trimCache",
+            "(Ljava/lang/String;JLjava/lang/String;)V",
+            QJniObject::fromString(usbMirrorRoot()).object<jstring>(),
+            kUsbMirrorMaxBytes,
+            QJniObject::fromString(path).object<jstring>());
+    QJniEnvironment env;
+    env.checkAndClearExceptions();
+    return copyFromUsb(relativeToRoot.left(separator),
+            relativeToRoot.mid(separator + 1),
+            path,
+            false);
+}
+#endif
 
 enum class IDForColor : uint8_t {
     Pink = 1,
@@ -219,15 +291,71 @@ QList<TreeItem*> findRekordboxDevices() {
     }
 #elif defined(__ANDROID__)
     // Removable storage (USB OTG drives, SD cards) is mounted under
-    // /storage/<volume id>. "emulated" is the internal shared storage and
-    // "self" a link to it, both are skipped.
-    const QFileInfoList devices = QDir(QStringLiteral("/storage"))
-                                          .entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    for (const QFileInfo& device : devices) {
-        if (device.fileName() == QStringLiteral("emulated") ||
-                device.fileName() == QStringLiteral("self")) {
-            continue;
+    // /storage/<volume id> if it is readable by apps at all. /storage itself
+    // is not readable by apps on some Android versions, so ask the
+    // StorageManager for the mounted volumes.
+    QStringList devicePaths;
+    const QJniObject volumes = QJniObject::callStaticMethod<jobjectArray>(
+            kStorageVolumesClass,
+            "getRemovableVolumes",
+            "(Landroid/content/Context;)[Ljava/lang/String;",
+            QNativeInterface::QAndroidApplication::context().object());
+    QJniEnvironment env;
+    if (env.checkAndClearExceptions() || !volumes.isValid()) {
+        qWarning() << "Failed to query the removable storage volumes";
+    } else {
+        const auto array = static_cast<jobjectArray>(volumes.object());
+        const jsize count = env->GetArrayLength(array);
+        for (jsize i = 0; i < count; ++i) {
+            const QJniObject entry = QJniObject::fromLocalRef(
+                    env->GetObjectArrayElement(array, i));
+            // <uuid>\t<path>\t<description>\t<access>
+            const QStringList fields = entry.toString().split(QChar('\t'));
+            if (fields.size() != 4) {
+                continue;
+            }
+            const QString& uuid = fields[0];
+            const QString& description = fields[2];
+            const QString& access = fields[3];
+            qDebug() << "Removable volume" << fields;
+            if (access == QStringLiteral("direct")) {
+                devicePaths << fields[1];
+            } else if (access == QStringLiteral("granted")) {
+                const QString mirrorPath = usbMirrorRoot() + QChar('/') + uuid;
+                for (const auto& pdbPath : kPdbPaths) {
+                    if (copyFromUsb(uuid,
+                                pdbPath,
+                                mirrorPath + QChar('/') + pdbPath,
+                                true)) {
+                        foundDevices << new TreeItem(description,
+                                QVariant(QList<QString>{
+                                        mirrorPath, IS_RECORDBOX_DEVICE}));
+                        break;
+                    }
+                }
+            } else {
+                foundDevices << new TreeItem(
+                        QCoreApplication::translate("RekordboxFeature",
+                                "%1 (tap to allow access)")
+                                .arg(description),
+                        QVariant(QList<QString>{uuid, IS_USB_ACCESS_REQUEST}));
+            }
         }
+    }
+    // Fallback where /storage is readable. "emulated" is the internal shared
+    // storage and "self" a link to it, both are skipped.
+    const QFileInfoList entries = QDir(QStringLiteral("/storage"))
+                                          .entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    for (const QFileInfo& entry : entries) {
+        if (entry.fileName() != QStringLiteral("emulated") &&
+                entry.fileName() != QStringLiteral("self") &&
+                !devicePaths.contains(entry.filePath())) {
+            devicePaths << entry.filePath();
+        }
+    }
+    qDebug() << "Searching Rekordbox devices in" << devicePaths;
+    for (const QString& devicePath : std::as_const(devicePaths)) {
+        const QFileInfo device(devicePath);
         if (!findRekordboxPdbPath(device.filePath()).isEmpty()) {
             auto* pFoundDevice = new TreeItem(
                     device.fileName(),
@@ -1124,6 +1252,22 @@ void readAnalyze(TrackPointer track,
 
 } // anonymous namespace
 
+#ifdef __ANDROID__
+Q_DECLARE_JNI_CLASS(StorageVolumesClass, "com/tondz/vynixdj/StorageVolumes")
+
+namespace {
+QPointer<RekordboxFeature> s_pRekordboxFeature;
+} // anonymous namespace
+
+// Called on the Android UI thread after the user granted access to a volume.
+// JNI callbacks must be declared at global scope for Q_DECLARE_JNI_NATIVE_METHOD
+static void nativeOnAccessGranted(JNIEnv*, jclass) {
+    QMetaObject::invokeMethod(
+            s_pRekordboxFeature, &RekordboxFeature::activate, Qt::QueuedConnection);
+}
+Q_DECLARE_JNI_NATIVE_METHOD(nativeOnAccessGranted)
+#endif
+
 RekordboxPlaylistModel::RekordboxPlaylistModel(QObject* parent,
         TrackCollectionManager* trackCollectionManager,
         QSharedPointer<BaseTrackCache> trackSource)
@@ -1234,10 +1378,24 @@ void RekordboxPlaylistModel::initSortColumnMapping() {
 TrackPointer RekordboxPlaylistModel::getTrack(const QModelIndex& index) const {
     qDebug() << "RekordboxTrackModel::getTrack";
 
-    TrackPointer track = BaseExternalPlaylistModel::getTrack(index);
     QString location = getFieldVariant(
             index, ColumnCache::COLUMN_TRACKLOCATIONSTABLE_LOCATION)
                                .toString();
+#ifdef __ANDROID__
+    if (isUsbMirrorPath(location)) {
+        // Copy the track from a USB drive only readable through the Storage
+        // Access Framework before it is opened
+        if (!fetchUsbMirrorFile(location)) {
+            qWarning() << "Failed to copy track from the USB drive:" << location;
+        }
+        const QString anlzPath =
+                getFieldVariant(index, ColumnCache::COLUMN_REKORDBOX_ANALYZE_PATH)
+                        .toString();
+        fetchUsbMirrorFile(anlzPath);
+        fetchUsbMirrorFile(anlzPath.left(anlzPath.length() - 3) + "EXT");
+    }
+#endif
+    TrackPointer track = BaseExternalPlaylistModel::getTrack(index);
 
     if (!QFile(location).exists()) {
         return track;
@@ -1407,6 +1565,16 @@ RekordboxFeature::RekordboxFeature(
             &RekordboxFeature::onTracksFound);
     // initialize the model
     m_pSidebarModel->setRootItem(TreeItem::newRoot(this));
+
+#ifdef __ANDROID__
+    s_pRekordboxFeature = this;
+    QJniEnvironment env;
+    if (!env.registerNativeMethods<QtJniTypes::StorageVolumesClass>({
+                Q_JNI_NATIVE_METHOD(nativeOnAccessGranted),
+        })) {
+        qWarning() << "Failed to register the Android storage access callback";
+    }
+#endif
 }
 
 RekordboxFeature::~RekordboxFeature() {
@@ -1547,6 +1715,20 @@ void RekordboxFeature::activateChild(const QModelIndex& index) {
     // activated.
     QList<QVariant> data = item->getData().toList();
     QString playlist = data[0].toString();
+#ifdef __ANDROID__
+    if (data[1].toString() == IS_USB_ACCESS_REQUEST) {
+        // Opens the system folder picker, onAccessGranted() refreshes the
+        // devices afterwards
+        QJniObject::callStaticMethod<void>(kStorageVolumesClass,
+                "requestAccess",
+                "(Landroid/content/Context;Ljava/lang/String;)V",
+                QNativeInterface::QAndroidApplication::context().object(),
+                QJniObject::fromString(playlist).object<jstring>());
+        QJniEnvironment env;
+        env.checkAndClearExceptions();
+        return;
+    }
+#endif
     bool doParseDeviceDB = data[1].toString() == IS_RECORDBOX_DEVICE;
 
     qDebug() << "RekordboxFeature::activateChild " << item->getLabel()

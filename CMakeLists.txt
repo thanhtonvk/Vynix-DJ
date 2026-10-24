@@ -265,7 +265,8 @@ function(fatal_error_missing_env)
   endif()
 endfunction()
 
-if(UNIX AND NOT APPLE)
+# Android builds only use the NDK toolchain, so they work in WSL
+if(UNIX AND NOT APPLE AND NOT CMAKE_SYSTEM_NAME STREQUAL Android)
   execute_process(
     COMMAND uname -r
     OUTPUT_VARIABLE UNAME_R
@@ -2458,12 +2459,26 @@ if(QT6)
       "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_NDK_HOST_SYSTEM_NAME}/bin/clang++"
     )
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIC")
+    # libc functions missing on Android < 14, which the prebuilt dependencies
+    # (built against API level 35) reference. Linked with -z global and loaded
+    # by MainActivity before Qt, so it also covers the Qt libraries.
+    add_library(vynixcompat SHARED src/util/androidlibccompat.c)
+    set_target_properties(
+      vynixcompat
+      PROPERTIES
+        C_VISIBILITY_PRESET hidden
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/compat"
+    )
+    target_link_options(vynixcompat PRIVATE "LINKER:-z,global")
+    target_link_libraries(vynixcompat PRIVATE dl)
+    target_link_libraries(mixxx-lib PUBLIC vynixcompat)
     set_target_properties(
       mixxx
       PROPERTIES
         QT_ANDROID_EXTRA_LIBS
-          ${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_NDK_HOST_SYSTEM_NAME}/lib/clang/18/lib/linux/aarch64/libomp.so
+          "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_NDK_HOST_SYSTEM_NAME}/lib/clang/18/lib/linux/aarch64/libomp.so;${CMAKE_CURRENT_BINARY_DIR}/compat/libvynixcompat.so"
     )
+    add_dependencies(mixxx vynixcompat)
     add_custom_target(
       copy-resource-android
       COMMENT "Copy resources folder to Android build asset directory"
@@ -2694,6 +2709,8 @@ if(UNIX AND NOT APPLE)
     DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor"
     # This file is for Windows.
     PATTERN ic_mixxx.ico EXCLUDE
+    # Source artwork, not an icon theme file
+    PATTERN logo.jpeg EXCLUDE
   )
 
   # .metainfo.xml file for KDE/GNOME AppStream initiative
@@ -3298,6 +3315,7 @@ if(WIN32)
       "${CMAKE_CURRENT_BINARY_DIR}/src/gitinfo.h"
   )
   target_include_directories(mixxx PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+  set_target_properties(mixxx PROPERTIES OUTPUT_NAME "VynixDJ")
 endif()
 
 # Chromaprint
@@ -5559,25 +5577,31 @@ configure_file(
 )
 
 # Packaging
-set(CPACK_PACKAGE_NAME "Mixxx")
-set(CPACK_PACKAGE_VENDOR "Mixxx Project")
-# TODO: Split this into Maintainer field: core-team@mixxx.org for package issues
-# and Uploaders field for personal signing email per Debian Policy.
-# https://www.debian.org/doc/debian-policy/ch-binary.html#the-maintainer-of-a-package
-set(CPACK_PACKAGE_CONTACT "Daniel Schürmann <daschuer@mixxx.org>")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Digital DJ Application")
+set(CPACK_PACKAGE_NAME "VynixDJ")
+set(CPACK_PACKAGE_VENDOR "tondz")
+set(
+  CPACK_PACKAGE_CONTACT
+  "tondz <thanhtonvk@users.noreply.github.com>"
+)
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Vynix DJ - Digital DJ Application")
 set(
   CPACK_PACKAGE_DESCRIPTION_FILE
   "${CMAKE_CURRENT_SOURCE_DIR}/packaging/CPackPackageDescription.txt"
 )
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Mixxx")
-set(CPACK_PACKAGE_EXECUTABLES "mixxx;Mixxx")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Vynix DJ")
+# The Windows executable is VynixDJ.exe, see OUTPUT_NAME above
+if(WIN32)
+  set(CPACK_PACKAGE_EXECUTABLES "VynixDJ;Vynix DJ")
+  set(CPACK_CREATE_DESKTOP_LINKS "VynixDJ")
+else()
+  set(CPACK_PACKAGE_EXECUTABLES "mixxx;Vynix DJ")
+  set(CPACK_CREATE_DESKTOP_LINKS "mixxx")
+endif()
 set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/res/images/mixxx_install_logo.bmp")
-set(CPACK_PACKAGE_HOMEPAGE_URL "https://www.mixxx.org/")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/thanhtonvk/Vynix-DJ")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
 set(CPACK_STRIP_FILES ON)
-set(CPACK_CREATE_DESKTOP_LINKS "mixxx")
 set(CPACK_MIXXX_VERSION "${MIXXX_VERSION}")
 # Save GIT values just in case they have been set manual via cmake
 set(CPACK_GIT_DESCRIBE "${GIT_DESCRIBE}")
@@ -5697,7 +5721,8 @@ set(
 
 # Use WiX toolset version >= 4.0 for building Windows installers.
 set(CPACK_WIX_VERSION 4)
-set(CPACK_WIX_UPGRADE_GUID "921DC99C-4DCF-478D-B950-50685CB9E6BE")
+# Own GUID, so the installer does not replace an installed Mixxx
+set(CPACK_WIX_UPGRADE_GUID "8547229F-7898-41ED-9B7B-49FA3BAF80F7")
 set(
   CPACK_WIX_LICENSE_RTF
   "${CMAKE_CURRENT_BINARY_DIR}/packaging/wix/LICENSE.rtf"

@@ -92,6 +92,39 @@
         </Children>
       </WidgetGroup>
 
+      <!-- Big load buttons, so loading needs no double tap on a table row.
+           Same controls as the load buttons of DJ controllers, so the skin
+           returns to the decks afterwards. -->
+      <WidgetGroup>
+        <ObjectName>TrackInfoLoadRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,64f</Size>
+        <Children>
+          <PushButton>
+            <ObjectName>TrackInfoLoad1</ObjectName>
+            <Size>0me,64f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Load 1</Text></State>
+            <State><Number>1</Number><Text>Load 1</Text></State>
+            <LeftClickIsPushButton>true</LeftClickIsPushButton>
+            <Connection>
+              <ConfigKey>[Channel1],LoadSelectedTrack</ConfigKey>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>TrackInfoLoad2</ObjectName>
+            <Size>0me,64f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Load 2</Text></State>
+            <State><Number>1</Number><Text>Load 2</Text></State>
+            <LeftClickIsPushButton>true</LeftClickIsPushButton>
+            <Connection>
+              <ConfigKey>[Channel2],LoadSelectedTrack</ConfigKey>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
       <TrackProperty>
         <ObjectName>TrackInfoDetail</ObjectName>
         <Group>[PreviewDeck1]</Group>

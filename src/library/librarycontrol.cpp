@@ -768,10 +768,64 @@ void LibraryControl::slotMoveDown(double v) {
     }
 }
 
+bool LibraryControl::showTouchSkinLibrary() {
+    // Touch skins with [Tab] pages show the library on its own page. Open it
+    // when the controller's browse knob is used on another page, so the
+    // library can be browsed without touching the screen. After loading a
+    // track the skin returns to the decks, see
+    // MixxxMainWindow::createSkinSettingsControls().
+    const ConfigKey libraryTabKey(QStringLiteral("[Tab]"), QStringLiteral("library"));
+    if (!ControlObject::exists(libraryTabKey) || ControlObject::get(libraryTabKey) > 0) {
+        return false;
+    }
+    // The full screen effect picker covers all pages
+    const ConfigKey fxPickerKey(QStringLiteral("[Skin]"), QStringLiteral("fx_picker"));
+    if (ControlObject::exists(fxPickerKey)) {
+        ControlObject::set(fxPickerKey, 0);
+    }
+    ControlObject::set(libraryTabKey, 1);
+    return true;
+}
+
+bool LibraryControl::focusVisibleTouchSkinWidget() {
+    // Touch skins show either the sidebar or the track table in its place,
+    // see WLibrarySidebar::slotItemTapped(). Controllers then navigate the
+    // visible one right away, without tapping it first to focus it. Only
+    // skins that define the control use this.
+    const ConfigKey sidebarVisibleKey(
+            QStringLiteral("[Sidebar]"), QStringLiteral("sidebar_visible"));
+    if (!ControlObject::exists(sidebarVisibleKey)) {
+        return false;
+    }
+    switch (m_focusedWidget) {
+    case FocusWidget::Dialog:
+    case FocusWidget::ContextMenu:
+    case FocusWidget::SearchRelatedMenu:
+        return false;
+    default:
+        break;
+    }
+    const FocusWidget target = ControlObject::get(sidebarVisibleKey) > 0
+            ? FocusWidget::Sidebar
+            : FocusWidget::TracksTable;
+    if (m_focusedWidget != target) {
+        setLibraryFocus(target);
+        updateFocusedWidgetControls();
+    }
+    return true;
+}
+
 void LibraryControl::slotMoveVertical(double v) {
     if (v == 0) {
         return;
     }
+
+    // The first turn only opens the library page, so the selection does not
+    // move before it can be seen
+    if (showTouchSkinLibrary()) {
+        return;
+    }
+    focusVisibleTouchSkinWidget();
 
     switch (m_focusedWidget) {
     case FocusWidget::Sidebar: {
@@ -1120,6 +1174,11 @@ void LibraryControl::slotGoToItem(double v) {
         return;
     }
 
+    if (showTouchSkinLibrary()) {
+        return;
+    }
+    const bool touchSkin = focusVisibleTouchSkinWidget();
+
     switch (m_focusedWidget) {
     case FocusWidget::Sidebar:
         // Focus the library if this is a leaf node in the tree
@@ -1127,6 +1186,12 @@ void LibraryControl::slotGoToItem(double v) {
         // expanding those root items via controllers is considered dispensable
         // because the subfeatures' actions can't be accessed by controllers anyway.
         if (m_pSidebarWidget->isLeafNodeSelected()) {
+            if (touchSkin) {
+                // Show the track table in place of the sidebar, like a tap
+                ControlObject::set(ConfigKey(QStringLiteral("[Sidebar]"),
+                                           QStringLiteral("sidebar_visible")),
+                        0);
+            }
             setLibraryFocus(FocusWidget::TracksTable);
         } else {
             // Otherwise toggle the sidebar item expanded state

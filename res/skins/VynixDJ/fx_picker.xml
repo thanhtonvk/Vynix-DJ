@@ -2,7 +2,7 @@
   Full screen Beat FX picker (Denon DJ SC Live style), shown instead of the tab
   pages while [Skin],fx_picker is set. Opened from the current effect button in
   effects.xml; loading an effect or Close hides it again. Tile N uses
-  [Skin],fx_select_N and [Skin],fx_current, which refer to the Nth effect of
+  [Skin],fx_select_N and [Skin],fx_picker_current, which refer to the Nth effect of
   VisibleEffectsList::beatFxEffectIds() (src/effects/visibleeffectslist.cpp).
 -->
 <Template>
@@ -33,7 +33,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>1</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -50,7 +50,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>2</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -67,7 +67,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>3</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -84,7 +84,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>4</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -108,7 +108,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>5</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -125,7 +125,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>6</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -142,7 +142,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>7</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -159,7 +159,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>8</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -183,7 +183,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>9</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -200,7 +200,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>10</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>
@@ -217,7 +217,7 @@
               <ConnectValueToWidget>false</ConnectValueToWidget>
             </Connection>
             <Connection>
-              <ConfigKey>[Skin],fx_current</ConfigKey>
+              <ConfigKey>[Skin],fx_picker_current</ConfigKey>
               <Transform><IsEqual>11</IsEqual></Transform>
               <ConnectValueFromWidget>false</ConnectValueFromWidget>
             </Connection>

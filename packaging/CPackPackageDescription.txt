@@ -1,7 +1,6 @@
-Mixxx is a digital DJ system, where Wave, Ogg, FLAC and MP3 files can be
-mixed on a computer for use in live performances. Filters, crossfader, and
-speed control are provided. Mixxx can sync the 4 decks automatically, using
-an algorithm to detect the beat.
+Vynix DJ is a digital DJ application based on Mixxx, built for touch screens
+and USB DJ controllers. Wave, Ogg, FLAC and MP3 files can be mixed for live
+performances with sync, loops, Beat FX and Rekordbox USB drives.
 
-Mixxx works with ALSA or Jack, can be controlled from the GUI or from external
-controllers, including MIDI devices and joysticks, and supports skins.
+Vynix DJ works with ALSA or Jack, can be controlled from the GUI or from
+external controllers, including MIDI devices, and supports skins.

@@ -88,6 +88,13 @@ class LibraryFeature : public QObject {
         return false;
     }
 
+    /// The children of the feature's sidebar item are devices found when the
+    /// feature is activated, e.g. Rekordbox USB drives. The item is no leaf
+    /// then, even while no devices have been found yet.
+    virtual bool listsDevices() {
+        return false;
+    }
+
   protected:
     QStringList getPlaylistFiles() const {
         return getPlaylistFiles(QFileDialog::ExistingFiles);

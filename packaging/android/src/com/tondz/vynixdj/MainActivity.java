@@ -1,6 +1,8 @@
 package com.tondz.vynixdj;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -9,6 +11,17 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import org.qtproject.qt.android.QtActivityBase;
 
 public class MainActivity extends QtActivityBase {
+    static {
+        // Must be loaded before the Qt libraries: it provides libc functions
+        // the prebuilt libraries need, which older Android versions lack.
+        // See src/util/androidlibccompat.c
+        try {
+            System.loadLibrary("vynixcompat");
+        } catch (UnsatisfiedLinkError e) {
+            Log.e("VynixDJ", "Failed to load libvynixcompat.so", e);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Draw into the camera cutout area: in landscape the cutout is a small
@@ -24,6 +37,14 @@ public class MainActivity extends QtActivityBase {
 
 
         hideSystemBars();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (StorageVolumes.onActivityResult(this, requestCode, resultCode, data)) {
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -1,0 +1,204 @@
+<!--
+  Compact Beat FX unit for [Skin],dual_fx: both units stacked in the panel
+  right of the waveforms, like the two FX sections of Denon DJ and Numark
+  controllers but on one side of the screen. Same controls as
+  beatfx_unit.xml without the parameter list, which only fits with one unit:
+    row 1: unit number and the effect picker
+    row 2: deck routing and the FX on/off toggle
+    row 3: BEAT and LEVEL knobs
+
+  The units expand to share the panel height, so unit 1 sits next to the
+  deck 1 waveform and unit 2 next to the deck 2 waveform.
+
+  Variables:
+    unit: effect unit number, 1 or 2
+    prefix: prefix of the [Skin] controls of the unit, "fx" for unit 1 and
+            "fx2" for unit 2 (see MixxxMainWindow::createSkinSettingsControls)
+    pad: extra height in pixels at the bottom of the unit. Unit 2 gets the
+         height of the FX / Key / Grid tab bar above unit 1: both units grow
+         by the same amount, so it starts at half the panel height, level
+         with the deck 2 waveform.
+-->
+<Template>
+  <SetVariable name="UnitGroup">[EffectRack1_EffectUnit<Variable name="unit"/>]</SetVariable>
+  <SetVariable name="EffectGroup">[EffectRack1_EffectUnit<Variable name="unit"/>_Effect1]</SetVariable>
+  <WidgetGroup>
+    <ObjectName>BeatFXCompact_Unit</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,e</SizePolicy>
+    <Children>
+
+      <WidgetGroup>
+        <ObjectName>BeatFXCompact_Row</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,36f</Size>
+        <Children>
+          <Label>
+            <ObjectName>BeatFXCompact_UnitLabel</ObjectName>
+            <Text>FX<Variable name="unit"/></Text>
+            <Size>40f,36f</Size>
+            <Alignment>center</Alignment>
+          </Label>
+          <!-- Opens the full screen effect picker (fx_picker.xml) for this unit -->
+          <PushButton>
+            <ObjectName>BeatFXCompact_Effect</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>12</NumberStates>
+            <State><Number>0</Number><Text>Select FX ›</Text></State>
+            <State><Number>1</Number><Text>Echo ›</Text></State>
+            <State><Number>2</Number><Text>Reverb ›</Text></State>
+            <State><Number>3</Number><Text>Flanger ›</Text></State>
+            <State><Number>4</Number><Text>Phaser ›</Text></State>
+            <State><Number>5</Number><Text>Filter ›</Text></State>
+            <State><Number>6</Number><Text>Trans ›</Text></State>
+            <State><Number>7</Number><Text>Pan ›</Text></State>
+            <State><Number>8</Number><Text>Glitch ›</Text></State>
+            <State><Number>9</Number><Text>Pitch ›</Text></State>
+            <State><Number>10</Number><Text>Crush ›</Text></State>
+            <State><Number>11</Number><Text>Noise ›</Text></State>
+            <Connection>
+              <ConfigKey>[Skin],<Variable name="prefix"/>_picker_open</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],<Variable name="prefix"/>_current</ConfigKey>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <ObjectName>BeatFXCompact_Row</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,36f</Size>
+        <Children>
+          <PushButton>
+            <ObjectName>BeatFX_DeckAssign1</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>D1</Text></State>
+            <State><Number>1</Number><Text>D1</Text></State>
+            <Connection>
+              <ConfigKey><Variable name="UnitGroup"/>,group_[Channel1]_enable</ConfigKey>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>BeatFX_DeckAssign2</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>D2</Text></State>
+            <State><Number>1</Number><Text>D2</Text></State>
+            <Connection>
+              <ConfigKey><Variable name="UnitGroup"/>,group_[Channel2]_enable</ConfigKey>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>BeatFXCompact_Toggle</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Off</Text></State>
+            <State><Number>1</Number><Text>On</Text></State>
+            <Connection>
+              <ConfigKey><Variable name="EffectGroup"/>,enabled</ConfigKey>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+
+      <!-- See the knobs in beatfx_unit.xml -->
+      <WidgetGroup>
+        <ObjectName>BeatFXCompact_KnobRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,80f</Size>
+        <Children>
+          <WidgetGroup>
+            <ObjectName>BeatFX_Knob</ObjectName>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,me</SizePolicy>
+            <Children>
+              <Label>
+                <ObjectName>BeatFX_KnobLabel</ObjectName>
+                <Text>Beat</Text>
+                <Size>0me,14f</Size>
+                <Alignment>center</Alignment>
+              </Label>
+              <KnobComposed>
+                <ObjectName>BeatFX_KnobDial</ObjectName>
+                <Size>0me,48f</Size>
+                <Knob scalemode="STRETCH_ASPECT">icons/knob.svg</Knob>
+                <MinAngle>-140</MinAngle>
+                <MaxAngle>140</MaxAngle>
+                <Connection>
+                  <ConfigKey>[Skin],<Variable name="prefix"/>_beat</ConfigKey>
+                </Connection>
+              </KnobComposed>
+              <PushButton>
+                <ObjectName>BeatFX_KnobValue</ObjectName>
+                <Size>0me,18f</Size>
+                <NumberStates>9</NumberStates>
+                <State><Number>0</Number><Text>–</Text></State>
+                <State><Number>1</Number><Text>1/8</Text></State>
+                <State><Number>2</Number><Text>1/4</Text></State>
+                <State><Number>3</Number><Text>1/2</Text></State>
+                <State><Number>4</Number><Text>1</Text></State>
+                <State><Number>5</Number><Text>2</Text></State>
+                <State><Number>6</Number><Text>4</Text></State>
+                <State><Number>7</Number><Text>8</Text></State>
+                <State><Number>8</Number><Text>16</Text></State>
+                <Connection>
+                  <ConfigKey>[Skin],<Variable name="prefix"/>_beat_index</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </PushButton>
+            </Children>
+          </WidgetGroup>
+          <WidgetGroup>
+            <ObjectName>BeatFX_Knob</ObjectName>
+            <Layout>vertical</Layout>
+            <SizePolicy>me,me</SizePolicy>
+            <Children>
+              <Label>
+                <ObjectName>BeatFX_KnobLabel</ObjectName>
+                <Text>Level</Text>
+                <Size>0me,14f</Size>
+                <Alignment>center</Alignment>
+              </Label>
+              <KnobComposed>
+                <ObjectName>BeatFX_KnobDial</ObjectName>
+                <Size>0me,48f</Size>
+                <Knob scalemode="STRETCH_ASPECT">icons/knob.svg</Knob>
+                <MinAngle>-140</MinAngle>
+                <MaxAngle>140</MaxAngle>
+                <Connection>
+                  <ConfigKey><Variable name="EffectGroup"/>,meta</ConfigKey>
+                </Connection>
+              </KnobComposed>
+              <Number>
+                <ObjectName>BeatFX_KnobNumber</ObjectName>
+                <Size>0me,18f</Size>
+                <NumberOfDigits>2</NumberOfDigits>
+                <Alignment>center</Alignment>
+                <Connection>
+                  <ConfigKey><Variable name="EffectGroup"/>,meta</ConfigKey>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </Number>
+            </Children>
+          </WidgetGroup>
+        </Children>
+      </WidgetGroup>
+
+      <WidgetGroup>
+        <ObjectName>BeatFX_Spacer</ObjectName>
+        <Size>0me,0me</Size>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>BeatFX_Spacer</ObjectName>
+        <Size>0me,<Variable name="pad"/>f</Size>
+      </WidgetGroup>
+
+    </Children>
+  </WidgetGroup>
+</Template>

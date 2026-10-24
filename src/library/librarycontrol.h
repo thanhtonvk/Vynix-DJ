@@ -144,6 +144,12 @@ class LibraryControl : public QObject {
 
     // Simulate pressing a key on the keyboard
     void emitKeyEvent(QKeyEvent&& event);
+    /// Focuses the sidebar or track table, whichever a touch skin shows.
+    /// Returns false if the skin is no touch skin.
+    bool focusVisibleTouchSkinWidget();
+    /// Opens the library page of touch skins with [Tab] pages.
+    /// Returns true if it was not shown yet.
+    bool showTouchSkinLibrary();
 
     // Controls to navigate vertically within currently focused widget (up/down buttons)
     std::unique_ptr<ControlPushButton> m_pMoveUp;

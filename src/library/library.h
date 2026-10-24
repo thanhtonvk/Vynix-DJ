@@ -134,6 +134,7 @@ class Library: public QObject {
     void slotRefreshLibraryModels();
     void slotCreatePlaylist();
     void slotCreateCrate();
+    void slotSearchboxSearch(const QString& text);
     void slotSearchInCurrentView();
     void slotSearchInAllTracks();
     void onSkinLoadFinished();
