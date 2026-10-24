@@ -1,0 +1,91 @@
+name: Linux x64 build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - main
+    paths:
+      - ".github/workflows/linux-x64.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  linux-x64:
+    name: Linux x64 DEB
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up build environment
+        run: tools/debian_buildenv.sh setup
+
+      - name: Configure
+        # Same options as the ARM64 build (linux-arm64.yml), so both packages
+        # have the same features
+        run: >-
+          mkdir build && cd build &&
+          cmake
+          -DCMAKE_BUILD_TYPE=Release
+          -DENGINEPRIME=OFF
+          -DQT6=ON -DQML=ON -DBULK=ON -DHID=ON -DFFMPEG=ON
+          -DLOCALECOMPARE=ON -DMAD=ON -DMODPLUG=ON -DWAVPACK=ON
+          -DINSTALL_USER_UDEV_RULES=OFF
+          -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF
+          -DCPACK_DEBIAN_PACKAGE_NAME=vynixdj
+          -DCPACK_DEBIAN_PACKAGE_CONFLICTS=mixxx
+          ..
+
+      - name: Set up gcc problem matcher
+        uses: ammaraskar/gcc-problem-matcher@0.3.0
+
+      - name: Build
+        working-directory: build
+        # Keep going after errors so that all of them are reported at once
+        run: |
+          set -o pipefail
+          cmake --build . --parallel "$(nproc)" -- -k 2>&1 | tee build.log
+
+      - name: Report build errors
+        if: failure()
+        working-directory: build
+        run: |
+          # Publish the compiler output around the first errors as one
+          # annotation, the raw log needs admin rights to download
+          grep -n -B8 -A2 "error" build.log | head -120 > errors.txt || true
+          msg="$(sed -e 's/%/%25/g' errors.txt | awk '{printf "%s%%0A", $0}')"
+          echo "::error title=Build errors::${msg}"
+
+      - name: Package
+        id: package
+        working-directory: build
+        run: |
+          cpack -G DEB
+          TAG="$(git describe --tags --abbrev=0)"
+          FILE="VynixDJ-${TAG#v}-linux-x64.deb"
+          mv "$(ls *.deb | head -1)" "$FILE"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "file=build/$FILE" >> "$GITHUB_OUTPUT"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: VynixDJ-linux-x64
+          path: ${{ steps.package.outputs.file }}
+          if-no-files-found: error
+
+      - name: Attach to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+          FILE: ${{ steps.package.outputs.file }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 ||
+            gh release create "$TAG" --verify-tag --title "Vynix DJ ${TAG#v}" --notes ""
+          gh release upload "$TAG" "$FILE" --clobber
