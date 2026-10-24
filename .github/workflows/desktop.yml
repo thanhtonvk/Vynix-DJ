@@ -63,7 +63,9 @@ jobs:
         run: |
           cpack -G ZIP -V
           $zip = Get-ChildItem *.zip | Select-Object -First 1
-          Rename-Item $zip.FullName "VynixDJ-${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}-windows-x64.zip"
+          # Tag v1.0.5 -> VynixDJ-1.0.5-windows-x64.zip, like the other packages
+          $version = "${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}".TrimStart('v')
+          Rename-Item $zip.FullName "VynixDJ-$version-windows-x64.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
