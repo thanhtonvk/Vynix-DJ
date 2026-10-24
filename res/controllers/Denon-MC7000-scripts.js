@@ -97,9 +97,6 @@ MC7000.jogParams = {
     // set to 1 with audio buffer set to 25ms
     // set to 3 with audio buffer set to 5ms
     sensitivity: engine.getSetting("jogSensitivity") || 1,
-    // Whether the jog wheels move the library selection instead of
-    // scratching or bending the pitch while the library is maximized
-    scrollMaximizedLibrary: engine.getSetting("jogScrollsMaximizedLibrary") ?? false,
     // Acceleration settings for the jog wheel in vinyl mode
     // If enabled, the track speed will accelerate faster than the physical jogwheel movement. Be aware that the absolute track position will drift relative to the jogwheel position in this mode!
     // (exponent: 0 and coefficient: 1 = no acceleration)
@@ -702,8 +699,7 @@ MC7000.loadButton = function(channel, control, value, status, group) {
 MC7000.wheelTouch = function(channel, control, value, status, group) {
     const deckNumber = script.deckFromGroup(group);
     const deckIndex = deckNumber - 1;
-    const libraryMaximized = MC7000.jogParams.scrollMaximizedLibrary &&
-        engine.getValue("[Skin]", "show_maximized_library") > 0;
+    const libraryMaximized = engine.getValue("[Skin]", "show_maximized_library") > 0;
     if (MC7000.isVinylMode[deckIndex] && !libraryMaximized) {
         if (value === 0x7F) {
             engine.scratchEnable(deckNumber, MC7000.jogWheelTicksPerRevolution,
@@ -733,11 +729,10 @@ MC7000.wheelTurn = function(channel, control, value, status, group) {
     const adjustedSpeed = baseSpeed / 10;
     const deckNumber = script.deckFromGroup(group);
     const deckIndex = deckNumber - 1;
-    const libraryMaximized = MC7000.jogParams.scrollMaximizedLibrary &&
-        engine.getValue("[Skin]", "show_maximized_library") > 0;
-    if (libraryMaximized && numTicks > 0) {
+    const libraryMaximized = engine.getValue("[Skin]", "show_maximized_library");
+    if (libraryMaximized === 1 && numTicks > 0) {
         engine.setValue("[Library]", "MoveDown", 1);
-    } else if (libraryMaximized && numTicks < 0) {
+    } else if (libraryMaximized === 1 && numTicks < 0) {
         engine.setValue("[Library]", "MoveUp", 1);
     } else if (engine.isScratching(deckNumber)) {
         // Scratch!
