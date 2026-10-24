@@ -876,6 +876,16 @@ void MixxxMainWindow::createSkinSettingsControls() {
             });
     m_skinSettingsControls.push_back(std::move(pWaveformType));
 
+    // Whether the EQ knobs and kills shape the waveforms. Off by default, so
+    // the waveform stays visible with all EQs turned down. Persisted, see
+    // WaveformRendererSignalBase::getGains()
+    m_skinSettingsControls.push_back(std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Waveform]"), QStringLiteral("eq_affects_waveform")),
+            true,
+            false,
+            true,
+            0.0));
+
     // Visible track table columns, see WTrackTableViewHeader::columnControls()
     for (const auto& columnControl : WTrackTableViewHeader::columnControls()) {
         auto pShowColumn = std::make_unique<ControlPushButton>(

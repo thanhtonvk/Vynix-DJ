@@ -61,6 +61,12 @@ WaveformRendererSignalBase::~WaveformRendererSignalBase() = default;
 bool WaveformRendererSignalBase::init() {
     m_pEQEnabled = std::make_unique<ControlProxy>(
             m_waveformRenderer->getGroup(), QStringLiteral("filterWaveformEnable"));
+    // Global option of touch skins, see MixxxMainWindow::createSkinSettingsControls()
+    m_pEQAffectsWaveform = std::make_unique<ControlProxy>(
+            QStringLiteral("[Waveform]"),
+            QStringLiteral("eq_affects_waveform"),
+            nullptr,
+            ControlFlag::AllowMissingOrInvalid);
     const QString effectGroup = kEffectGroupFormat.arg(m_waveformRenderer->getGroup());
     m_pLowFilterControlObject = std::make_unique<ControlProxy>(
             effectGroup, QStringLiteral("parameter1"));
@@ -173,7 +179,16 @@ void WaveformRendererSignalBase::getGains(float* pAllGain,
         CSAMPLE_GAIN lowVisualGain = 1.0, midVisualGain = 1.0, highVisualGain = 1.0;
 
         // Only adjust low/mid/high gains if EQs are enabled or if there is no EQs CO setup.
-        if (!m_pEQEnabled || m_pEQEnabled->get() > 0.0) {
+        // With [Waveform],eq_affects_waveform off the EQ knobs and kills leave
+        // the waveform alone, so it stays visible with all EQs turned down.
+        const bool eqAffectsWaveform = !m_pEQAffectsWaveform ||
+                !m_pEQAffectsWaveform->valid() ||
+                m_pEQAffectsWaveform->get() > 0.0;
+        if (!eqAffectsWaveform) {
+            lowVisualGain = m_lowVisualGain;
+            midVisualGain = m_midVisualGain;
+            highVisualGain = m_highVisualGain;
+        } else if (!m_pEQEnabled || m_pEQEnabled->get() > 0.0) {
             if (m_pLowFilterControlObject &&
                     m_pMidFilterControlObject &&
                     m_pHighFilterControlObject) {

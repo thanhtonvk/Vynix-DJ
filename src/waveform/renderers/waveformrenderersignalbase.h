@@ -58,6 +58,7 @@ class WaveformRendererSignalBase : public QObject, public WaveformRendererAbstra
 
   protected:
     std::unique_ptr<ControlProxy> m_pEQEnabled;
+    std::unique_ptr<ControlProxy> m_pEQAffectsWaveform;
     std::unique_ptr<ControlProxy> m_pLowFilterControlObject;
     std::unique_ptr<ControlProxy> m_pMidFilterControlObject;
     std::unique_ptr<ControlProxy> m_pHighFilterControlObject;
