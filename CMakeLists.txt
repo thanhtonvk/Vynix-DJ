@@ -1243,6 +1243,7 @@ add_library(
   src/controllers/controllermappinginfo.cpp
   src/controllers/legacycontrollersettings.cpp
   src/controllers/legacycontrollersettingslayout.cpp
+  src/controllers/controllermappingimport.cpp
   src/controllers/controllermappinginfoenumerator.cpp
   src/controllers/controllermappingtablemodel.cpp
   src/controllers/controlleroutputmappingtablemodel.cpp

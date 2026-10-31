@@ -81,6 +81,8 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 - Controller USB HID / Bulk (một số dòng Traktor, Hercules, Denon, …).
 - Tự chọn mapping trong các mapping có sẵn của Mixxx (Pioneer DDJ, Denon MC, Numark,
   Hercules, Roland, …).
+- Import mapping của cộng đồng (`.xml`, `.js` hoặc file `.zip` chứa cả hai) ngay trong
+  app, kể cả trên Android, nơi không mở được thư mục mapping.
 - Điều khiển ưu tiên bằng controller: xoay núm browse sẽ mở thư viện, load bài xong tự
   quay về màn deck.
 
@@ -130,6 +132,10 @@ Apple Developer ID nên lần đầu mở macOS sẽ chặn: chuột phải vào
   động.
 - Nếu cắm controller khi app đang chạy, app sẽ báo cần khởi động lại.
 - Chọn mapping thủ công: **SETTINGS → DEVICE → DJ controllers → OPEN**.
+- Dùng mapping không có sẵn trong Mixxx, ví dụ từ
+  [forum Mixxx](https://mixxx.discourse.group/c/controller-mappings/10): tải về, bấm
+  **Import...** cạnh **Load Mapping** rồi chọn file `.zip` hoặc các file `.xml` và `.js`.
+  Chọn mapping vừa import và bấm **Apply**.
 
 **Nhạc**
 
@@ -222,6 +228,7 @@ adb install -r build/android-build/build/outputs/apk/release/android-build-relea
 |---|---|
 | `res/skins/VynixDJ/` | Skin cảm ứng: tab MIXER với Sound Color FX, màn hình chọn Beat FX, bảng thông tin bài hát |
 | `src/controllers/controllermanager.cpp` | Tự bật controller mới và chọn mapping theo tên |
+| `src/controllers/controllermappingimport.*` | Import file mapping và file ZIP vào thư mục mapping của người dùng |
 | `src/controllers/midi/androidmidi*` | Backend MIDI cho Android (`android.media.midi`) |
 | `src/library/` | Điều khiển thư viện bằng controller, tìm kiếm từ sidebar, Rekordbox / Serato lên đầu |
 | `src/effects/` | Núm Beat FX, control `beat_period`, BQ EQ làm EQ mặc định của deck |

@@ -131,6 +131,22 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="btnImportMapping">
+       <property name="toolTip">
+        <string>Import mapping files (.xml, .js or .zip) into the user mapping folder</string>
+       </property>
+       <property name="text">
+        <string>Import...</string>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
 

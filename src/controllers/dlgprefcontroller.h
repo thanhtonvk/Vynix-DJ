@@ -71,6 +71,8 @@ class DlgPrefController : public DlgPreferencePage {
     void slotStopLearning();
     void enableWizardAndIOTabs(bool enable);
     void slotRefreshMappingList();
+    /// Copies mapping files picked by the user into the user mapping folder
+    void slotImportMapping();
 
 #ifdef MIXXX_USE_QML
     // Onboard screen controller.

@@ -10,6 +10,7 @@
 #include "controllers/controllerinputmappingtablemodel.h"
 #include "controllers/controllerlearningeventfilter.h"
 #include "controllers/controllermanager.h"
+#include "controllers/controllermappingimport.h"
 #include "controllers/controllermappinginfoenumerator.h"
 #include "controllers/controlleroutputmappingtablemodel.h"
 #include "controllers/controlpickermenu.h"
@@ -119,6 +120,10 @@ DlgPrefController::DlgPrefController(
             &QAbstractButton::clicked,
             this,
             &DlgPrefController::slotRefreshMappingList);
+    connect(m_ui.btnImportMapping,
+            &QAbstractButton::clicked,
+            this,
+            &DlgPrefController::slotImportMapping);
 
     m_pControlPickerMenu = make_parented<ControlPickerMenu>(this);
 
@@ -678,6 +683,17 @@ void DlgPrefController::slotUpdate() {
 void DlgPrefController::slotRefreshMappingList() {
     enumerateMappings(m_pControllerManager->getConfiguredMappingFileForDevice(
             m_pController->getName()));
+}
+
+void DlgPrefController::slotImportMapping() {
+    const QString mappingPath = mixxx::controllers::importMappingFilesInteractive(
+            this, m_pUserDir);
+    if (mappingPath.isEmpty()) {
+        slotRefreshMappingList();
+        return;
+    }
+    // Select the imported mapping, it is loaded with Apply or OK
+    enumerateMappings(mappingPath);
 }
 
 void DlgPrefController::slotHide() {

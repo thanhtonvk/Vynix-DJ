@@ -83,6 +83,8 @@ complete DJ system.
 - USB HID / Bulk controllers (some Traktor, Hercules, Denon, … models).
 - Automatic mapping selection from the mappings that ship with Mixxx (Pioneer DDJ,
   Denon MC, Numark, Hercules, Roland, …).
+- Import mappings from the community (`.xml`, `.js` or a `.zip` with both) right in
+  the app, also on Android where the mapping folder cannot be opened.
 - Controller-first browsing: turning the browse knob opens the library, loading a track
   returns to the decks.
 
@@ -132,6 +134,10 @@ with an Apple Developer ID, so macOS blocks it the first time: right-click the a
   mapping are enabled automatically.
 - If you plug one in while the app is running, a notice asks you to restart the app.
 - To choose a mapping manually: **SETTINGS → DEVICE → DJ controllers → OPEN**.
+- To use a mapping that does not ship with Mixxx, e.g. from the
+  [Mixxx forum](https://mixxx.discourse.group/c/controller-mappings/10): download it, then
+  **Import...** next to **Load Mapping** and pick the `.zip` or the `.xml` and `.js` files.
+  Select the imported mapping and press **Apply**.
 
 **Music**
 
@@ -225,6 +231,7 @@ adb install -r build/android-build/build/outputs/apk/release/android-build-relea
 |---|---|
 | `res/skins/VynixDJ/` | Touch skin: MIXER tab with Sound Color FX, Beat FX picker, track info panel |
 | `src/controllers/controllermanager.cpp` | Auto-enables new controllers and picks a mapping by name |
+| `src/controllers/controllermappingimport.*` | Import mapping files and ZIP archives into the user mapping folder |
 | `src/controllers/midi/androidmidi*` | Android MIDI backend (`android.media.midi`) |
 | `src/library/` | Controller-first browsing, search from the sidebar, Rekordbox / Serato first |
 | `src/effects/` | Beat FX knobs, `beat_period` control, BQ EQ as the default deck EQ |

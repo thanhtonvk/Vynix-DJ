@@ -3,6 +3,7 @@
 #include "control/controlproxy.h"
 #include "controllers/controller.h"
 #include "controllers/controllermanager.h"
+#include "controllers/controllermappingimport.h"
 #include "controllers/defs_controllers.h"
 #include "controllers/dlgprefcontroller.h"
 #include "defs_urls.h"
@@ -37,6 +38,14 @@ DlgPrefControllers::DlgPrefControllers(DlgPreferences* pPreferences,
         QString mappingsPath = userMappingsPath(m_pConfig);
         openLocalFile(mappingsPath);
     });
+    // On Android the user mapping folder is private to the app and cannot
+    // be opened, so mappings are imported from a file picker instead
+    connect(btnImportMapping, &QPushButton::clicked, this, [this]() {
+        mixxx::controllers::importMappingFilesInteractive(this, userMappingsPath(m_pConfig));
+    });
+#ifdef Q_OS_ANDROID
+    btnOpenUserMappings->hide();
+#endif
 
     // Connections
     connect(m_pControllerManager.get(),
