@@ -2221,6 +2221,28 @@ WBeatSpinBox::up-button {
   qproperty-layoutSpacing: 8;
 }
 
+/* Sound Color FX buttons in two columns around the VU meter, lit like
+ * the FX picker tiles */
+#MixerColorFxColumn {
+  qproperty-layoutSpacing: 8;
+}
+
+#MixerColorFx {
+  color: #e6e9ef;
+  background-color: #1d232d;
+  border: 2px solid #343d4c;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerColorFx[displayValue="1"] {
+  color: #ffffff;
+  background-color: #f15921;
+  border-color: #ff8a5c;
+}
+
 #MixerDeckNumber1,
 #MixerDeckNumber2 {
   color: #ffffff;

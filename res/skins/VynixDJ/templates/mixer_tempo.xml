@@ -1,6 +1,7 @@
 <!--
   Tempo control of one deck on the MIXER page (mixer.xml), next to its
-  GAIN knob: current BPM, pitch in %, tempo fader and a reset to 0 %.
+  GAIN knob: current BPM, pitch in % and a reset to 0 %. The tempo fader
+  itself is next to the channel fader (mixer.xml).
   Variables:
     channel: deck number
 -->
@@ -9,7 +10,7 @@
   <WidgetGroup>
     <ObjectName>MixerTempo</ObjectName>
     <Layout>horizontal</Layout>
-    <SizePolicy>me,me</SizePolicy>
+    <Size>270f,0me</Size>
     <Children>
       <!-- Current tempo, i.e. the track BPM with the tempo fader applied -->
       <WidgetGroup>
@@ -53,16 +54,6 @@
           </NumberRate>
         </Children>
       </WidgetGroup>
-      <SliderComposed>
-        <ObjectName>MixerTempoFader</ObjectName>
-        <SizePolicy>me,me</SizePolicy>
-        <Slider scalemode="STRETCH">icons/mix_slider_groove.svg</Slider>
-        <Handle scalemode="STRETCH_ASPECT">icons/mix_slider_handle.svg</Handle>
-        <Horizontal>true</Horizontal>
-        <Connection>
-          <ConfigKey><Variable name="Group"/>,rate</ConfigKey>
-        </Connection>
-      </SliderComposed>
       <!-- ConnectValueToWidget is false because _set_default stays 1 while
            the fader is at its default, see levels.xml -->
       <PushButton>

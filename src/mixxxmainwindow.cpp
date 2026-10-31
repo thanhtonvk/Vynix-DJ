@@ -45,8 +45,16 @@
 #include "control/controlpotmeter.h"
 #include "control/controlproxy.h"
 #include "control/controlpushbutton.h"
+#include "effects/backends/builtin/bitcrushereffect.h"
+#include "effects/backends/builtin/echoeffect.h"
+#include "effects/backends/builtin/filtereffect.h"
+#include "effects/backends/builtin/moogladder4filtereffect.h"
+#include "effects/backends/builtin/reverbeffect.h"
+#include "effects/backends/builtin/whitenoiseeffect.h"
 #include "effects/backends/effectsbackendmanager.h"
+#include "effects/chains/quickeffectchain.h"
 #include "effects/effectchain.h"
+#include "effects/effectparameterslotbase.h"
 #include "effects/effectslot.h"
 #include "effects/effectsmanager.h"
 #include "effects/visibleeffectslist.h"
@@ -1051,6 +1059,125 @@ void MixxxMainWindow::createSkinSettingsControls() {
                         pSlot->loadEffectWithDefaults(pManifest);
                     }
                     pFxPickerRaw->set(0.0);
+                });
+        m_skinSettingsControls.push_back(std::move(pSelect));
+    }
+
+    // Sound Color FX like on Pioneer XDJ / DJM mixers: [Skin],color_fx_select_N
+    // loads the Nth of kColorFx into the QuickEffect of every deck, so the
+    // filter knob of each channel ([QuickEffectRack1_[ChannelN]],super1)
+    // applies it. Except for the filters, the effect is off with the knob in
+    // the center and grows to both sides. [Skin],color_fx_current is the
+    // number of the effect loaded for deck 1 (0 if none or another effect).
+    struct ColorFx {
+        QString effectId;
+        // Knob parameter values that differ from the effect defaults
+        QList<std::pair<QString, double>> parameters;
+    };
+    const QList<ColorFx> kColorFx = {
+            {FilterEffect::getId(), {}},
+            // SPACE
+            {ReverbEffect::getId(), {{QStringLiteral("decay"), 0.7}}},
+            // DUB ECHO
+            {EchoEffect::getId(),
+                    {{QStringLiteral("delay_time"), 0.75},
+                            {QStringLiteral("feedback_amount"), 0.8}}},
+            // SWEEP: resonant low pass / high pass filter
+            {MoogLadder4FilterEffect::getId(), {{QStringLiteral("resonance"), 3.0}}},
+            // NOISE
+            {WhiteNoiseEffect::getId(), {}},
+            // CRUSH
+            {BitCrusherEffect::getId(), {}},
+    };
+
+    auto pColorFxCurrent = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("color_fx_current")));
+    ControlObject* pColorFxCurrentRaw = pColorFxCurrent.get();
+    m_skinSettingsControls.push_back(std::move(pColorFxCurrent));
+
+    QStringList colorFxIds;
+    for (const auto& colorFx : kColorFx) {
+        colorFxIds.append(colorFx.effectId);
+    }
+    const QString firstDeckGroup = PlayerManager::groupForDeck(0);
+    const QuickEffectChainPointer pFirstDeckChain =
+            pEffectsManager->getQuickEffectChain(firstDeckGroup);
+    const EffectSlotPointer pFirstDeckSlot =
+            pFirstDeckChain ? pFirstDeckChain->getEffectSlot(0) : EffectSlotPointer();
+    if (pFirstDeckSlot) {
+        const QWeakPointer<EffectSlot> pWeakSlot = pFirstDeckSlot;
+        const auto updateColorFxCurrent = [pWeakSlot, pColorFxCurrentRaw, colorFxIds]() {
+            const EffectSlotPointer pSlot = pWeakSlot.toStrongRef();
+            const EffectManifestPointer pManifest = pSlot ? pSlot->getManifest() : nullptr;
+            pColorFxCurrentRaw->set(pManifest ? colorFxIds.indexOf(pManifest->id()) + 1 : 0);
+        };
+        connect(pFirstDeckSlot.data(), &EffectSlot::effectChanged, this, updateColorFxCurrent);
+        updateColorFxCurrent();
+    }
+
+    for (int i = 0; i < kColorFx.size(); ++i) {
+        auto pSelect = std::make_unique<ControlPushButton>(
+                ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("color_fx_select_%1").arg(i + 1)));
+        const ColorFx colorFx = kColorFx.at(i);
+        connect(pSelect.get(),
+                &ControlObject::valueChanged,
+                this,
+                [this, pWeakEffectsManager, colorFx](double value) {
+                    const auto pEffectsManager = pWeakEffectsManager.lock();
+                    if (value <= 0 || !pEffectsManager) {
+                        return;
+                    }
+                    const EffectManifestPointer pManifest =
+                            pEffectsManager->getBackendManager()->getManifest(
+                                    colorFx.effectId, EffectBackendType::BuiltIn);
+                    if (!pManifest) {
+                        return;
+                    }
+                    const int deckCount = static_cast<int>(
+                            m_pCoreServices->getPlayerManager()->numberOfDecks());
+                    for (int deck = 0; deck < deckCount; ++deck) {
+                        const QuickEffectChainPointer pChain =
+                                pEffectsManager->getQuickEffectChain(
+                                        PlayerManager::groupForDeck(deck));
+                        const EffectSlotPointer pSlot =
+                                pChain ? pChain->getEffectSlot(0) : EffectSlotPointer();
+                        if (!pSlot) {
+                            continue;
+                        }
+                        pSlot->loadEffectWithDefaults(pManifest);
+                        const int knobCount = static_cast<int>(
+                                pSlot->numParameters(EffectParameterType::Knob));
+                        for (int param = 0; param < knobCount; ++param) {
+                            const EffectParameterSlotBasePointer pParameterSlot =
+                                    pSlot->getEffectParameterSlot(
+                                            EffectParameterType::Knob, param);
+                            if (!pParameterSlot || !pParameterSlot->isLoaded()) {
+                                continue;
+                            }
+                            const EffectManifestParameterPointer pParameter =
+                                    pParameterSlot->getManifest();
+                            const QString prefix = QStringLiteral("parameter%1").arg(param + 1);
+                            // Off in the center, like the knob of a DJ
+                            // mixer, instead of growing from left to right
+                            if (pParameter->defaultLinkType() ==
+                                    EffectManifestParameter::LinkType::Linked) {
+                                ControlObject::set(
+                                        ConfigKey(pSlot->getGroup(),
+                                                prefix + QStringLiteral("_link_type")),
+                                        static_cast<double>(EffectManifestParameter::
+                                                        LinkType::LinkedLeftRight));
+                            }
+                            for (const auto& [id, parameterValue] : colorFx.parameters) {
+                                if (pParameter->id() == id) {
+                                    ControlObject::set(
+                                            ConfigKey(pSlot->getGroup(), prefix),
+                                            parameterValue);
+                                }
+                            }
+                        }
+                        // Apply the knob position to the new effect
+                        pChain->setSuperParameter(pChain->getSuperParameter(), true);
+                    }
                 });
         m_skinSettingsControls.push_back(std::move(pSelect));
     }

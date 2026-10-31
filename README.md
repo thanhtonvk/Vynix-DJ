@@ -26,7 +26,9 @@
   including the camera cutout (notch) area.
 - **Two-finger pinch zoom** on the waveforms.
 - **MIXER tab**: GAIN, tempo (BPM, pitch %, tempo fader), channel faders, LOW / MID / HI
-  EQ and filter faders, master VU meter, CUE / PLAY / SYNC and crossfader.
+  EQ and FX faders, master VU meter, CUE / PLAY / SYNC and crossfader.
+- **Sound Color FX** like on Pioneer XDJ mixers: FILTER, SPACE, DUB ECHO, SWEEP, NOISE
+  and CRUSH buttons pick the effect of the FX fader of both decks.
 - **Music library** from device storage (`Music`, `Download` or any folder you add), with
   search and a track info panel: cover art, BPM, key, duration, overview waveform and
   LOAD 1 / LOAD 2 buttons.
@@ -92,8 +94,10 @@ with an Apple Developer ID, so macOS blocks it the first time: right-click the a
 
 **Mixing** (**MIXER** tab)
 
-- Faders for volume, LOW / MID / HI and filter, GAIN knobs, tempo, CUE / PLAY / SYNC
+- Faders for tempo, volume, LOW / MID / HI and FX, GAIN knobs, CUE / PLAY / SYNC
   and the crossfader for both decks.
+- The buttons in the middle choose the effect of the FX faders. The fader is off in
+  the center; FILTER cuts the highs or lows, the other effects grow to both sides.
 
 **Beat FX** (**PLAY** tab, right panel)
 

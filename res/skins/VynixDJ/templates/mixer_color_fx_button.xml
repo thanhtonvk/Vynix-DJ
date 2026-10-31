@@ -1,0 +1,27 @@
+<!--
+  Sound Color FX button of the MIXER page (mixer.xml), like on Pioneer XDJ
+  mixers: loads the effect for the FLT fader of every deck and is lit while
+  it is loaded. See [Skin],color_fx_select_N in MixxxMainWindow.
+  Variables:
+    n:     number of the effect (1-6)
+    label: button text
+-->
+<Template>
+  <PushButton>
+    <ObjectName>MixerColorFx</ObjectName>
+    <SizePolicy>me,me</SizePolicy>
+    <NumberStates>2</NumberStates>
+    <State><Number>0</Number><Text><Variable name="label"/></Text></State>
+    <State><Number>1</Number><Text><Variable name="label"/></Text></State>
+    <Connection>
+      <ConfigKey>[Skin],color_fx_select_<Variable name="n"/></ConfigKey>
+      <ButtonState>LeftButton</ButtonState>
+      <ConnectValueToWidget>false</ConnectValueToWidget>
+    </Connection>
+    <Connection>
+      <ConfigKey>[Skin],color_fx_current</ConfigKey>
+      <Transform><IsEqual><Variable name="n"/></IsEqual></Transform>
+      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+    </Connection>
+  </PushButton>
+</Template>
