@@ -2297,13 +2297,13 @@ if(APPLE AND MACOS_BUNDLE)
   set(MIXXX_INSTALL_BINDIR "${CMAKE_INSTALL_BINDIR}")
   set(
     MACOS_BUNDLE_NAME
-    Mixxx
+    VynixDJ
     CACHE STRING
     "The macOS app bundle and executable name"
   )
   set(
     MACOS_BUNDLE_IDENTIFIER
-    org.mixxx.mixxx
+    com.tondz.vynixdj
     CACHE STRING
     "The macOS app bundle identifier"
   )

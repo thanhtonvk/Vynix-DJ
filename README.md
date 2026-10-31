@@ -6,7 +6,7 @@
 
 <p align="center">
   Open-source DJ software for <b>Android</b>, built for touch screens and USB DJ controllers.<br>
-  Also available for Windows and Linux. Based on <a href="https://mixxx.org">Mixxx</a>.
+  Also available for Windows, Linux and macOS. Based on <a href="https://mixxx.org">Mixxx</a>.
 </p>
 
 <p align="center">
@@ -52,6 +52,7 @@
   or adapter to connect a DJ controller.
 - **Windows:** Windows 10 or later, 64-bit.
 - **Linux:** Debian / Ubuntu based distributions, x86_64 or ARM64.
+- **macOS:** macOS 11 or later, Apple Silicon (M1 or later).
 
 ## Installation
 
@@ -64,6 +65,7 @@ Download the package for your platform from the
 | Windows | `VynixDJ-<version>-windows-x64.zip` |
 | Linux (PC) | `VynixDJ-<version>-linux-x64.deb` |
 | Linux (ARM64, e.g. Raspberry Pi) | `VynixDJ-<version>-linux-arm64.deb` |
+| macOS (Apple Silicon) | `VynixDJ-<version>-macos-arm64.dmg` |
 
 **Android:** open the APK on your phone and allow installing apps from unknown sources,
 or install it from a computer with `adb install VynixDJ-<version>-android-arm64.apk`.
@@ -73,6 +75,10 @@ Launch Vynix DJ and grant file access when asked.
 
 **Linux:** `sudo apt install ./VynixDJ-<version>-linux-x64.deb` (or the ARM64 package),
 then start Vynix DJ from the applications menu.
+
+**macOS:** open the DMG and drag **VynixDJ** to **Applications**. The app is not signed
+with an Apple Developer ID, so macOS blocks it the first time: right-click the app →
+**Open** → **Open**, or run `xattr -dr com.apple.quarantine /Applications/VynixDJ.app`.
 
 ## Quick start
 
@@ -150,9 +156,10 @@ The `setup` step needs `sudo` to install packages and downloads about 15 GB of
 libraries. `-DCMAKE_CXX_SCAN_FOR_MODULES=OFF` is needed with CMake 3.28 and later, the
 NDK has no `clang-scan-deps`.
 
-### Windows and Linux
+### Windows, Linux and macOS
 
-The Windows (x64) and Linux (x64, ARM64) packages are built by GitHub Actions, see
+The Windows (x64), Linux (x64, ARM64) and macOS (arm64) packages are built by GitHub
+Actions, see
 [`.github/workflows`](.github/workflows). Pushing a `v*` tag builds all of them and
 attaches them to the release. See [CONTRIBUTING.md](CONTRIBUTING.md) for building the
 desktop version locally.

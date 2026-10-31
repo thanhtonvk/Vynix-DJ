@@ -1,0 +1,84 @@
+name: macOS build
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    name: macOS arm64 (DMG, unsigned)
+    runs-on: macos-15
+    env:
+      BUILDENV_BASEPATH: /Users/runner/buildenv
+      BUILDENV_RELEASE: TRUE
+      MACOSX_DEPLOYMENT_TARGET: "11.0"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          # Full history and tags for the version in the package name
+          fetch-depth: 0
+
+      - name: Set up cmake
+        uses: jwlawson/actions-setup-cmake@v2.2
+        with:
+          cmake-version: "3.30.x"
+
+      - name: Install build tools
+        run: brew install ninja || true
+
+      - name: Set up build environment
+        run: source tools/macos_buildenv.sh setup
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Configure
+        working-directory: build
+        run: >-
+          cmake
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+          -DMACOS_BUNDLE=ON
+          -DBULK=ON -DCOREAUDIO=ON -DHID=ON -DLOCALECOMPARE=ON
+          -DMAD=ON -DMODPLUG=ON -DWAVPACK=ON
+          -DQT6=ON -DQML=ON -DKEYFINDER=ON -DLILV=ON -DOPUS=ON
+          -DQTKEYCHAIN=ON -DVINYLCONTROL=ON -DBATTERY=ON -DBROADCAST=ON
+          -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF
+          ..
+
+      - name: Build
+        working-directory: build
+        run: cmake --build . --parallel
+
+      - name: Package
+        working-directory: build
+        run: |
+          # The app is only ad-hoc signed (no Apple Developer ID), see README.
+          # hdiutil sometimes fails with "Resource busy" on CI, so retry.
+          for i in 1 2 3; do
+            cpack -G DragNDrop -D CPACK_DMG_VOLUME_NAME="Vynix DJ" && break
+            sleep 10
+          done
+          dmg=$(ls VynixDJ-*.dmg | head -n 1)
+          # Tag v1.0.6 -> VynixDJ-1.0.6-macos-arm64.dmg, like the other packages
+          version=$(git describe --tags --abbrev=0 | sed 's/^v//')
+          mv "$dmg" "VynixDJ-$version-macos-arm64.dmg"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: VynixDJ-macos-arm64
+          path: build/VynixDJ-*-macos-arm64.dmg
+          if-no-files-found: error
+
+      - name: Attach to release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/VynixDJ-*-macos-arm64.dmg
