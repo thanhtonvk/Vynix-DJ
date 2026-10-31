@@ -9,7 +9,7 @@
 <Template>
   <PushButton>
     <ObjectName>MixerColorFx</ObjectName>
-    <SizePolicy>me,me</SizePolicy>
+    <Size>0me,52f</Size>
     <NumberStates>2</NumberStates>
     <State><Number>0</Number><Text><Variable name="label"/></Text></State>
     <State><Number>1</Number><Text><Variable name="label"/></Text></State>

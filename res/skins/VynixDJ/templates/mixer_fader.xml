@@ -5,7 +5,8 @@
   Variables:
     ConfigKey: fully qualified [Group],key the fader controls
     Handle: name of the handle, icons/mixer_handle_<Handle>.svg
-    Width: width of the fader, e.g. 64f (EQ) or 0me
+    Width: width of the fader, e.g. 84f (EQ) or 96f (VOL)
+    Reset: true to jump back to the centre when tapped twice (EQ and FX)
 -->
 <Template>
   <SliderComposed>
@@ -14,6 +15,7 @@
     <Slider scalemode="STRETCH">icons/mixer_groove_v.svg</Slider>
     <Handle scalemode="STRETCH_ASPECT">icons/mixer_handle_<Variable name="Handle"/>.svg</Handle>
     <Horizontal>false</Horizontal>
+    <DoubleTapReset><Variable name="Reset"/></DoubleTapReset>
     <Connection>
       <ConfigKey><Variable name="ConfigKey"/></ConfigKey>
     </Connection>

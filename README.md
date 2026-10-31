@@ -5,53 +5,95 @@
 <h1 align="center">Vynix DJ</h1>
 
 <p align="center">
-  Open-source DJ software for <b>Android</b>, built for touch screens and USB DJ controllers.<br>
-  Also available for Windows, Linux and macOS. Based on <a href="https://mixxx.org">Mixxx</a>.
+  Turn your DJ controller into an <b>all-in-one DJ system</b>.<br>
+  Open-source DJ software for Android, Windows, Linux and macOS, built for touch screens
+  and USB DJ controllers. Based on <a href="https://mixxx.org">Mixxx</a>.
+</p>
+
+<p align="center">
+  <b>English</b> · <a href="README.vi.md">Tiếng Việt</a>
 </p>
 
 <p align="center">
   <img src="res/skins/VynixDJ/skin_preview.png" width="720" alt="Vynix DJ interface">
 </p>
 
+---
+
+## What is Vynix DJ?
+
+Standalone all-in-one units like the Pioneer XDJ series or Denon DJ Prime put the
+decks, the mixer and a screen in one box, so you can play without a laptop. Vynix DJ
+lets you build the same thing from a regular USB DJ controller: add a phone, a tablet,
+a single-board computer with a touch screen or a small PC, and the controller becomes a
+complete DJ system.
+
+- **Made for modding.** The interface is designed for a screen mounted on or next to the
+  controller: large touch targets, full-screen layout and controller-first browsing, so
+  a whole set can be played from the controller alone.
+- **Runs on what you have.** The same software and interface on Android, Windows, Linux
+  (x64 and ARM64) and macOS. Pick the hardware that fits your build.
+- **Plug and play controllers.** More than 140 controller mappings ship with Mixxx, and
+  a mapping is picked automatically when a controller is plugged in.
+- **Your existing library.** Play from local folders or from Rekordbox USB drives with
+  their playlists, cues, loops and beatgrids.
+
 > **Two decks.** Vynix DJ currently supports **2 decks**. Controllers with four decks
 > work, but only decks 1 and 2 are shown and mixed in the interface.
 
----
+## Build ideas
+
+| Build | Platform | Notes |
+|---|---|---|
+| Controller + phone or tablet | Android | USB OTG cable or hub to the controller. The most compact build. |
+| Controller + ARM64 board with a touch screen (e.g. Raspberry Pi) | Linux ARM64 | A fixed "XDJ style" unit, the board can be mounted in a case. |
+| Controller + mini PC or old laptop | Windows / Linux x64 | The most processing power for large libraries. |
+| Controller + Mac | macOS | Apple Silicon Macs. |
 
 ## Features
 
-- **Two decks** with colored waveforms (RGB / Filtered / HSV), beatgrids, cues, hot cues
+**Decks**
+- Two decks with colored waveforms (RGB / Filtered / HSV), beatgrids, cues, hot cues
   and loops.
-- **Touch interface** that scales to phone and tablet screens and runs truly full screen,
-  including the camera cutout (notch) area.
-- **Two-finger pinch zoom** on the waveforms.
-- **MIXER tab**: GAIN, tempo (BPM, pitch %, tempo fader), channel faders, LOW / MID / HI
-  EQ and FX faders, master VU meter, CUE / PLAY / SYNC and crossfader.
+- Two-finger pinch zoom on the waveforms.
+- Touch interface that scales to phone, tablet and desktop screens, truly full screen,
+  including the camera cutout (notch) area on phones.
+
+**Mixer** (MIXER tab)
+- GAIN, tempo fader with pitch % and 0 % reset, channel faders, LOW / MID / HI EQ
+  and FX faders, master VU meter, CUE / PLAY / SYNC and crossfader for both decks.
 - **Sound Color FX** like on Pioneer XDJ mixers: FILTER, SPACE, DUB ECHO, SWEEP, NOISE
-  and CRUSH buttons pick the effect of the FX fader of both decks.
-- **Music library** from device storage (`Music`, `Download` or any folder you add), with
-  search and a track info panel: cover art, BPM, key, duration, overview waveform and
-  LOAD 1 / LOAD 2 buttons.
-- **Rekordbox USB drives**: reads playlists, cues, loops and beatgrids from USB drives
-  exported with Rekordbox. Rekordbox and Serato are listed right after Tracks.
-- **Hardware-style Beat FX**: pick an effect from a full-screen picker, toggle it on/off,
-  set the BEAT and LEVEL knobs. Includes Echo, Reverb, Flanger, Phaser, Filter, Trans,
-  Pan, Glitch, Pitch, Bitcrusher and Noise. Choose one FX unit (DDJ style) or two
-  (Denon DJ / Numark style).
-- **USB MIDI controllers** through the Android MIDI API: controllers are detected and a
-  mapping is picked automatically from the 140+ mappings that ship with Mixxx
-  (Pioneer DDJ, Denon MC, Numark, Hercules, Roland, …).
-- **Controller-first browsing**: turning the browse knob opens the library, loading a
-  track returns to the decks, so a set can be played without touching the screen.
-- **USB HID / Bulk controllers** (some Traktor, Hercules, Denon, … models).
-- **Touch-friendly settings**: in-app settings pages, plus the full Preferences dialog
-  with large text and swipe scrolling.
+  and CRUSH choose the effect of the FX fader of both decks.
+- Tap an EQ or FX fader twice to center it.
+
+**Beat FX** (PLAY tab)
+- Hardware-style effect unit: pick an effect from a full-screen picker, turn it on and
+  set the BEAT and LEVEL knobs. LEVEL starts at 0 when an effect is chosen.
+- Echo, Reverb, Flanger, Phaser, Filter, Trans, Pan, Glitch, Pitch, Bitcrusher and Noise.
+- One FX unit (DDJ style) or two (Denon DJ / Numark style).
+
+**Library**
+- Music folders on the device or computer, with search and a track info panel: cover
+  art, BPM, key, duration, overview waveform and LOAD 1 / LOAD 2 buttons.
+- Rekordbox USB drives: playlists, cues, loops and beatgrids from drives exported with
+  Rekordbox. Rekordbox and Serato are listed right after Tracks.
+
+**Controllers**
+- USB MIDI controllers, including through the Android MIDI API on phones and tablets.
+- USB HID / Bulk controllers (some Traktor, Hercules, Denon, … models).
+- Automatic mapping selection from the mappings that ship with Mixxx (Pioneer DDJ,
+  Denon MC, Numark, Hercules, Roland, …).
+- Controller-first browsing: turning the browse knob opens the library, loading a track
+  returns to the decks.
+
+**Settings**
+- In-app settings pages for touch screens, plus the full Preferences dialog with large
+  text and swipe scrolling.
 
 ## Requirements
 
-- **Android:** Android 9 (API 28) or later, **arm64-v8a** CPU.
-  **All files access** permission to read your music library, and a **USB OTG** cable
-  or adapter to connect a DJ controller.
+- **Android:** Android 9 (API 28) or later, **arm64-v8a** CPU. **All files access**
+  permission to read your music, and a **USB OTG** cable or adapter for the controller.
 - **Windows:** Windows 10 or later, 64-bit.
 - **Linux:** Debian / Ubuntu based distributions, x86_64 or ARM64.
 - **macOS:** macOS 11 or later, Apple Silicon (M1 or later).
@@ -69,7 +111,7 @@ Download the package for your platform from the
 | Linux (ARM64, e.g. Raspberry Pi) | `VynixDJ-<version>-linux-arm64.deb` |
 | macOS (Apple Silicon) | `VynixDJ-<version>-macos-arm64.dmg` |
 
-**Android:** open the APK on your phone and allow installing apps from unknown sources,
+**Android:** open the APK on the device and allow installing apps from unknown sources,
 or install it from a computer with `adb install VynixDJ-<version>-android-arm64.apk`.
 Launch Vynix DJ and grant file access when asked.
 
@@ -84,43 +126,50 @@ with an Apple Developer ID, so macOS blocks it the first time: right-click the a
 
 ## Quick start
 
-**Adding music**
+**DJ controller**
 
-- Copy music into the phone's `Music` or `Download` folder; Vynix DJ scans both
-  on first launch.
-- To add another folder: **SETTINGS → DEVICE → Music library → OPEN → Add**.
-- Open **BROWSE → TRACKS**, tap a track, then press **LOAD 1** or **LOAD 2**
-  (or double-tap the track).
-
-**Mixing** (**MIXER** tab)
-
-- Faders for tempo, volume, LOW / MID / HI and FX, GAIN knobs, CUE / PLAY / SYNC
-  and the crossfader for both decks.
-- The buttons in the middle choose the effect of the FX faders. The fader is off in
-  the center; FILTER cuts the highs or lows, the other effects grow to both sides.
-
-**Beat FX** (**PLAY** tab, right panel)
-
-1. Tap the effect name to open the picker, then choose an effect.
-2. Select **Deck 1** / **Deck 2** to apply it to.
-3. Press **FX ON**, then turn the **BEAT** and **LEVEL** knobs.
-4. One or two FX units: **SETTINGS → GENERAL → FX units**.
-
-**DJ controllers**
-
-- Plug in the controller **before** launching the app. Controllers with a bundled
+- Plug in the controller **before** launching Vynix DJ. Controllers with a bundled
   mapping are enabled automatically.
 - If you plug one in while the app is running, a notice asks you to restart the app.
 - To choose a mapping manually: **SETTINGS → DEVICE → DJ controllers → OPEN**.
 
+**Music**
+
+- On Android, copy music into the `Music` or `Download` folder; both are scanned on
+  first launch. On computers, your `Music` folder is used.
+- To add another folder: **SETTINGS → DEVICE → Music library → OPEN → Add**.
+- Open **BROWSE → TRACKS** (or turn the browse knob), select a track and press
+  **LOAD 1** / **LOAD 2**, double-tap it, or use the load buttons of the controller.
+
+**Mixing** (MIXER tab)
+
+- Tempo, volume, LOW / MID / HI and FX faders, GAIN knobs, CUE / PLAY / SYNC and the
+  crossfader for both decks.
+- The buttons in the middle choose the effect of the FX faders. The fader is off in the
+  center; FILTER cuts the highs or lows, the other effects grow to both sides.
+
+**Beat FX** (PLAY tab, right panel)
+
+1. Tap the effect name to open the picker, then choose an effect.
+2. Select **Deck 1** / **Deck 2** to apply it to.
+3. Press **FX ON**, then turn up **LEVEL** and set **BEAT**.
+4. One or two FX units: **SETTINGS → GENERAL → FX units**.
+
 **Audio**
 
-- The default output is the device speaker or headphones, via Oboe/AAudio.
-- To change device, latency or sample rate: **SETTINGS → AUDIO → OPEN**.
+- To choose the sound card, latency or sample rate: **SETTINGS → AUDIO → OPEN**. On
+  Android the default output is the device speaker or headphones, via Oboe/AAudio.
 - Master, booth and headphone levels and the master EQ are in **SETTINGS → AUDIO**.
 - Sample players are in **SETTINGS → SAMPLER**.
 
 ## Building from source
+
+### Windows, Linux and macOS
+
+The Windows (x64), Linux (x64, ARM64) and macOS (arm64) packages are built by GitHub
+Actions, see [`.github/workflows`](.github/workflows). Pushing a `v*` tag builds all of
+them and attaches them to the release. See [CONTRIBUTING.md](CONTRIBUTING.md) for
+building the desktop version locally.
 
 ### Android
 
@@ -160,18 +209,8 @@ The `setup` step needs `sudo` to install packages and downloads about 15 GB of
 libraries. `-DCMAKE_CXX_SCAN_FOR_MODULES=OFF` is needed with CMake 3.28 and later, the
 NDK has no `clang-scan-deps`.
 
-### Windows, Linux and macOS
-
-The Windows (x64), Linux (x64, ARM64) and macOS (arm64) packages are built by GitHub
-Actions, see
-[`.github/workflows`](.github/workflows). Pushing a `v*` tag builds all of them and
-attaches them to the release. See [CONTRIBUTING.md](CONTRIBUTING.md) for building the
-desktop version locally.
-
-### Running on the Android emulator
-
-The build is arm64 only. x86_64 emulator images running **Android 11 or later** can
-still run it through ARM translation, but slower than a real device:
+The build is arm64 only. x86_64 Android emulator images running **Android 11 or later**
+can still run it through ARM translation, but slower than a real device:
 
 ```bash
 sdkmanager "system-images;android-34;google_apis;x86_64" "emulator"
@@ -184,16 +223,16 @@ adb install -r build/android-build/build/outputs/apk/release/android-build-relea
 
 | Component | Main changes |
 |---|---|
-| `src/controllers/midi/androidmidi*` | New Android MIDI backend (`android.media.midi`) |
+| `res/skins/VynixDJ/` | Touch skin: MIXER tab with Sound Color FX, Beat FX picker, track info panel |
+| `src/controllers/controllermanager.cpp` | Auto-enables new controllers and picks a mapping by name |
+| `src/controllers/midi/androidmidi*` | Android MIDI backend (`android.media.midi`) |
+| `src/library/` | Controller-first browsing, search from the sidebar, Rekordbox / Serato first |
+| `src/effects/` | Beat FX knobs, `beat_period` control, BQ EQ as the default deck EQ |
+| `src/widget/` | Two-finger pinch zoom on waveforms, double-tap to center faders |
+| `src/preferences/dialog/dlgpreferences.cpp` | Large-text Preferences with swipe scrolling |
+| `src/soundio/` | Detects the built-in speaker on Android, selects Oboe and a default output |
 | `packaging/android/src/com/tondz/vynixdj/` | `MidiBridge` (MIDI), `StorageVolumes` (USB drives), `MainActivity` (full screen) |
 | `src/util/androidlibccompat.c` | libc functions missing on Android 9–13 |
-| `src/controllers/controllermanager.cpp` | Auto-enables new controllers and picks a mapping by name |
-| `src/library/` | Controller-first browsing, search from the sidebar, Rekordbox / Serato first |
-| `res/skins/VynixDJ/` | Touch skin, MIXER tab, FX picker, track info panel |
-| `src/preferences/dialog/dlgpreferences.cpp` | Large-text Preferences with swipe scrolling |
-| `src/widget/wwaveformviewer.cpp` | Two-finger pinch zoom |
-| `src/effects/` | Beat FX knobs, `beat_period` control, BQ EQ as the default deck EQ |
-| `src/soundio/` | Detects the built-in speaker, selects Oboe and a default output |
 
 It also includes several fixes for Mixxx on Android: a crash on launch on Android 9–13,
 empty waveforms, no audio output, Rekordbox USB drives not found, and effects and fonts
@@ -203,16 +242,17 @@ not loading from the APK assets.
 
 - Only **2 decks** are supported.
 - Controllers with a built-in sound card (e.g. Denon MC7000) may only play the Master
-  output; separate headphone cueing is not supported yet.
+  output on Android; separate headphone cueing is not supported there yet.
 - Controllers plugged in while the app is running are only detected after a restart.
 
 ## Contributing
 
 Vynix DJ is an independent project and is not part of the Mixxx development team.
 Please report bugs and feature requests in [Issues](https://github.com/thanhtonvk/Vynix-DJ/issues),
-**not** on Mixxx channels.
+**not** on Mixxx channels. Photos and descriptions of your all-in-one builds are welcome
+there too.
 
-General Android fixes (not tied to the Vynix DJ interface) may be contributed back to
+General fixes that are not tied to the Vynix DJ interface may be contributed back to
 Mixxx following the process in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Credits

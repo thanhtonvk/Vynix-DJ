@@ -2204,7 +2204,6 @@ WBeatSpinBox::up-button {
 }
 
 #MixerTopRow,
-#MixerGainRow,
 #MixerBottomRow {
   qproperty-layoutSpacing: 10;
 }
@@ -2275,19 +2274,23 @@ WBeatSpinBox::up-button {
   border-radius: 6px;
 }
 
-/* Tempo next to the GAIN knobs, see templates/mixer_tempo.xml */
-#MixerTempo {
-  qproperty-layoutSpacing: 8;
+/* BPM next to the track title, see templates/mixer_deck_header.xml */
+#MixerDeckBpm {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-#MixerTempoBox {
-  background-color: #1a1f27;
-  border-radius: 6px;
+/* Tempo strip next to the channel fader, see templates/mixer_tempo.xml */
+#MixerTempo {
+  qproperty-layoutSpacing: 6;
 }
 
 #MixerTempoValue {
   color: #ffffff;
-  font-size: 22px;
+  background-color: #1a1f27;
+  border-radius: 6px;
+  font-size: 15px;
   font-weight: bold;
 }
 

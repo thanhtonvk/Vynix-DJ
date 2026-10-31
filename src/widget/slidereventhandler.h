@@ -4,7 +4,10 @@
 #include <QWheelEvent>
 #include <QCursor>
 #include <QApplication>
+#include <QElapsedTimer>
+#include <QLineF>
 #include <QPoint>
+#include <QStyleHints>
 
 #include "util/math.h"
 
@@ -21,7 +24,9 @@ class SliderEventHandler {
               m_dSliderLength(0),
               m_bHorizontal(false),
               m_bDrag(false),
-              m_bEventWhileDrag(true) { }
+              m_bEventWhileDrag(true),
+              m_bDoubleTapReset(false),
+              m_bIgnoreMove(false) { }
 
     void setHorizontal(bool horiz) {
         m_bHorizontal = horiz;
@@ -39,7 +44,17 @@ class SliderEventHandler {
         m_bEventWhileDrag = eventwhile;
     }
 
+    /// Reset to the default when tapped twice, also on touch screens where
+    /// no double click event arrives because the finger moved a little.
+    void setDoubleTapReset(bool doubleTapReset) {
+        m_bDoubleTapReset = doubleTapReset;
+    }
+
     void mouseMoveEvent(T* pWidget, QMouseEvent* e) {
+        // The finger of a double tap must not move the reset fader again
+        if (m_bIgnoreMove) {
+            return;
+        }
         if (!m_bRightButtonPressed) {
             if (m_bHorizontal) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -78,6 +93,27 @@ class SliderEventHandler {
     }
 
     void mousePressEvent(T* pWidget, QMouseEvent* e) {
+        if (m_bDoubleTapReset && e->button() == Qt::LeftButton) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+            const QPointF pos = e->position();
+#else
+            const QPointF pos = e->localPos();
+#endif
+            // Touch screens need more room than a mouse
+            constexpr double kMaxDoubleTapDistance = 40;
+            const bool doubleTap = m_lastTap.isValid() &&
+                    m_lastTap.elapsed() <
+                            QGuiApplication::styleHints()->mouseDoubleClickInterval() &&
+                    QLineF(pos, m_lastTapPos).length() < kMaxDoubleTapDistance;
+            if (doubleTap) {
+                m_lastTap.invalidate();
+                pWidget->resetControlParameter();
+                m_bIgnoreMove = true;
+                return;
+            }
+            m_lastTap.start();
+            m_lastTapPos = pos;
+        }
         if (!m_bEventWhileDrag) {
             m_dStartMousePos = 0;
             m_dStartHandlePos = 0;
@@ -113,6 +149,10 @@ class SliderEventHandler {
     }
 
     void mouseReleaseEvent(T* pWidget, QMouseEvent* e) {
+        if (m_bIgnoreMove) {
+            m_bIgnoreMove = false;
+            return;
+        }
         if (!m_bEventWhileDrag) {
             pWidget->mouseMoveEvent(e);
             m_bDrag = false;
@@ -223,4 +263,9 @@ class SliderEventHandler {
     bool m_bDrag;
     // Is true if events is emitted while the slider is dragged
     bool m_bEventWhileDrag;
+    bool m_bDoubleTapReset;
+    // Set from a double tap until the finger is released
+    bool m_bIgnoreMove;
+    QElapsedTimer m_lastTap;
+    QPointF m_lastTapPos;
 };

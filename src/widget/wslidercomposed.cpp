@@ -163,6 +163,7 @@ void WSliderComposed::setup(const QDomNode& node, const SkinContext& context) {
             m_handler.setEventWhileDrag(false);
         }
     }
+    m_handler.setDoubleTapReset(context.selectBool(node, "DoubleTapReset", false));
     if (!m_connections.empty()) {
         auto& pDefaultConnection = m_connections[0];
         if (pDefaultConnection) {

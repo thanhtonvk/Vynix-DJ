@@ -1,6 +1,6 @@
 <!--
   Deck header of the MIXER page (mixer.xml), on either side of REC: deck
-  number and track on one line, the overview waveform below.
+  number, track and BPM on one line, the overview waveform below.
   Variables:
     channel: deck number
 -->
@@ -30,6 +30,23 @@
             <Elide>right</Elide>
             <Size>0me,30f</Size>
           </TrackProperty>
+          <!-- Current tempo, i.e. the track BPM with the tempo fader applied -->
+          <NumberBpm>
+            <ObjectName>MixerDeckBpm</ObjectName>
+            <Channel><Variable name="channel"/></Channel>
+            <NumberOfDigits>1</NumberOfDigits>
+            <Size>80f,30f</Size>
+            <Alignment>right</Alignment>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,visual_bpm</ConfigKey>
+            </Connection>
+          </NumberBpm>
+          <Label>
+            <ObjectName>MixerKnobLabel</ObjectName>
+            <Text>BPM</Text>
+            <Size>34f,30f</Size>
+            <Alignment>left</Alignment>
+          </Label>
         </Children>
       </WidgetGroup>
       <Overview>

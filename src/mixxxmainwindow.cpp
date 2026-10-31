@@ -1057,6 +1057,22 @@ void MixxxMainWindow::createSkinSettingsControls() {
                                     id, EffectBackendType::BuiltIn);
                     if (pManifest) {
                         pSlot->loadEffectWithDefaults(pManifest);
+                        // Start with LEVEL at 0 like Beat FX units, so a new
+                        // effect is not heard until it is turned up. Effects
+                        // with a split knob (Filter) are neutral in the
+                        // centre and keep their default.
+                        bool splitKnob = false;
+                        for (const auto& pParameter : pManifest->parameters()) {
+                            if (pParameter->defaultLinkType() ==
+                                            EffectManifestParameter::LinkType::LinkedLeft ||
+                                    pParameter->defaultLinkType() ==
+                                            EffectManifestParameter::LinkType::LinkedRight) {
+                                splitKnob = true;
+                            }
+                        }
+                        if (!splitKnob) {
+                            pSlot->setMetaParameter(0.0, true);
+                        }
                     }
                     pFxPickerRaw->set(0.0);
                 });

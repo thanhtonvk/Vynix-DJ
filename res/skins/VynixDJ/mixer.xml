@@ -1,11 +1,12 @@
 <!--
   MIXER page, laid out like the mixer of Cross DJ:
-    top:     deck 1 track and overview, REC, deck 2 track and overview
-    gain:    GAIN knob, BPM, tempo % and 0 % of each deck
-    faders:  TEMPO VOL LOW MID HI FX  FILTER SPACE DUB ECHO | VU |
-             SWEEP NOISE CRUSH  FX LOW MID HI VOL TEMPO
+    top:     deck 1 track, BPM and overview, REC, deck 2 the same
+    faders:  TEMPO LOW MID HI FX VOL  GAIN 1 + FILTER SPACE DUB ECHO | VU |
+             GAIN 2 + SWEEP NOISE CRUSH  VOL FX LOW MID HI TEMPO
+             (templates/mixer_tempo.xml: tempo %, tempo fader and 0 %)
     bottom:  CUE PLAY SYNC  crossfader  SYNC CUE PLAY
-  Deck 2 mirrors deck 1. See templates/mixer_fader.xml for the faders.
+  Deck 2 mirrors deck 1. See templates/mixer_fader.xml for the faders;
+  tapping an EQ or FX fader twice centres it.
 
   The master output levels and master EQ that used to be on this tab are
   in Settings > Audio (levels.xml).
@@ -59,47 +60,6 @@
         </Children>
       </WidgetGroup>
 
-      <!-- GAIN above each channel fader, and the tempo of each deck next
-           to it (templates/mixer_tempo.xml) -->
-      <WidgetGroup>
-        <ObjectName>MixerGainRow</ObjectName>
-        <Layout>horizontal</Layout>
-        <Size>0me,70f</Size>
-        <Children>
-          <WidgetGroup>
-            <Layout>horizontal</Layout>
-            <Size>96f,0me</Size>
-            <Children>
-              <Template src="skin:templates/mixer_knob.xml">
-                <SetVariable name="Label">Gain</SetVariable>
-                <SetVariable name="ConfigKey">[Channel1],pregain</SetVariable>
-                <SetVariable name="Color">#3d8bfd</SetVariable>
-              </Template>
-            </Children>
-          </WidgetGroup>
-          <Template src="skin:templates/mixer_tempo.xml">
-            <SetVariable name="channel">1</SetVariable>
-          </Template>
-          <WidgetGroup>
-            <SizePolicy>me,me</SizePolicy>
-          </WidgetGroup>
-          <Template src="skin:templates/mixer_tempo.xml">
-            <SetVariable name="channel">2</SetVariable>
-          </Template>
-          <WidgetGroup>
-            <Layout>horizontal</Layout>
-            <Size>96f,0me</Size>
-            <Children>
-              <Template src="skin:templates/mixer_knob.xml">
-                <SetVariable name="Label">Gain</SetVariable>
-                <SetVariable name="ConfigKey">[Channel2],pregain</SetVariable>
-                <SetVariable name="Color">#f15921</SetVariable>
-              </Template>
-            </Children>
-          </WidgetGroup>
-        </Children>
-      </WidgetGroup>
-
       <!-- Channel and EQ faders of both decks, with the Sound Color FX
            buttons (templates/mixer_color_fx_button.xml) in two columns
            around the master VU meter, like on Pioneer XDJ mixers -->
@@ -108,42 +68,51 @@
         <Layout>horizontal</Layout>
         <SizePolicy>me,me</SizePolicy>
         <Children>
+          <Template src="skin:templates/mixer_tempo.xml">
+            <SetVariable name="channel">1</SetVariable>
+          </Template>
           <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[Channel1],rate</SetVariable>
-            <SetVariable name="Handle">tempo</SetVariable>
-            <SetVariable name="Width">56f</SetVariable>
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter1</SetVariable>
+            <SetVariable name="Handle">low</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter2</SetVariable>
+            <SetVariable name="Handle">mid</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter3</SetVariable>
+            <SetVariable name="Handle">hi</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[QuickEffectRack1_[Channel1]],super1</SetVariable>
+            <SetVariable name="Handle">flt</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
           </Template>
           <Template src="skin:templates/mixer_fader.xml">
             <SetVariable name="ConfigKey">[Channel1],volume</SetVariable>
             <SetVariable name="Handle">vol</SetVariable>
             <SetVariable name="Width">96f</SetVariable>
           </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter1</SetVariable>
-            <SetVariable name="Handle">low</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter2</SetVariable>
-            <SetVariable name="Handle">mid</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter3</SetVariable>
-            <SetVariable name="Handle">hi</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[QuickEffectRack1_[Channel1]],super1</SetVariable>
-            <SetVariable name="Handle">flt</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
 
+          <WidgetGroup><SizePolicy>me,me</SizePolicy></WidgetGroup>
           <WidgetGroup>
             <ObjectName>MixerColorFxColumn</ObjectName>
             <Layout>vertical</Layout>
-            <SizePolicy>me,me</SizePolicy>
+            <Size>150f,0me</Size>
             <Children>
+              <Template src="skin:templates/mixer_knob.xml">
+                <SetVariable name="Label">Gain</SetVariable>
+                <SetVariable name="ConfigKey">[Channel1],pregain</SetVariable>
+                <SetVariable name="Color">#3d8bfd</SetVariable>
+              </Template>
+              <WidgetGroup><SizePolicy>me,me</SizePolicy></WidgetGroup>
               <Template src="skin:templates/mixer_color_fx_button.xml">
                 <SetVariable name="n">1</SetVariable>
                 <SetVariable name="label">Filter</SetVariable>
@@ -156,6 +125,7 @@
                 <SetVariable name="n">3</SetVariable>
                 <SetVariable name="label">Dub Echo</SetVariable>
               </Template>
+              <WidgetGroup><SizePolicy>me,me</SizePolicy></WidgetGroup>
             </Children>
           </WidgetGroup>
 
@@ -177,8 +147,14 @@
           <WidgetGroup>
             <ObjectName>MixerColorFxColumn</ObjectName>
             <Layout>vertical</Layout>
-            <SizePolicy>me,me</SizePolicy>
+            <Size>150f,0me</Size>
             <Children>
+              <Template src="skin:templates/mixer_knob.xml">
+                <SetVariable name="Label">Gain</SetVariable>
+                <SetVariable name="ConfigKey">[Channel2],pregain</SetVariable>
+                <SetVariable name="Color">#f15921</SetVariable>
+              </Template>
+              <WidgetGroup><SizePolicy>me,me</SizePolicy></WidgetGroup>
               <Template src="skin:templates/mixer_color_fx_button.xml">
                 <SetVariable name="n">4</SetVariable>
                 <SetVariable name="label">Sweep</SetVariable>
@@ -191,38 +167,42 @@
                 <SetVariable name="n">6</SetVariable>
                 <SetVariable name="label">Crush</SetVariable>
               </Template>
+              <WidgetGroup><SizePolicy>me,me</SizePolicy></WidgetGroup>
             </Children>
           </WidgetGroup>
+          <WidgetGroup><SizePolicy>me,me</SizePolicy></WidgetGroup>
 
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[QuickEffectRack1_[Channel2]],super1</SetVariable>
-            <SetVariable name="Handle">flt</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter1</SetVariable>
-            <SetVariable name="Handle">low</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter2</SetVariable>
-            <SetVariable name="Handle">mid</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
-          <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter3</SetVariable>
-            <SetVariable name="Handle">hi</SetVariable>
-            <SetVariable name="Width">64f</SetVariable>
-          </Template>
           <Template src="skin:templates/mixer_fader.xml">
             <SetVariable name="ConfigKey">[Channel2],volume</SetVariable>
             <SetVariable name="Handle">vol</SetVariable>
             <SetVariable name="Width">96f</SetVariable>
           </Template>
           <Template src="skin:templates/mixer_fader.xml">
-            <SetVariable name="ConfigKey">[Channel2],rate</SetVariable>
-            <SetVariable name="Handle">tempo</SetVariable>
-            <SetVariable name="Width">56f</SetVariable>
+            <SetVariable name="ConfigKey">[QuickEffectRack1_[Channel2]],super1</SetVariable>
+            <SetVariable name="Handle">flt</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter1</SetVariable>
+            <SetVariable name="Handle">low</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter2</SetVariable>
+            <SetVariable name="Handle">mid</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter3</SetVariable>
+            <SetVariable name="Handle">hi</SetVariable>
+            <SetVariable name="Width">84f</SetVariable>
+            <SetVariable name="Reset">true</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_tempo.xml">
+            <SetVariable name="channel">2</SetVariable>
           </Template>
         </Children>
       </WidgetGroup>
