@@ -7,8 +7,8 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-#include "effects/backends/builtin/biquadfullkilleqeffect.h"
 #include "effects/backends/builtin/filtereffect.h"
+#include "effects/backends/builtin/threebandbiquadeqeffect.h"
 #include "effects/backends/effectmanifest.h"
 #include "effects/effectchain.h"
 #include "effects/presets/effectchainpreset.h"
@@ -696,8 +696,10 @@ EffectChainPresetPointer EffectChainPresetManager::createEmptyNamelessChainPrese
 }
 
 EffectManifestPointer EffectChainPresetManager::getDefaultEqEffect() {
+    // Vynix DJ: "BQ EQ" (Biquad Equalizer) for every deck, also after
+    // Preferences > Mixer > Reset to defaults
     EffectManifestPointer pDefaultEqEffect = m_pBackendManager->getManifest(
-            BiquadFullKillEQEffect::getId(), EffectBackendType::BuiltIn);
+            ThreeBandBiquadEQEffect::getId(), EffectBackendType::BuiltIn);
     DEBUG_ASSERT(!pDefaultEqEffect.isNull());
     return pDefaultEqEffect;
 }

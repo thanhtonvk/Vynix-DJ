@@ -1,8 +1,13 @@
+<!--
+  Master output levels and master EQ, shown in Settings > Audio
+  (settings.xml). The MIXER tab (mixer.xml) took the place of the former
+  LEVELS tab.
+-->
 <Template>
   <WidgetGroup>
     <ObjectName>Levels</ObjectName>
     <Layout>vertical</Layout>
-    <SizePolicy>me,me</SizePolicy>
+    <SizePolicy>me,min</SizePolicy>
     <Children>
 
       <Label>
@@ -205,25 +210,6 @@
           </WidgetGroup>
 
 
-        </Children>
-      </WidgetGroup>
-
-      <WidgetGroup>
-        <ObjectName>SettingsSpacer</ObjectName>
-        <Size>0me,0me</Size>
-      </WidgetGroup>
-
-      <WidgetGroup>
-        <ObjectName>Decks</ObjectName>
-        <Layout>horizontal</Layout>
-        <Size>0me,80max</Size>
-        <Children>
-          <Template src="skin:deck.xml">
-            <SetVariable name="channel">1</SetVariable>
-          </Template>
-          <Template src="skin:deck.xml">
-            <SetVariable name="channel">2</SetVariable>
-          </Template>
         </Children>
       </WidgetGroup>
 

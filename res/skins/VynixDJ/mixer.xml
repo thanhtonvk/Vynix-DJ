@@ -1,0 +1,222 @@
+<!--
+  MIXER page, laid out like the mixer of Cross DJ:
+    top:     deck 1 track and overview, REC, deck 2 track and overview
+    gain:    GAIN knob above each channel fader, tempo of each deck
+    faders:  VOL  LOW MID HI FLT  | master VU |  FLT LOW MID HI  VOL
+    bottom:  CUE PLAY SYNC  crossfader  SYNC CUE PLAY
+  Deck 2 mirrors deck 1. See templates/mixer_fader.xml for the faders.
+
+  The master output levels and master EQ that used to be on this tab are
+  in Settings > Audio (levels.xml).
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>Mixer</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+    <!-- Styled inner group: the root of a singleton gets the singleton's
+         object name, so #Mixer would not match it -->
+    <WidgetGroup>
+    <ObjectName>MixerBody</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+
+      <!-- Tracks with their overview waveforms, and REC -->
+      <WidgetGroup>
+        <ObjectName>MixerTopRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,96f</Size>
+        <Children>
+          <Template src="skin:templates/mixer_deck_header.xml">
+            <SetVariable name="channel">1</SetVariable>
+          </Template>
+
+          <PushButton>
+            <ObjectName>MixerRecButton</ObjectName>
+            <Size>120f,44f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>● Rec</Text></State>
+            <State><Number>1</Number><Text>● Rec</Text></State>
+            <Connection>
+              <ConfigKey>[Recording],toggle_recording</ConfigKey>
+              <ButtonState>LeftButton</ButtonState>
+              <ConnectValueToWidget>false</ConnectValueToWidget>
+            </Connection>
+            <!-- Lit while armed or recording, see tab.xml -->
+            <Connection>
+              <ConfigKey>[Recording],status</ConfigKey>
+              <Transform><Not/><Not/></Transform>
+              <ConnectValueFromWidget>false</ConnectValueFromWidget>
+            </Connection>
+          </PushButton>
+
+          <Template src="skin:templates/mixer_deck_header.xml">
+            <SetVariable name="channel">2</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup>
+
+      <!-- GAIN above each channel fader, and the tempo of each deck next
+           to it (templates/mixer_tempo.xml) -->
+      <WidgetGroup>
+        <ObjectName>MixerGainRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,70f</Size>
+        <Children>
+          <WidgetGroup>
+            <Layout>horizontal</Layout>
+            <Size>96f,0me</Size>
+            <Children>
+              <Template src="skin:templates/mixer_knob.xml">
+                <SetVariable name="Label">Gain</SetVariable>
+                <SetVariable name="ConfigKey">[Channel1],pregain</SetVariable>
+                <SetVariable name="Color">#3d8bfd</SetVariable>
+              </Template>
+            </Children>
+          </WidgetGroup>
+          <Template src="skin:templates/mixer_tempo.xml">
+            <SetVariable name="channel">1</SetVariable>
+          </Template>
+          <WidgetGroup>
+            <Size>40f,0me</Size>
+          </WidgetGroup>
+          <Template src="skin:templates/mixer_tempo.xml">
+            <SetVariable name="channel">2</SetVariable>
+          </Template>
+          <WidgetGroup>
+            <Layout>horizontal</Layout>
+            <Size>96f,0me</Size>
+            <Children>
+              <Template src="skin:templates/mixer_knob.xml">
+                <SetVariable name="Label">Gain</SetVariable>
+                <SetVariable name="ConfigKey">[Channel2],pregain</SetVariable>
+                <SetVariable name="Color">#f15921</SetVariable>
+              </Template>
+            </Children>
+          </WidgetGroup>
+        </Children>
+      </WidgetGroup>
+
+      <!-- Channel, EQ and filter faders around the master VU meter -->
+      <WidgetGroup>
+        <ObjectName>MixerFaderRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[Channel1],volume</SetVariable>
+            <SetVariable name="Handle">vol</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter1</SetVariable>
+            <SetVariable name="Handle">low</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter2</SetVariable>
+            <SetVariable name="Handle">mid</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel1]_Effect1],parameter3</SetVariable>
+            <SetVariable name="Handle">hi</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[QuickEffectRack1_[Channel1]],super1</SetVariable>
+            <SetVariable name="Handle">flt</SetVariable>
+          </Template>
+
+          <VuMeter>
+            <ObjectName>MixerVu</ObjectName>
+            <Size>16f,0me</Size>
+            <PathBack scalemode="STRETCH">icons/vu_back.svg</PathBack>
+            <PathVu scalemode="STRETCH">icons/vu_front.svg</PathVu>
+            <Horizontal>false</Horizontal>
+            <PeakHoldSize>5</PeakHoldSize>
+            <PeakHoldTime>500</PeakHoldTime>
+            <PeakFallTime>50</PeakFallTime>
+            <PeakFallStep>2</PeakFallStep>
+            <Connection>
+              <ConfigKey>[Master],vu_meter</ConfigKey>
+            </Connection>
+          </VuMeter>
+
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[QuickEffectRack1_[Channel2]],super1</SetVariable>
+            <SetVariable name="Handle">flt</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter1</SetVariable>
+            <SetVariable name="Handle">low</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter2</SetVariable>
+            <SetVariable name="Handle">mid</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[EqualizerRack1_[Channel2]_Effect1],parameter3</SetVariable>
+            <SetVariable name="Handle">hi</SetVariable>
+          </Template>
+          <Template src="skin:templates/mixer_fader.xml">
+            <SetVariable name="ConfigKey">[Channel2],volume</SetVariable>
+            <SetVariable name="Handle">vol</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup>
+
+      <!-- Transport around the crossfader -->
+      <WidgetGroup>
+        <ObjectName>MixerBottomRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,76f</Size>
+        <Children>
+          <WidgetGroup>
+            <ObjectName>MixerTransport</ObjectName>
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,me</SizePolicy>
+            <Children>
+              <Template src="skin:templates/mixer_cue_button.xml">
+                <SetVariable name="channel">1</SetVariable>
+              </Template>
+              <Template src="skin:templates/mixer_play_button.xml">
+                <SetVariable name="channel">1</SetVariable>
+              </Template>
+              <Template src="skin:templates/mixer_sync_button.xml">
+                <SetVariable name="channel">1</SetVariable>
+              </Template>
+            </Children>
+          </WidgetGroup>
+          <SliderComposed>
+            <ObjectName>MixerCrossfader</ObjectName>
+            <SizePolicy>me,me</SizePolicy>
+            <Slider scalemode="STRETCH">icons/mix_slider_groove.svg</Slider>
+            <Handle scalemode="STRETCH_ASPECT">icons/mix_slider_handle.svg</Handle>
+            <Horizontal>true</Horizontal>
+            <Connection>
+              <ConfigKey>[Master],crossfader</ConfigKey>
+            </Connection>
+          </SliderComposed>
+          <WidgetGroup>
+            <ObjectName>MixerTransport</ObjectName>
+            <Layout>horizontal</Layout>
+            <SizePolicy>me,me</SizePolicy>
+            <Children>
+              <Template src="skin:templates/mixer_sync_button.xml">
+                <SetVariable name="channel">2</SetVariable>
+              </Template>
+              <Template src="skin:templates/mixer_cue_button.xml">
+                <SetVariable name="channel">2</SetVariable>
+              </Template>
+              <Template src="skin:templates/mixer_play_button.xml">
+                <SetVariable name="channel">2</SetVariable>
+              </Template>
+            </Children>
+          </WidgetGroup>
+        </Children>
+      </WidgetGroup>
+
+    </Children>
+    </WidgetGroup>
+    </Children>
+  </WidgetGroup>
+</Template>

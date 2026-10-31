@@ -1,0 +1,20 @@
+<!--
+  One vertical fader of the MIXER page (mixer.xml), Cross DJ style: the
+  handle carries the label (VOL, LOW, MID, HI, FLT.). EQ and filter faders
+  are neutral in the centre, the channel fader is at full volume on top.
+  Variables:
+    ConfigKey: fully qualified [Group],key the fader controls
+    Handle: name of the handle, icons/mixer_handle_<Handle>.svg
+-->
+<Template>
+  <SliderComposed>
+    <ObjectName>MixerFader</ObjectName>
+    <SizePolicy>me,me</SizePolicy>
+    <Slider scalemode="STRETCH">icons/mixer_groove_v.svg</Slider>
+    <Handle scalemode="STRETCH_ASPECT">icons/mixer_handle_<Variable name="Handle"/>.svg</Handle>
+    <Horizontal>false</Horizontal>
+    <Connection>
+      <ConfigKey><Variable name="ConfigKey"/></ConfigKey>
+    </Connection>
+  </SliderComposed>
+</Template>

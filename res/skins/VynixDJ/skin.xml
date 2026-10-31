@@ -76,9 +76,9 @@
 			</Children>
 		</SingletonDefinition>
 		<SingletonDefinition>
-			<ObjectName>Levels_Singleton</ObjectName>
+			<ObjectName>Mixer_Singleton</ObjectName>
 			<Children>
-				<Template src="skin:levels.xml"/>
+				<Template src="skin:mixer.xml"/>
 			</Children>
 		</SingletonDefinition>
 		<SingletonDefinition>
@@ -159,15 +159,12 @@
 								<SingletonContainer trigger="[Tab],library" on_hide_select="0">
 									<ObjectName>Library_Singleton</ObjectName>
 								</SingletonContainer>
-								<SingletonContainer trigger="[Tab],samplers" on_hide_select="0">
-									<ObjectName>Samplers_Singleton</ObjectName>
-								</SingletonContainer>
-								<!-- Child order is load-bearing: ControllerSettings
-								     navigates to Settings by index (overview=0,
-								     library=1, samplers=2, levels=3, settings=4).
-								     Reorder here and that constant must move too. -->
-								<SingletonContainer trigger="[Tab],levels" on_hide_select="0">
-									<ObjectName>Levels_Singleton</ObjectName>
+								<!-- Pages: overview=0, library=1, mixer=2, settings=3.
+								     The sample players are in Settings > Sampler
+								     (settings.xml). Code switches pages through the
+								     [Tab] triggers, not by index. -->
+								<SingletonContainer trigger="[Tab],mixer" on_hide_select="0">
+									<ObjectName>Mixer_Singleton</ObjectName>
 								</SingletonContainer>
 								<SingletonContainer trigger="[Tab],settings" on_hide_select="0">
 									<ObjectName>Settings_Singleton</ObjectName>

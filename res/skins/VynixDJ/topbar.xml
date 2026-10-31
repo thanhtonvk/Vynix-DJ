@@ -18,12 +18,8 @@
             <SetVariable name="config_key">library</SetVariable>
           </Template>
           <Template src="skin:tab.xml">
-            <SetVariable name="tab_name">Sampler</SetVariable>
-            <SetVariable name="config_key">samplers</SetVariable>
-          </Template>
-          <Template src="skin:tab.xml">
-            <SetVariable name="tab_name">Levels</SetVariable>
-            <SetVariable name="config_key">levels</SetVariable>
+            <SetVariable name="tab_name">Mixer</SetVariable>
+            <SetVariable name="config_key">mixer</SetVariable>
           </Template>
           <Template src="skin:tab.xml">
             <SetVariable name="tab_name">Settings</SetVariable>

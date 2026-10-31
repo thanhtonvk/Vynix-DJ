@@ -1,0 +1,56 @@
+<!--
+  Deck header of the MIXER page (mixer.xml), on either side of REC: deck
+  number and track on one line, the overview waveform below.
+  Variables:
+    channel: deck number
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="channel"/>]</SetVariable>
+  <WidgetGroup>
+    <ObjectName>MixerDeckHeader</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+      <WidgetGroup>
+        <ObjectName>MixerDeckTitleRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,30f</Size>
+        <Children>
+          <Label>
+            <ObjectName>MixerDeckNumber<Variable name="channel"/></ObjectName>
+            <Text>Deck <Variable name="channel"/></Text>
+            <Size>76f,26f</Size>
+            <Alignment>center</Alignment>
+          </Label>
+          <!-- "Artist - Title" -->
+          <TrackProperty>
+            <ObjectName>MixerDeckTitle</ObjectName>
+            <Group><Variable name="Group"/></Group>
+            <Property>titleInfo</Property>
+            <Elide>right</Elide>
+            <Size>0me,30f</Size>
+          </TrackProperty>
+        </Children>
+      </WidgetGroup>
+      <Overview>
+        <ObjectName>MixerDeckOverview</ObjectName>
+        <Channel><Variable name="channel"/></Channel>
+        <SizePolicy>me,me</SizePolicy>
+        <BgColor>#12161d</BgColor>
+        <SignalColor>#3d8bfd</SignalColor>
+        <SignalLowColor>#3d8bfd</SignalLowColor>
+        <SignalMidColor>#8cc8ff</SignalMidColor>
+        <SignalHighColor>#ffffff</SignalHighColor>
+        <PlayedOverlayColor>#80000000</PlayedOverlayColor>
+        <Mark>
+          <Control>cue_point</Control>
+          <Color>#eb870f</Color>
+        </Mark>
+        <!-- Moves the play position marker and seeks when tapped -->
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+        </Connection>
+      </Overview>
+    </Children>
+  </WidgetGroup>
+</Template>

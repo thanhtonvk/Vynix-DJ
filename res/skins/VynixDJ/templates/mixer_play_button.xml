@@ -1,0 +1,18 @@
+<!--
+  Deck PLAY / PAUSE button of the MIXER page (mixer.xml).
+  Variables:
+    channel: deck number
+-->
+<Template>
+  <PushButton>
+    <ObjectName>MixerTransportPlay</ObjectName>
+    <SizePolicy>me,me</SizePolicy>
+    <NumberStates>2</NumberStates>
+    <State><Number>0</Number><Text>Play</Text></State>
+    <State><Number>1</Number><Text>Pause</Text></State>
+    <Connection>
+      <ConfigKey>[Channel<Variable name="channel"/>],play</ConfigKey>
+      <ButtonState>LeftButton</ButtonState>
+    </Connection>
+  </PushButton>
+</Template>

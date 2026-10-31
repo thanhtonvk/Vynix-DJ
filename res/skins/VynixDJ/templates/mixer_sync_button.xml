@@ -1,0 +1,19 @@
+<!--
+  Deck SYNC button of the MIXER page (mixer.xml): tap to sync tempo and
+  phase to the other deck and keep it synced, tap again to stop.
+  Variables:
+    channel: deck number
+-->
+<Template>
+  <PushButton>
+    <ObjectName>MixerTransportSync</ObjectName>
+    <SizePolicy>me,me</SizePolicy>
+    <NumberStates>2</NumberStates>
+    <State><Number>0</Number><Text>Sync</Text></State>
+    <State><Number>1</Number><Text>Sync</Text></State>
+    <Connection>
+      <ConfigKey>[Channel<Variable name="channel"/>],sync_enabled</ConfigKey>
+      <ButtonState>LeftButton</ButtonState>
+    </Connection>
+  </PushButton>
+</Template>

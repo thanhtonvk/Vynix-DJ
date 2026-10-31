@@ -1,0 +1,24 @@
+<!--
+  Deck CUE button of the MIXER page (mixer.xml), lit while the deck is at
+  its cue point.
+  Variables:
+    channel: deck number
+-->
+<Template>
+  <PushButton>
+    <ObjectName>MixerTransportCue</ObjectName>
+    <SizePolicy>me,me</SizePolicy>
+    <NumberStates>2</NumberStates>
+    <State><Number>0</Number><Text>Cue</Text></State>
+    <State><Number>1</Number><Text>Cue</Text></State>
+    <LeftClickIsPushButton>true</LeftClickIsPushButton>
+    <Connection>
+      <ConfigKey>[Channel<Variable name="channel"/>],cue_default</ConfigKey>
+      <ButtonState>LeftButton</ButtonState>
+    </Connection>
+    <Connection>
+      <ConfigKey>[Channel<Variable name="channel"/>],cue_indicator</ConfigKey>
+      <ConnectValueFromWidget>false</ConnectValueFromWidget>
+    </Connection>
+  </PushButton>
+</Template>

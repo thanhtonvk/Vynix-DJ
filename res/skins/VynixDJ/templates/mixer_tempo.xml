@@ -1,0 +1,81 @@
+<!--
+  Tempo control of one deck on the MIXER page (mixer.xml), next to its
+  GAIN knob: current BPM, pitch in %, tempo fader and a reset to 0 %.
+  Variables:
+    channel: deck number
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="channel"/>]</SetVariable>
+  <WidgetGroup>
+    <ObjectName>MixerTempo</ObjectName>
+    <Layout>horizontal</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+      <!-- Current tempo, i.e. the track BPM with the tempo fader applied -->
+      <WidgetGroup>
+        <ObjectName>MixerTempoBox</ObjectName>
+        <Layout>vertical</Layout>
+        <Size>100f,0me</Size>
+        <Children>
+          <Label>
+            <ObjectName>MixerKnobLabel</ObjectName>
+            <Text>BPM</Text>
+            <Size>0me,16f</Size>
+            <Alignment>center</Alignment>
+          </Label>
+          <NumberBpm>
+            <ObjectName>MixerTempoValue</ObjectName>
+            <Channel><Variable name="channel"/></Channel>
+            <NumberOfDigits>1</NumberOfDigits>
+            <Alignment>center</Alignment>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,visual_bpm</ConfigKey>
+            </Connection>
+          </NumberBpm>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>MixerTempoBox</ObjectName>
+        <Layout>vertical</Layout>
+        <Size>90f,0me</Size>
+        <Children>
+          <Label>
+            <ObjectName>MixerKnobLabel</ObjectName>
+            <Text>Tempo %</Text>
+            <Size>0me,16f</Size>
+            <Alignment>center</Alignment>
+          </Label>
+          <NumberRate>
+            <ObjectName>MixerTempoValue</ObjectName>
+            <Channel><Variable name="channel"/></Channel>
+            <NumberOfDigits>1</NumberOfDigits>
+            <Alignment>center</Alignment>
+          </NumberRate>
+        </Children>
+      </WidgetGroup>
+      <SliderComposed>
+        <ObjectName>MixerTempoFader</ObjectName>
+        <SizePolicy>me,me</SizePolicy>
+        <Slider scalemode="STRETCH">icons/mix_slider_groove.svg</Slider>
+        <Handle scalemode="STRETCH_ASPECT">icons/mix_slider_handle.svg</Handle>
+        <Horizontal>true</Horizontal>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,rate</ConfigKey>
+        </Connection>
+      </SliderComposed>
+      <!-- ConnectValueToWidget is false because _set_default stays 1 while
+           the fader is at its default, see levels.xml -->
+      <PushButton>
+        <ObjectName>MixerTempoReset</ObjectName>
+        <Size>64f,0me</Size>
+        <NumberStates>1</NumberStates>
+        <State><Number>0</Number><Text>0 %</Text></State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,rate_set_default</ConfigKey>
+          <EmitOnDownPress>true</EmitOnDownPress>
+          <ConnectValueToWidget>false</ConnectValueToWidget>
+        </Connection>
+      </PushButton>
+    </Children>
+  </WidgetGroup>
+</Template>

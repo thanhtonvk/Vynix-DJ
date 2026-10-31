@@ -14,16 +14,16 @@
             <SetVariable name="ConfigKey">general</SetVariable>
           </Template>
           <Template src="skin:templates/setting_subtab_button.xml">
-            <SetVariable name="Text">Library</SetVariable>
-            <SetVariable name="ConfigKey">columns</SetVariable>
-          </Template>
-          <Template src="skin:templates/setting_subtab_button.xml">
             <SetVariable name="Text">Device</SetVariable>
             <SetVariable name="ConfigKey">midi</SetVariable>
           </Template>
           <Template src="skin:templates/setting_subtab_button.xml">
             <SetVariable name="Text">Audio</SetVariable>
             <SetVariable name="ConfigKey">audio</SetVariable>
+          </Template>
+          <Template src="skin:templates/setting_subtab_button.xml">
+            <SetVariable name="Text">Sampler</SetVariable>
+            <SetVariable name="ConfigKey">sampler</SetVariable>
           </Template>
           <Template src="skin:templates/setting_subtab_button.xml">
             <SetVariable name="Text">System</SetVariable>
@@ -412,17 +412,7 @@
                   </PushButton>
                 </Children>
               </WidgetGroup>
-              <WidgetGroup>
-                <ObjectName>SettingsSpacer</ObjectName>
-                <Size>0me,0me</Size>
-              </WidgetGroup>
-            </Children>
-          </WidgetGroup>
-          <WidgetGroup trigger="[SettingsTab],columns">
-            <ObjectName>SettingsPanel</ObjectName>
-            <Layout>vertical</Layout>
-            <SizePolicy>me,me</SizePolicy>
-            <Children>
+              <!-- Formerly the Library tab -->
               <WidgetGroup>
                 <ObjectName>SettingsRow</ObjectName>
                 <Layout>horizontal</Layout>
@@ -457,6 +447,16 @@
                 <ObjectName>SettingsSpacer</ObjectName>
                 <Size>0me,0me</Size>
               </WidgetGroup>
+            </Children>
+          </WidgetGroup>
+          <!-- Sample players, formerly the SAMPLER tab (samplers.xml) -->
+          <WidgetGroup trigger="[SettingsTab],sampler">
+            <Layout>vertical</Layout>
+            <SizePolicy>me,me</SizePolicy>
+            <Children>
+              <SingletonContainer>
+                <ObjectName>Samplers_Singleton</ObjectName>
+              </SingletonContainer>
             </Children>
           </WidgetGroup>
           <WidgetGroup trigger="[SettingsTab],system">
@@ -530,6 +530,9 @@
                   </PushButton>
                 </Children>
               </WidgetGroup>
+              <!-- Master / booth / headphone levels and master EQ, formerly
+                   the LEVELS tab -->
+              <Template src="skin:levels.xml"/>
               <WidgetGroup>
                 <ObjectName>SettingsSpacer</ObjectName>
                 <Size>0me,0me</Size>

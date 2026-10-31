@@ -1,0 +1,42 @@
+<!--
+  One knob of a mixer channel (mixer_channel.xml), like the knobs of the
+  WeDJ mixer: a small cap with a value arc in the deck color, drawn from
+  12 o'clock since trim, EQs and filter are neutral in the centre.
+  Drag up or right to turn it clockwise.
+  Variables:
+    Label: knob name
+    ConfigKey: fully qualified [Group],key the knob controls
+    Color: arc color of the deck
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>MixerKnob</ObjectName>
+    <Layout>vertical</Layout>
+    <Size>0me,62f</Size>
+    <Children>
+      <Label>
+        <ObjectName>MixerKnobLabel</ObjectName>
+        <Text><Variable name="Label"/></Text>
+        <Size>0me,14f</Size>
+        <Alignment>center</Alignment>
+      </Label>
+      <KnobComposed>
+        <ObjectName>MixerKnobDial</ObjectName>
+        <Size>0me,48f</Size>
+        <Knob scalemode="STRETCH_ASPECT">icons/mixer_knob.svg</Knob>
+        <MinAngle>-135</MinAngle>
+        <MaxAngle>135</MaxAngle>
+        <ArcRadius>21</ArcRadius>
+        <ArcThickness>4</ArcThickness>
+        <ArcBgThickness>4</ArcBgThickness>
+        <ArcColor><Variable name="Color"/></ArcColor>
+        <ArcBgColor>#2a313d</ArcBgColor>
+        <ArcRoundCaps>true</ArcRoundCaps>
+        <ArcUnipolar>false</ArcUnipolar>
+        <Connection>
+          <ConfigKey><Variable name="ConfigKey"/></ConfigKey>
+        </Connection>
+      </KnobComposed>
+    </Children>
+  </WidgetGroup>
+</Template>
