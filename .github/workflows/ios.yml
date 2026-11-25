@@ -89,6 +89,7 @@ jobs:
           export PKG_CONFIG_LIBDIR="$DEPS/$TRIPLET/lib/pkgconfig:$DEPS/$TRIPLET/share/pkgconfig"
           cmake -G Xcode -S . -B build \
             -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+            -DMIXXX_VCPKG_ROOT="$VCPKG_ROOT" \
             -DVCPKG_MANIFEST_MODE=OFF \
             -DVCPKG_INSTALLED_DIR="$DEPS" \
             -DVCPKG_TARGET_TRIPLET="$TRIPLET" \
