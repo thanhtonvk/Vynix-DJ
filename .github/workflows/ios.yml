@@ -114,6 +114,8 @@ jobs:
       - name: Build
         run: |
           set -o pipefail
+          # Report all errors at once
+          defaults write com.apple.dt.Xcode IDEBuildingContinueBuildingAfterErrors -bool YES
           cmake --build build --config Release --target mixxx --parallel -- \
             CODE_SIGNING_ALLOWED=NO -quiet 2>&1 | tee "$LOG"
 
@@ -133,7 +135,7 @@ jobs:
         run: |
           # The raw log needs admin rights to download, so publish the part
           # around the errors as an annotation
-          grep -nE -B3 -A6 "error[: ]|Error|FAILED|CMake Error|undefined|Undefined symbols|BUILD FAILED" "$LOG" | head -150 > errors.txt || true
+          grep -E -A4 "error: |CMake Error|BUILD_FAILED|Undefined symbols|ld: |duplicate symbol" "$LOG" | awk '!seen[$0]++' | head -400 > errors.txt || true
           test -s errors.txt || tail -80 "$LOG" > errors.txt
           grep -oE "/Users/runner/vcpkg/buildtrees/[^ ]*-(err|out)\.log" "$LOG" | sort -u | while read -r f; do
             if [ -f "$f" ]; then
