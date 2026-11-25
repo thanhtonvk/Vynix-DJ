@@ -1810,6 +1810,7 @@ add_library(
   src/widget/wfindonwebmenu.cpp
   src/widget/whotcuebutton.cpp
   src/widget/wimagestore.cpp
+  src/widget/wjogwheel.cpp
   src/widget/wkey.cpp
   src/widget/wknob.cpp
   src/widget/wknobcomposed.cpp
@@ -2378,11 +2379,18 @@ if(QT6)
     fatal_error_missing_env()
   endif()
 
+  # The Android app only uses the widget based skin, the QML user interface
+  # would add dozens of Qt libraries to the APK
+  if(ANDROID)
+    set(QML_DEFAULT OFF)
+  else()
+    set(QML_DEFAULT ON)
+  endif()
   # We need Qt 6.4 for ComponentBehavior: Bound
   cmake_dependent_option(
     QML
     "Build with QML"
-    ON
+    ${QML_DEFAULT}
     "Qt6_VERSION VERSION_GREATER_EQUAL 6.4"
     OFF
   )
@@ -2480,6 +2488,23 @@ if(QT6)
           "${CMAKE_ANDROID_NDK}/toolchains/llvm/prebuilt/${ANDROID_NDK_HOST_SYSTEM_NAME}/lib/clang/18/lib/linux/aarch64/libomp.so;${CMAKE_CURRENT_BINARY_DIR}/compat/libvynixcompat.so"
     )
     add_dependencies(mixxx vynixcompat)
+    # androiddeployqt packages every library the app is linked to, so do not
+    # link the ones it does not use. Only the Qt loader, which needs main(),
+    # and the JVM access this library, all other symbols can be hidden, which
+    # allows the linker to drop unused code of the static libraries.
+    target_link_options(
+      mixxx
+      PRIVATE
+        "LINKER:--as-needed"
+        "LINKER:--gc-sections"
+        "LINKER:--icf=safe"
+        "LINKER:--version-script=${CMAKE_SOURCE_DIR}/packaging/android/libmixxx.map"
+    )
+    set_property(
+      TARGET mixxx
+      APPEND
+      PROPERTY LINK_DEPENDS "${CMAKE_SOURCE_DIR}/packaging/android/libmixxx.map"
+    )
     add_custom_target(
       copy-resource-android
       COMMENT "Copy resources folder to Android build asset directory"
@@ -3921,7 +3946,6 @@ if(QT6)
   find_package(QT 6.2 NAMES Qt6 COMPONENTS Core REQUIRED)
   list(APPEND QT_EXTRA_COMPONENTS "ShaderTools")
   list(APPEND QT_EXTRA_COMPONENTS "SvgWidgets")
-  list(APPEND QT_EXTRA_COMPONENTS "Core5Compat")
   if(QT_VERSION VERSION_GREATER_EQUAL 6.10)
     # from Qt 6.10 GuiPrivate required for QShader/rendergraph (rhi/qshader.h)
     list(APPEND QT_EXTRA_COMPONENTS "GuiPrivate")
@@ -3931,6 +3955,8 @@ else()
   find_package(QT 5.12 NAMES Qt5 COMPONENTS Core REQUIRED)
 endif()
 if(QML)
+  # Not used by the C++ code, but by the Qt5Compat.GraphicalEffects QML module
+  list(APPEND QT_EXTRA_COMPONENTS "Core5Compat")
   list(APPEND QT_EXTRA_COMPONENTS "LabsQmlModels")
   list(APPEND QT_EXTRA_COMPONENTS "Multimedia")
   list(APPEND QT_EXTRA_COMPONENTS "Quick")
@@ -4167,6 +4193,23 @@ if(QML)
   install(
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/res/qml"
     DESTINATION "${MIXXX_INSTALL_DATADIR}"
+  )
+elseif(ANDROID)
+  # Only package the plugins that are used. The QML debugger would also need
+  # the Qt Quick library.
+  qt_import_plugins(
+    mixxx
+    EXCLUDE_BY_TYPE qmltooling
+    INCLUDE_BY_TYPE sqldrivers Qt${QT_VERSION_MAJOR}::QSQLiteDriverPlugin
+  )
+  # Creates the targets that build the APK
+  qt_finalize_target(mixxx)
+  # androiddeployqt scans all QML files of the source directory and packages the
+  # QML modules they import. Let it scan a directory without QML files instead.
+  set_target_properties(
+    mixxx
+    PROPERTIES
+      _qt_android_native_qml_root_paths "${CMAKE_SOURCE_DIR}/packaging/android"
   )
 endif()
 
@@ -5761,22 +5804,11 @@ if(WIN32)
     )
   endif()
 
-  # Build the custom action DLL for cross-scope upgrade detection.
-  # Old Mixxx (<=2.5) was installed per-user due to a CPack bug (CMP0172).
-  # The standard FindRelatedProducts skips per-user products when the
-  # current install is per-machine.  The custom action calls scope-agnostic
-  # MsiEnumRelatedProducts() to detect and mark the old installation for
-  # removal by RemoveExistingProducts.
-  add_subdirectory(packaging/wix)
   set(CPACK_WIX_INSTALL_SCOPE "perMachine")
-  file(
-    GENERATE OUTPUT
-    "${CMAKE_CURRENT_BINARY_DIR}/packaging/wix/MixxxUpgradePatch.xml"
-    INPUT "${CMAKE_CURRENT_SOURCE_DIR}/packaging/wix/MixxxUpgradePatch.xml.in"
-  )
+  set(CPACK_WIX_PROGRAM_MENU_FOLDER "Vynix DJ")
   set(
     CPACK_WIX_PATCH_FILE
-    "${CMAKE_CURRENT_BINARY_DIR}/packaging/wix/MixxxUpgradePatch.xml"
+    "${CMAKE_CURRENT_SOURCE_DIR}/packaging/wix/InstallerPatch.xml"
   )
 
   # uses CMAKE_PROJECT_VERSION

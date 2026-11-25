@@ -1,0 +1,22 @@
+<!--
+  Selects the page of a deck on the MIXER page (mixer_deck1.xml). Always
+  emits 1, so tapping the active one does nothing.
+  Variables:
+    name: MixerMode1 or MixerMode2, the color of the deck
+    Text: label
+    ConfigKey: trigger of the page, [DeckModeN],page
+-->
+<Template>
+  <PushButton>
+    <ObjectName><Variable name="name"/></ObjectName>
+    <SizePolicy>me,me</SizePolicy>
+    <NumberStates>2</NumberStates>
+    <State><Number>0</Number><Text><Variable name="Text"/></Text></State>
+    <State><Number>1</Number><Text><Variable name="Text"/></Text></State>
+    <LeftClickIsPushButton>true</LeftClickIsPushButton>
+    <Connection>
+      <ConfigKey><Variable name="ConfigKey"/></ConfigKey>
+      <EmitOnDownPress>true</EmitOnDownPress>
+    </Connection>
+  </PushButton>
+</Template>

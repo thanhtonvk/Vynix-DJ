@@ -31,8 +31,18 @@ const mixxx::Logger kLogger("PlayerManager");
 const QString kAppGroup = QStringLiteral("[App]");
 const QString kLegacyGroup = QStringLiteral("[Master]");
 
-// Utilize half of the available cores for adhoc analysis of tracks
-const int kNumberOfAnalyzerThreads = math_max(1, QThread::idealThreadCount() / 2);
+// Utilize half of the available cores for adhoc analysis of tracks, but leave
+// enough for the user interface and the engine on tablets and similar devices
+// with few and slow cores.
+const int kNumberOfAnalyzerThreads = QThread::idealThreadCount() <= 4
+        ? 1
+        : QThread::idealThreadCount() / 2;
+
+// The selected track is only loaded into the preview deck, and only analyzed,
+// if it stays selected for some time. Otherwise scrolling through a list would
+// load and analyze one track after the other.
+constexpr int kPreviewSelectedTrackDelayMillis = 350;
+constexpr int kAnalyzeSelectedTrackDelayMillis = 2500;
 
 const QRegularExpression kDeckRegex(QStringLiteral("^\\[Channel(\\d+)\\]$"));
 const QRegularExpression kSamplerRegex(QStringLiteral("^\\[Sampler(\\d+)\\]$"));
@@ -142,6 +152,10 @@ PlayerManager::PlayerManager(UserSettingsPointer pConfig,
 PlayerManager::~PlayerManager() {
     kLogger.debug() << "Destroying";
 
+    m_previewSelectedTrackTimer.stop();
+    m_analyzeSelectedTrackTimer.stop();
+    m_pSelectedTrack.reset();
+
     const auto locker = lockMutex(&m_mutex);
 
     m_pSamplerBank->saveSamplerBankToPath(getDefaultSamplerPath(m_pConfig));
@@ -158,22 +172,61 @@ PlayerManager::~PlayerManager() {
 }
 
 void PlayerManager::slotPreviewSelectedTrack(TrackPointer pTrack) {
+    m_previewSelectedTrackTimer.stop();
+    m_analyzeSelectedTrackTimer.stop();
     if (!pTrack || !m_pPreviewSelectedTrack || m_pPreviewSelectedTrack->get() <= 0) {
+        m_pSelectedTrack.reset();
         return;
     }
-    if (m_previewDecks.isEmpty()) {
+    m_pSelectedTrack = pTrack;
+    m_previewSelectedTrackTimer.start();
+}
+
+void PlayerManager::loadSelectedTrackToPreviewDeck() {
+    const TrackPointer pTrack = m_pSelectedTrack;
+    if (!pTrack || m_previewDecks.isEmpty()) {
         return;
     }
-    const QString group = m_previewDecks.first()->getGroup();
+    PreviewDeck* pPreviewDeck = m_previewDecks.first();
+    const QString group = pPreviewDeck->getGroup();
     // Don't interrupt a preview that is currently playing
     if (ControlObject::get(ConfigKey(group, QStringLiteral("play"))) > 0) {
         return;
     }
+    if (pPreviewDeck->getLoadedTrack() != pTrack) {
 #ifdef __STEM__
-    slotLoadTrackToPlayer(pTrack, group, mixxx::StemChannelSelection(), false);
+        slotLoadTrackToPlayer(pTrack, group, mixxx::StemChannelSelection(), false);
 #else
-    slotLoadTrackToPlayer(pTrack, group, false);
+        slotLoadTrackToPlayer(pTrack, group, false);
 #endif
+    }
+    m_analyzeSelectedTrackTimer.start();
+}
+
+void PlayerManager::analyzeSelectedTrack() {
+    if (!m_pSelectedTrack) {
+        return;
+    }
+    if (kNumberOfAnalyzerThreads == 1) {
+        // Analyzing takes most of the CPU time of slow devices, which the
+        // playing decks need
+        for (const Deck* pDeck : std::as_const(m_decks)) {
+            if (ControlObject::get(ConfigKey(
+                        pDeck->getGroup(), QStringLiteral("play"))) > 0) {
+                return;
+            }
+        }
+    }
+    slotAnalyzeTrack(m_pSelectedTrack);
+}
+
+void PlayerManager::slotAnalyzePreviewTrack(TrackPointer pTrack) {
+    if (pTrack && pTrack == m_pSelectedTrack) {
+        // Loaded by loadSelectedTrackToPreviewDeck(), which also analyzes it
+        // if it stays selected
+        return;
+    }
+    slotAnalyzeTrack(pTrack);
 }
 
 void PlayerManager::bindToLibrary(Library* pLibrary) {
@@ -196,6 +249,19 @@ void PlayerManager::bindToLibrary(Library* pLibrary) {
             &Library::trackSelected,
             this,
             &PlayerManager::slotPreviewSelectedTrack);
+
+    m_previewSelectedTrackTimer.setSingleShot(true);
+    m_previewSelectedTrackTimer.setInterval(kPreviewSelectedTrackDelayMillis);
+    connect(&m_previewSelectedTrackTimer,
+            &QTimer::timeout,
+            this,
+            &PlayerManager::loadSelectedTrackToPreviewDeck);
+    m_analyzeSelectedTrackTimer.setSingleShot(true);
+    m_analyzeSelectedTrackTimer.setInterval(kAnalyzeSelectedTrackDelayMillis);
+    connect(&m_analyzeSelectedTrackTimer,
+            &QTimer::timeout,
+            this,
+            &PlayerManager::analyzeSelectedTrack);
 
     DEBUG_ASSERT(!m_pTrackAnalysisScheduler);
     m_pTrackAnalysisScheduler = pLibrary->createTrackAnalysisScheduler(
@@ -225,7 +291,7 @@ void PlayerManager::bindToLibrary(Library* pLibrary) {
         connect(pPreviewDeck,
                 &BaseTrackPlayer::newTrackLoaded,
                 this,
-                &PlayerManager::slotAnalyzeTrack);
+                &PlayerManager::slotAnalyzePreviewTrack);
     }
 }
 
@@ -496,7 +562,7 @@ void PlayerManager::addPreviewDeckInner() {
         connect(pPreviewDeck,
                 &BaseTrackPlayer::newTrackLoaded,
                 this,
-                &PlayerManager::slotAnalyzeTrack);
+                &PlayerManager::slotAnalyzePreviewTrack);
     }
 
     m_players[handleGroup.handle()] = pPreviewDeck;

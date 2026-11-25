@@ -11,7 +11,7 @@
         current key, +/-1 and +/-2 semitone nudges, and a reset (see
         templates/keyfx_deck_row.xml).
 
-  GRID— the beat grid editor for one deck at a time, picked by the 1 / 2
+  GRID— the beat grid editor for one deck at a time, picked by the deck
         tabs on the page itself (see templates/grid_deck_page.xml). One
         deck at a time because the editor needs full-width buttons: two
         decks of nudge / set / BPM / scale controls do not fit this
@@ -182,6 +182,32 @@
               <Template src="skin:templates/keyfx_deck_row.xml">
                 <SetVariable name="channel">2</SetVariable>
               </Template>
+              <WidgetGroup>
+                <Layout>vertical</Layout>
+                <SizePolicy>me,min</SizePolicy>
+                <Children>
+                  <Template src="skin:templates/keyfx_deck_row.xml">
+                    <SetVariable name="channel">3</SetVariable>
+                  </Template>
+                </Children>
+                <Connection>
+                  <ConfigKey>[Skin],show_4decks</ConfigKey>
+                  <BindProperty>visible</BindProperty>
+                </Connection>
+              </WidgetGroup>
+              <WidgetGroup>
+                <Layout>vertical</Layout>
+                <SizePolicy>me,min</SizePolicy>
+                <Children>
+                  <Template src="skin:templates/keyfx_deck_row.xml">
+                    <SetVariable name="channel">4</SetVariable>
+                  </Template>
+                </Children>
+                <Connection>
+                  <ConfigKey>[Skin],show_4decks</ConfigKey>
+                  <BindProperty>visible</BindProperty>
+                </Connection>
+              </WidgetGroup>
 
               <WidgetGroup>
                 <ObjectName>BeatFX_Spacer</ObjectName>
@@ -192,7 +218,7 @@
           </WidgetGroup>
 
           <!--
-            GRID — beat grid editor. One page per deck behind the 1 / 2 tabs
+            GRID — beat grid editor. One page per deck behind the deck tabs
             the pages carry themselves, so the deck bar reads as one strip
             while the stack swaps under it. Both pages are the same size, so
             switching decks does not resize the panel.
@@ -222,6 +248,24 @@
                     <Children>
                       <Template src="skin:templates/grid_deck_page.xml">
                         <SetVariable name="channel">2</SetVariable>
+                      </Template>
+                    </Children>
+                  </WidgetGroup>
+                  <WidgetGroup trigger="[Skin],grid_deck3">
+                    <Layout>vertical</Layout>
+                    <SizePolicy>me,me</SizePolicy>
+                    <Children>
+                      <Template src="skin:templates/grid_deck_page.xml">
+                        <SetVariable name="channel">3</SetVariable>
+                      </Template>
+                    </Children>
+                  </WidgetGroup>
+                  <WidgetGroup trigger="[Skin],grid_deck4">
+                    <Layout>vertical</Layout>
+                    <SizePolicy>me,me</SizePolicy>
+                    <Children>
+                      <Template src="skin:templates/grid_deck_page.xml">
+                        <SetVariable name="channel">4</SetVariable>
                       </Template>
                     </Children>
                   </WidgetGroup>

@@ -155,16 +155,19 @@ bool VisualPlayPosition::getPlaySlipAtNextVSync(
         double* pPlayPosition,
         double* pSlipPosition) {
     VisualPlayPositionData data;
-    std::size_t i = 0;
     double offsetBuffers = 0;
+    bool hasData = false;
     // Work around #15886: Don't use the most recent buffer right away because
     // it likely not reached the DAC. This has caused a visible jump back, from
     // the correct pause position to a too early position when start playing.
-    for (; i < 3; ++i) {
+    for (std::size_t i = 0; i < 3; ++i) {
         // Find buffer that is currently in the DAC.
         // This is either at 0 or 1, but can also be at 2, if the buffer has
         // been updated conurrently during the loop
-        if (m_data.getAt(i, &data)) {
+        VisualPlayPositionData candidate;
+        if (m_data.getAt(i, &candidate)) {
+            data = candidate;
+            hasData = true;
             offsetBuffers = calcOffsetAtNextVSync(pSyncTimeProvider, data);
             if (offsetBuffers > -1) {
                 // The buffer, currently in the DAC has an offset of -1 ... 0
@@ -172,7 +175,10 @@ bool VisualPlayPosition::getPlaySlipAtNextVSync(
             }
         }
     }
-    if (i >= 3) {
+    // With a high output latency all of these buffers are still waiting for the
+    // DAC (offset <= -1). Extrapolate back from the oldest one then, otherwise
+    // the caller would draw the start of the track.
+    if (!hasData) {
         // No valid data available e.g, track ejected
         return false;
     }

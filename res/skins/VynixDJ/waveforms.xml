@@ -1,15 +1,58 @@
+<!-- Decks 3 and 4 are shown with [Skin],show_4decks (Settings > General) -->
 <Template>
   <WidgetGroup>
     <ObjectName>Waveforms</ObjectName>
     <Layout>vertical</Layout>
     <Size>0me,0me</Size>
     <Children>
-      <Template src="skin:waveform.xml">
-        <SetVariable name="channel">1</SetVariable>
-      </Template>
-      <Template src="skin:waveform.xml">
-        <SetVariable name="channel">2</SetVariable>
-      </Template>
+      <WidgetGroup>
+        <ObjectName>WaveformRow</ObjectName>
+        <Layout>vertical</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <Template src="skin:waveform.xml">
+            <SetVariable name="channel">1</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>WaveformRow</ObjectName>
+        <Layout>vertical</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <Template src="skin:waveform.xml">
+            <SetVariable name="channel">2</SetVariable>
+          </Template>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>WaveformRow</ObjectName>
+        <Layout>vertical</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <Template src="skin:waveform.xml">
+            <SetVariable name="channel">3</SetVariable>
+          </Template>
+        </Children>
+        <Connection>
+          <ConfigKey>[Skin],show_4decks</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>WaveformRow</ObjectName>
+        <Layout>vertical</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <Template src="skin:waveform.xml">
+            <SetVariable name="channel">4</SetVariable>
+          </Template>
+        </Children>
+        <Connection>
+          <ConfigKey>[Skin],show_4decks</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup>
     </Children>
   </WidgetGroup>
 </Template>

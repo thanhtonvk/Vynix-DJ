@@ -57,7 +57,7 @@
         <Children>
           <PushButton>
             <ObjectName>Grid_DeckTab1</ObjectName>
-            <Size>32f,30f</Size>
+            <Size>28f,30f</Size>
             <NumberStates>2</NumberStates>
             <State>
               <Number>0</Number>
@@ -75,7 +75,7 @@
           </PushButton>
           <PushButton>
             <ObjectName>Grid_DeckTab2</ObjectName>
-            <Size>32f,30f</Size>
+            <Size>28f,30f</Size>
             <NumberStates>2</NumberStates>
             <State>
               <Number>0</Number>
@@ -89,6 +89,50 @@
             <Connection>
               <ConfigKey>[Skin],grid_deck2</ConfigKey>
               <EmitOnDownPress>true</EmitOnDownPress>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>Grid_DeckTab3</ObjectName>
+            <Size>28f,30f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>3</Text>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>3</Text>
+            </State>
+            <LeftClickIsPushButton>true</LeftClickIsPushButton>
+            <Connection>
+              <ConfigKey>[Skin],grid_deck3</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],show_4decks</ConfigKey>
+              <BindProperty>visible</BindProperty>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>Grid_DeckTab4</ObjectName>
+            <Size>28f,30f</Size>
+            <NumberStates>2</NumberStates>
+            <State>
+              <Number>0</Number>
+              <Text>4</Text>
+            </State>
+            <State>
+              <Number>1</Number>
+              <Text>4</Text>
+            </State>
+            <LeftClickIsPushButton>true</LeftClickIsPushButton>
+            <Connection>
+              <ConfigKey>[Skin],grid_deck4</ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Skin],show_4decks</ConfigKey>
+              <BindProperty>visible</BindProperty>
             </Connection>
           </PushButton>
 

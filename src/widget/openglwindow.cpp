@@ -131,6 +131,21 @@ bool OpenGLWindow::event(QEvent* pEv) {
             return result;
         }
 
+        // Sending touch events with QApplication::sendEvent() only works for
+        // TouchBegin, updates do not reach the WWaveformViewer that contains
+        // the waveform widget.
+        if (t == QEvent::TouchBegin || t == QEvent::TouchUpdate ||
+                t == QEvent::TouchEnd || t == QEvent::TouchCancel) {
+            TrackDropTarget* pTouchTarget = m_pWidget->trackDropTarget();
+            if (pTouchTarget && pTouchTarget->handleTouchEventFromWindow(pEv)) {
+                return true;
+            }
+#ifdef __WINDOWS__
+            // A single finger arrives as mouse events, see WWidget::event()
+            return result;
+#endif
+        }
+
         // Send all remaining events to the widget that owns the window
         // container widget that contains this QOpenGLWindow. With this mouse
         // events, keyboard events, etc all arrive as intended, including the

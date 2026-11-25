@@ -254,7 +254,8 @@ DJ505.browseEncoder = new components.Encoder({
                     engine.setValue("[Library]", key, 1.0);
                     this.trackColorCycleHappened = true;
                 } else {
-                    engine.setValue("[Playlist]", "SelectPlaylist", rotateValue);
+                    // Waveform zoom with the Vynix DJ skin
+                    engine.setValue("[Library]", "ScrollVertical", rotateValue);
                 }
             }
         };

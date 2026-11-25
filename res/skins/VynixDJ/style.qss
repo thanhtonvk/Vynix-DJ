@@ -17,7 +17,7 @@
 }
 
 QMenuBar, QMenuBar::item, QMenu, QMenu::item {
-  background-color: #a7a9ac;
+  background-color: #a6a9ad;
 }
 
 QMenuBar::item:pressed, QMenu::item:selected, QMenu::item:pressed {
@@ -29,26 +29,26 @@ QMenuBar::item:pressed, QMenu::item:selected, QMenu::item:pressed {
 /************************************************************************/
 
 WPushButton {
-  color: #e5e6ea;
+  color: #e6e7e9;
   background-color: transparent;
-  border: 1px solid #32323c;
+  border: 1px solid #2d2f31;
   border-radius: 2px;
   outline: none;
 }
 
 WPushButton:hover {
-  border: 1px solid #5F5F5F;
+  border: 1px solid #4e5155;
 }
 
 WPushButton[value="1"] {
-  color: #e5e6ea;
-  border: 1px solid #5F5F5F;
-  background-color: #32323c;
+  color: #e6e7e9;
+  border: 1px solid #4e5155;
+  background-color: #2d2f31;
 }
 
 WPushButton[value="1"]:hover {
-  border: 1px solid #4B4B4B;
-  background-color: #30303a;
+  border: 1px solid #3e4043;
+  background-color: #2c2d30;
 }
 
 /************************************************************************/
@@ -61,11 +61,11 @@ WPushButton[value="1"]:hover {
 }
 
 #Deck[highlight="1"] {
-  border: 1px solid #e5e6ea;
+  border: 1px solid #e6e7e9;
 }
 
 #DeckBPMWrapper {
-  border: 2px solid #e5e6ea;
+  border: 2px solid #e6e7e9;
   border-radius: 5px;
   margin-bottom: 4px;
   padding-right: 2px;
@@ -79,7 +79,7 @@ WPushButton[value="1"]:hover {
 #DeckBPM[highlight="1"],
 #DeckRate[highlight="1"],
 #BPMPercent[highlight="1"] {
-  color: #f15921;
+  color: #ff6a13;
 }
 
 #DeckBPMTitleWrapper {
@@ -98,7 +98,7 @@ WPushButton[value="1"]:hover {
 }
 
 #DeckBPMRangePercent {
-  background-color: #151515;
+  background-color: #111213;
   padding: 0px;
 }
 
@@ -108,7 +108,7 @@ WPushButton[value="1"]:hover {
 }
 
 #DeckHeader {
-  background-color: #151515;
+  background-color: #111213;
   padding: 2px;
 }
 
@@ -124,43 +124,43 @@ WPushButton[value="1"]:hover {
 #DeckTitlePlaying {
   font-size: 18px;
   font-weight: bold;
-  color: #f15921;
+  color: #ff6a13;
   margin-right: 4px;
 }
 
 #DeckArtist {
   font-size: 18px;
-  color: #9a9b9c;
+  color: #969aa0;
 }
 
 #DeckKey {
   font-size: 13px;
   font-weight: bold;
-  color: #08537c;
-  background-color: rgba(8, 125, 225, 0.1);
+  color: #7fccff;
+  background-color: rgba(43, 166, 255, 0.1);
   margin-right: 6px;
   qproperty-alignment: 'AlignCenter';
 }
 
 /* Playing key != file key (same cue as DeckBPM for rate_ratio != 1). */
 #DeckKey[highlight="1"] {
-  color: #f15921;
-  background-color: rgba(241, 89, 33, 0.12);
+  color: #ff6a13;
+  background-color: rgba(255, 106, 19, 0.12);
 }
 
 /* Matched pair with DeckKey, shown off the overview tab only. */
 #DeckHeaderBPM {
   font-size: 13px;
   font-weight: bold;
-  color: #08537c;
-  background-color: rgba(8, 125, 225, 0.1);
+  color: #7fccff;
+  background-color: rgba(43, 166, 255, 0.1);
   margin-right: 6px;
   qproperty-alignment: 'AlignCenter';
 }
 
 #DeckHeaderBPM[highlight="1"] {
-  color: #f15921;
-  background-color: rgba(241, 89, 33, 0.12);
+  color: #ff6a13;
+  background-color: rgba(255, 106, 19, 0.12);
 }
 
 #DeckChannelTitle, #DeckTempoTitle,
@@ -171,16 +171,16 @@ WPushButton[value="1"]:hover {
 }
 
 #DeckTrackTimeRemainLabel, #DeckTrackTimeTimeLabel {
-  color: #4a4a4a;
+  color: #3d3f43;
 }
 
 #DeckTrackTimeRemainLabel[highlight="1"],
 #DeckTrackTimeTimeLabel[highlight="1"] {
-  color: #e5e6ea;
+  color: #e6e7e9;
 }
 
 #DeckTrackTimeSlashLabel {
-  color: #98989a;
+  color: #94989e;
   padding: 0 1px;
 }
 
@@ -262,16 +262,16 @@ WPushButton[value="1"]:hover {
 
 #FxPanel_TabBar WPushButton {
   background-color: transparent;
-  border: 2px solid #32323c;
-  color: #a7a9ac;
+  border: 2px solid #2d2f31;
+  color: #a6a9ad;
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 #FxPanel_TabBar WPushButton[value="1"] {
-  background-color: #488ab3;
-  border-color: #488ab3;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
   color: #e7e8e9;
 }
 
@@ -289,8 +289,8 @@ WPushButton[value="1"]:hover {
   font-size: 13px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #08537c;
-  background-color: rgba(8, 125, 225, 0.1);
+  color: #7fccff;
+  background-color: rgba(43, 166, 255, 0.1);
   border: 1px solid transparent;
   border-radius: 2px;
   margin-right: 6px;
@@ -298,11 +298,11 @@ WPushButton[value="1"]:hover {
 
 #DeckCueChip:pressed {
   color: #e7e8e9;
-  background-color: #488ab3;
+  background-color: #1e8fe6;
 }
 
 #CuePanel {
-  background-color: #151515;
+  background-color: #111213;
   padding: 2px;
 }
 
@@ -315,7 +315,7 @@ WPushButton[value="1"]:hover {
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #a7a9ac;
+  color: #a6a9ad;
   qproperty-alignment: 'AlignLeft | AlignVCenter';
 }
 
@@ -323,31 +323,31 @@ WPushButton[value="1"]:hover {
  * convention as BeatFX_ActiveToggle. */
 #CuePanel_BankToggle {
   background-color: transparent;
-  border: 2px solid #32323c;
+  border: 2px solid #2d2f31;
   border-radius: 2px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 #CuePanel_BankToggle[value="1"] {
-  background-color: #488ab3;
-  border-color: #488ab3;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
   color: #e7e8e9;
 }
 
 #CuePanel_Close {
   background-color: transparent;
-  border: 2px solid #32323c;
+  border: 2px solid #2d2f31;
   border-radius: 2px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 15px;
   font-weight: bold;
 }
 
 #CuePanel_Close:pressed {
-  border-color: #488ab3;
+  border-color: #1e8fe6;
   color: #e7e8e9;
 }
 
@@ -363,17 +363,17 @@ WPushButton[value="1"]:hover {
  * own colour, applied by WHotcueButton as an inline stylesheet, so only the
  * text and border are set here. */
 #CuePad {
-  background-color: #1a1a1a;
-  border: 1px solid #32323c;
+  background-color: #151617;
+  border: 1px solid #2d2f31;
   border-radius: 3px;
-  color: #4a4a4a;
+  color: #3d3f43;
   font-size: 20px;
   font-weight: bold;
 }
 
 #CuePad[displayValue="1"], #CuePad[displayValue="2"] {
   color: #e7e8e9;
-  border-color: #5f5f5f;
+  border-color: #4e5155;
 }
 
 /* WHotcueButton reports whether the cue colour is light or dark so the label
@@ -385,7 +385,7 @@ WPushButton[value="1"]:hover {
  * gets white text. */
 /* no-invert */
 #CuePad[light="true"] {
-  color: #101010;
+  color: #0d0e0e;
 }
 
 /* no-invert */
@@ -400,7 +400,7 @@ WPushButton[value="1"]:hover {
 
 /* Saved loop currently running. */
 #CuePad[displayValue="2"] {
-  border: 2px solid #f15921;
+  border: 2px solid #ff6a13;
 }
 
 #BeatFX_ParamRow {
@@ -408,7 +408,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_ParamLabel {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
@@ -430,9 +430,9 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_Tile {
-  color: #d5dae3;
-  background-color: #1d232d;
-  border: 1px solid #343d4c;
+  color: #dadcde;
+  background-color: #1e2021;
+  border: 1px solid #35373a;
   border-radius: 6px;
   font-size: 12px;
   font-weight: bold;
@@ -442,14 +442,14 @@ WPushButton[value="1"]:hover {
 
 #BeatFX_Tile[displayValue="1"] {
   color: #ffffff;
-  background-color: #f15921;
-  border-color: #ff8a5c;
+  background-color: #ff6a13;
+  border-color: #ff9d5c;
 }
 
 #BeatFX_CurrentEffect {
   color: #ffffff;
-  background-color: #262d39;
-  border: 2px solid #3d8bfd;
+  background-color: #27282b;
+  border: 2px solid #1e8fff;
   border-radius: 8px;
   font-size: 18px;
   font-weight: bold;
@@ -458,12 +458,12 @@ WPushButton[value="1"]:hover {
 }
 
 #FxPicker {
-  background-color: #10141a;
+  background-color: #111213;
   padding: 8px 16px;
 }
 
 #FxPicker_Header {
-  color: #8a94a6;
+  color: #93979d;
   font-size: 20px;
   font-weight: bold;
   text-transform: uppercase;
@@ -476,9 +476,9 @@ WPushButton[value="1"]:hover {
 
 #FxPicker_Tile,
 #FxPicker_Close {
-  color: #e6e9ef;
-  background-color: #1d232d;
-  border: 2px solid #343d4c;
+  color: #eaeaeb;
+  background-color: #1e2021;
+  border: 2px solid #35373a;
   border-radius: 12px;
   font-size: 26px;
   font-weight: bold;
@@ -487,27 +487,27 @@ WPushButton[value="1"]:hover {
 
 #FxPicker_Tile[displayValue="1"] {
   color: #ffffff;
-  background-color: #f15921;
-  border-color: #ff8a5c;
+  background-color: #ff6a13;
+  border-color: #ff9d5c;
 }
 
 #FxPicker_Close {
-  color: #8a94a6;
+  color: #93979d;
   border-style: dashed;
 }
 
 #BeatFX_BucketButton {
-  color: #a7a9ac;
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  color: #a6a9ad;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 2px;
   font-size: 16px;
   font-weight: bold;
 }
 
 #BeatFX_BucketButton[displayValue="1"] {
-  color: #f15921;
-  border-color: #f15921;
+  color: #ff6a13;
+  border-color: #ff6a13;
   background-color: #2a1a13;
 }
 
@@ -526,7 +526,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_Parameters QScrollBar:vertical {
-  background-color: #151515;
+  background-color: #111213;
   border: 0;
   border-radius: 2px;
   margin: 0 0 0 4px;
@@ -534,7 +534,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_Parameters QScrollBar::handle:vertical {
-  background-color: #488ab3;
+  background-color: #1e8fe6;
   border: 0;
   border-radius: 3px;
   min-height: 32px;
@@ -553,9 +553,9 @@ WPushButton[value="1"]:hover {
 /* Button parameters (Quantize, Triplets, ...): same surface as the buckets,
  * the current option is the text, On is highlighted like a picked bucket. */
 #BeatFX_ParamButton {
-  color: #a7a9ac;
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  color: #a6a9ad;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 2px;
   font-size: 14px;
   font-weight: bold;
@@ -563,8 +563,8 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_ParamButton[displayValue="1"] {
-  color: #f15921;
-  border-color: #f15921;
+  color: #ff6a13;
+  border-color: #ff6a13;
   background-color: #2a1a13;
 }
 
@@ -583,7 +583,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_Parameters QScrollBar:vertical {
-  background-color: #151515;
+  background-color: #111213;
   border: 0;
   border-radius: 2px;
   margin: 0 0 0 4px;
@@ -591,7 +591,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_Parameters QScrollBar::handle:vertical {
-  background-color: #855ea7;
+  background-color: #1e8fe6;
   border: 0;
   border-radius: 3px;
   min-height: 32px;
@@ -610,9 +610,9 @@ WPushButton[value="1"]:hover {
 /* Button parameters (Quantize, Triplets, ...): same surface as the buckets,
  * the current option is the text, On is highlighted like a picked bucket. */
 #BeatFX_ParamButton {
-  color: #a7a9ac;
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  color: #a6a9ad;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 2px;
   font-size: 14px;
   font-weight: bold;
@@ -626,9 +626,9 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_ActiveToggle {
-  color: #8a94a6;
-  background-color: #1a1f27;
-  border: 2px solid #3a4352;
+  color: #93979d;
+  background-color: #1b1c1d;
+  border: 2px solid #393c3f;
   border-radius: 8px;
   font-size: 20px;
   font-weight: bold;
@@ -638,8 +638,8 @@ WPushButton[value="1"]:hover {
 
 #BeatFX_ActiveToggle[value="1"] {
   color: #ffffff;
-  background-color: #f15921;
-  border-color: #ff8a5c;
+  background-color: #ff6a13;
+  border-color: #ff9d5c;
 }
 
 /* Deck-routing toggles for [EffectRack1_EffectUnit1]. Channel colors mirror
@@ -652,24 +652,24 @@ WPushButton[value="1"]:hover {
 
 #BeatFX_DeckAssign1,
 #BeatFX_DeckAssign2 {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 3px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 20px;
   font-weight: bold;
 }
 
 #BeatFX_DeckAssign1[displayValue="1"] {
-  background-color: #488ab3;
-  border-color: #488ab3;
-  color: #1a1a1a;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
+  color: #151617;
 }
 
 #BeatFX_DeckAssign2[displayValue="1"] {
-  background-color: #f15921;
-  border-color: #f15921;
-  color: #1a1a1a;
+  background-color: #ff6a13;
+  border-color: #ff6a13;
+  color: #151617;
 }
 
 #BeatFX_WetRow {
@@ -678,7 +678,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_MixLabel {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
@@ -691,8 +691,8 @@ WPushButton[value="1"]:hover {
 /* Both FX units stacked with [Skin],dual_fx, see beatfx_unit_compact.xml */
 /* Framed like the waveform boxes next to them */
 #BeatFXCompact_Unit {
-  background-color: #10141a;
-  border: 1px solid #2a313d;
+  background-color: #111213;
+  border: 1px solid #2a2c2e;
   border-radius: 8px;
   padding: 4px;
 }
@@ -710,7 +710,7 @@ WPushButton[value="1"]:hover {
 
 #BeatFXCompact_UnitLabel {
   color: #e7e8e9;
-  background-color: #32323c;
+  background-color: #2d2f31;
   border-radius: 6px;
   font-size: 15px;
   font-weight: bold;
@@ -718,8 +718,8 @@ WPushButton[value="1"]:hover {
 
 #BeatFXCompact_Effect {
   color: #ffffff;
-  background-color: #262d39;
-  border: 2px solid #3d8bfd;
+  background-color: #27282b;
+  border: 2px solid #1e8fff;
   border-radius: 6px;
   font-size: 15px;
   font-weight: bold;
@@ -727,9 +727,9 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFXCompact_Toggle {
-  color: #8a94a6;
-  background-color: #1a1f27;
-  border: 2px solid #3a4352;
+  color: #93979d;
+  background-color: #1b1c1d;
+  border: 2px solid #393c3f;
   border-radius: 6px;
   font-size: 16px;
   font-weight: bold;
@@ -738,8 +738,8 @@ WPushButton[value="1"]:hover {
 
 #BeatFXCompact_Toggle[value="1"] {
   color: #ffffff;
-  background-color: #f15921;
-  border-color: #ff8a5c;
+  background-color: #ff6a13;
+  border-color: #ff9d5c;
 }
 
 /* BEAT and LEVEL knobs, side by side under the FX On toggle */
@@ -749,7 +749,7 @@ WPushButton[value="1"]:hover {
 }
 
 #BeatFX_KnobLabel {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 13px;
   font-weight: bold;
   text-transform: uppercase;
@@ -759,7 +759,7 @@ WPushButton[value="1"]:hover {
  * so it can show text per division. */
 #BeatFX_KnobValue,
 #BeatFX_KnobNumber {
-  color: #f15921;
+  color: #ff6a13;
   background-color: transparent;
   border: none;
   font-size: 15px;
@@ -777,14 +777,14 @@ WPushButton[value="1"]:hover {
 }
 
 #KeyFX_DeckLabel_1 {
-  color: #488ab3;
+  color: #1e8fe6;
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 #KeyFX_DeckLabel_2 {
-  color: #f15921;
+  color: #ff6a13;
   font-size: 15px;
   font-weight: bold;
   text-transform: uppercase;
@@ -798,7 +798,7 @@ WPushButton[value="1"]:hover {
 }
 
 #KeyFX_DeckKey[highlight="1"] {
-  color: #f15921;
+  color: #ff6a13;
 }
 
 #KeyFX_ButtonRow {
@@ -808,10 +808,10 @@ WPushButton[value="1"]:hover {
 #KeyFX_Down,
 #KeyFX_Up,
 #KeyFX_Reset {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 3px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 16px;
   font-weight: bold;
 }
@@ -824,8 +824,8 @@ WPushButton[value="1"]:hover {
 #KeyFX_Down:pressed,
 #KeyFX_Up:pressed,
 #KeyFX_Reset:pressed {
-  border-color: #f15921;
-  color: #f15921;
+  border-color: #ff6a13;
+  color: #ff6a13;
 }
 
 /* GRID page: the beat grid editor for one deck, picked by the 1 / 2 tabs the
@@ -841,24 +841,24 @@ WPushButton[value="1"]:hover {
 
 #Grid_DeckTab1,
 #Grid_DeckTab2 {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 3px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 18px;
   font-weight: bold;
 }
 
 #Grid_DeckTab1[displayValue="1"] {
-  background-color: #488ab3;
-  border-color: #488ab3;
-  color: #1a1a1a;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
+  color: #151617;
 }
 
 #Grid_DeckTab2[displayValue="1"] {
-  background-color: #f15921;
-  border-color: #f15921;
-  color: #1a1a1a;
+  background-color: #ff6a13;
+  border-color: #ff6a13;
+  color: #151617;
 }
 
 /* The grid's BPM, so it reads as the thing being edited rather than a chip. */
@@ -880,10 +880,10 @@ WPushButton[value="1"]:hover {
 #Grid_Bpm_Up,
 #Grid_Scale,
 #Grid_Undo {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 3px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 16px;
   font-weight: bold;
 }
@@ -905,7 +905,7 @@ WPushButton[value="1"]:hover {
  * back out of every button above it. */
 #Grid_Scale,
 #Grid_Undo {
-  color: #6b6e76;
+  color: #6b6f76;
   font-size: 14px;
   text-transform: uppercase;
 }
@@ -914,8 +914,8 @@ WPushButton[value="1"]:hover {
  * bearing, not decoration: a disabled WWidget never synthesizes touch ->
  * mouse, so the button stops taking taps as well as looking dead. */
 #Grid_Undo:disabled {
-  border-color: #2a2a2a;
-  color: #3f4249;
+  border-color: #222426;
+  color: #383a3d;
 }
 
 /* No track on this deck, so the whole action block is off. */
@@ -925,8 +925,8 @@ WPushButton[value="1"]:hover {
 #Grid_Bpm_Down:disabled,
 #Grid_Bpm_Up:disabled,
 #Grid_Scale:disabled {
-  border-color: #2a2a2a;
-  color: #3f4249;
+  border-color: #222426;
+  color: #383a3d;
 }
 
 #Grid_DeckPage_1 #Grid_Nudge:enabled:pressed,
@@ -935,8 +935,8 @@ WPushButton[value="1"]:hover {
 #Grid_DeckPage_1 #Grid_Bpm_Up:enabled:pressed,
 #Grid_DeckPage_1 #Grid_Scale:enabled:pressed,
 #Grid_DeckPage_1 #Grid_Undo:enabled:pressed {
-  border-color: #488ab3;
-  color: #488ab3;
+  border-color: #1e8fe6;
+  color: #1e8fe6;
 }
 
 #Grid_DeckPage_2 #Grid_Nudge:enabled:pressed,
@@ -945,8 +945,8 @@ WPushButton[value="1"]:hover {
 #Grid_DeckPage_2 #Grid_Bpm_Up:enabled:pressed,
 #Grid_DeckPage_2 #Grid_Scale:enabled:pressed,
 #Grid_DeckPage_2 #Grid_Undo:enabled:pressed {
-  border-color: #f15921;
-  color: #f15921;
+  border-color: #ff6a13;
+  color: #ff6a13;
 }
 
 /* GRID page: the beat grid editor for one deck, picked by the 1 / 2 tabs the
@@ -962,24 +962,24 @@ WPushButton[value="1"]:hover {
 
 #Grid_DeckTab1,
 #Grid_DeckTab2 {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 3px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 18px;
   font-weight: bold;
 }
 
 #Grid_DeckTab1[displayValue="1"] {
-  background-color: #855ea7;
-  border-color: #855ea7;
-  color: #1a1a1a;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
+  color: #151617;
 }
 
 #Grid_DeckTab2[displayValue="1"] {
   background-color: #c9372c;
   border-color: #c9372c;
-  color: #1a1a1a;
+  color: #151617;
 }
 
 /* The grid's BPM, so it reads as the thing being edited rather than a chip. */
@@ -1001,10 +1001,10 @@ WPushButton[value="1"]:hover {
 #Grid_Bpm_Up,
 #Grid_Scale,
 #Grid_Undo {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 3px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 16px;
   font-weight: bold;
 }
@@ -1026,7 +1026,7 @@ WPushButton[value="1"]:hover {
  * back out of every button above it. */
 #Grid_Scale,
 #Grid_Undo {
-  color: #6b6e76;
+  color: #6b6f76;
   font-size: 14px;
   text-transform: uppercase;
 }
@@ -1035,8 +1035,8 @@ WPushButton[value="1"]:hover {
  * bearing, not decoration: a disabled WWidget never synthesizes touch ->
  * mouse, so the button stops taking taps as well as looking dead. */
 #Grid_Undo:disabled {
-  border-color: #2a2a2a;
-  color: #3f4249;
+  border-color: #222426;
+  color: #383a3d;
 }
 
 /* No track on this deck, so the whole action block is off. */
@@ -1046,8 +1046,8 @@ WPushButton[value="1"]:hover {
 #Grid_Bpm_Down:disabled,
 #Grid_Bpm_Up:disabled,
 #Grid_Scale:disabled {
-  border-color: #2a2a2a;
-  color: #3f4249;
+  border-color: #222426;
+  color: #383a3d;
 }
 
 #Grid_DeckPage_1 #Grid_Nudge:enabled:pressed,
@@ -1056,8 +1056,8 @@ WPushButton[value="1"]:hover {
 #Grid_DeckPage_1 #Grid_Bpm_Up:enabled:pressed,
 #Grid_DeckPage_1 #Grid_Scale:enabled:pressed,
 #Grid_DeckPage_1 #Grid_Undo:enabled:pressed {
-  border-color: #855ea7;
-  color: #855ea7;
+  border-color: #1e8fe6;
+  color: #1e8fe6;
 }
 
 #Grid_DeckPage_2 #Grid_Nudge:enabled:pressed,
@@ -1083,10 +1083,10 @@ WPushButton[value="1"]:hover {
  * the inversion works from. Colours are the BeatFX control surface its
  * neighbours use (BucketButton / ActiveToggle / DeckAssign). */
 WEffectSelector {
-  background-color: #1a1a1a;
-  border: 1px solid #3a3a3a;
+  background-color: #151617;
+  border: 1px solid #303134;
   border-radius: 2px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 14px;
   font-weight: bold;
   padding: 4px;
@@ -1118,10 +1118,10 @@ WEffectSelector::down-arrow {
  * in the skin declared them. Styling it explicitly both fixes the popup and
  * puts it inside the stylesheet, which is what the inversion works from. */
 WEffectSelector QAbstractItemView {
-  background-color: #1a1a1a;
-  border: 1px solid #32323c;
-  color: #e5e6ea;
-  selection-background-color: #488ab3;
+  background-color: #151617;
+  border: 1px solid #2d2f31;
+  color: #e6e7e9;
+  selection-background-color: #1e8fe6;
   selection-color: #e7e8e9;
 }
 
@@ -1134,7 +1134,7 @@ WEffectSelector QAbstractItemView {
 /************************************************************************/
 
 #LibraryWrapper QScrollBar {
-  background-color: #262d39;
+  background-color: #27282b;
 }
 
 #LibraryWrapper QScrollBar::handle:horizontal {
@@ -1153,14 +1153,14 @@ WEffectSelector QAbstractItemView {
 }
 
 #LibraryWrapper QScrollBar::handle:vertical {
-  background-color: #3d8bfd;
+  background-color: #1e8fff;
   border-radius: 4px;
   min-height: 32px;
 }
 
 #LibraryWrapper QScrollBar::add-page,
 #LibraryWrapper QScrollBar::sub-page {
-  background-color: #262d39;
+  background-color: #27282b;
 }
 
 #LibraryWrapper QScrollBar::add-line,
@@ -1171,19 +1171,19 @@ WEffectSelector QAbstractItemView {
 
 #LibraryWrapper WTrackTableViewHeader,
 #LibraryWrapper QHeaderView {
-  background-color: #323b4a;
+  background-color: #333538;
 }
 
 #LibraryWrapper WTrackTableViewHeader::section,
 #LibraryWrapper QHeaderView::section {
-  background-color: #323b4a;
-  color: #dfe5ee;
+  background-color: #333538;
+  color: #e5e6e8;
   font-weight: bold;
   font-size: 18px;
   padding: 10px 12px;
   border: 0;
-  border-right: 1px solid #424c5d;
-  border-bottom: 2px solid #3d8bfd;
+  border-right: 1px solid #414447;
+  border-bottom: 2px solid #1e8fff;
   text-transform: uppercase;
 }
 
@@ -1192,16 +1192,16 @@ WEffectSelector QAbstractItemView {
    kPlayedTrackColor in browsetablemodel.cpp, which tints the Computer/USB
    file browser (a QStandardItemModel with no styleable view property). */
 #LibraryWrapper WTrackTableView {
-  qproperty-trackPlayedColor: #8cc8ff;
+  qproperty-trackPlayedColor: #7fccff;
 }
 
 /* Track list: a lighter slate than the rest of the skin, so titles stay
    readable on a phone in a dim room. */
 #LibraryWrapper QTableView,
 #LibraryWrapper WLibraryTextBrowser {
-  background-color: #262d39;
-  alternate-background-color: #2e3644;
-  selection-background-color: #3d8bfd;
+  background-color: #27282b;
+  alternate-background-color: #2f3133;
+  selection-background-color: #1e8fff;
   color: #ffffff;
   selection-color: #ffffff;
   font-size: 24px;
@@ -1214,19 +1214,19 @@ WEffectSelector QAbstractItemView {
 #LibraryWrapper QTableView::item {
   padding: 0 12px;
   border: 0;
-  border-bottom: 1px solid #343d4c;
+  border-bottom: 1px solid #35373a;
 }
 
 #LibraryWrapper QTableView::item:selected {
-  background-color: #3d8bfd;
+  background-color: #1e8fff;
   color: #ffffff;
 }
 
 #LibraryWrapper WLibrarySidebar {
-  background-color: #262d39;
-  selection-background-color: #3d8bfd;
+  background-color: #27282b;
+  selection-background-color: #1e8fff;
   border: 0;
-  border-left: 4px solid #3d8bfd;
+  border-left: 4px solid #1e8fff;
   color: #ffffff;
   font-weight: bold;
   font-size: 22px;
@@ -1236,11 +1236,11 @@ WEffectSelector QAbstractItemView {
 
 #LibraryWrapper WLibrarySidebar::item {
   padding: 10px 6px;
-  border-bottom: 1px solid #343d4c;
+  border-bottom: 1px solid #35373a;
 }
 
 #LibraryWrapper WLibrarySidebar::item:selected {
-  background-color: #3d8bfd;
+  background-color: #1e8fff;
   color: #ffffff;
 }
 
@@ -1259,19 +1259,19 @@ WEffectSelector QAbstractItemView {
 
 /* Track info panel next to the track list (track_info.xml) */
 #TrackInfoPanel {
-  background-color: #1d232d;
-  border-left: 2px solid #3d8bfd;
+  background-color: #1e2021;
+  border-left: 2px solid #1e8fff;
   padding: 10px 14px;
 }
 
 #TrackInfoHeader {
-  color: #8a94a6;
+  color: #93979d;
   font-size: 16px;
   font-weight: bold;
 }
 
 #TrackInfoCover {
-  background-color: #262d39;
+  background-color: #27282b;
   border-radius: 8px;
   margin: 6px 0px;
 }
@@ -1283,12 +1283,12 @@ WEffectSelector QAbstractItemView {
 }
 
 #TrackInfoArtist {
-  color: #8cc8ff;
+  color: #7fccff;
   font-size: 22px;
 }
 
 #TrackInfoStat {
-  background-color: #262d39;
+  background-color: #27282b;
   border-radius: 8px;
   margin: 8px 4px;
   padding: 4px 8px;
@@ -1296,7 +1296,7 @@ WEffectSelector QAbstractItemView {
 }
 
 #TrackInfoStatLabel {
-  color: #8a94a6;
+  color: #93979d;
   font-size: 14px;
   font-weight: bold;
   qproperty-alignment: 'AlignCenter';
@@ -1310,7 +1310,7 @@ WEffectSelector QAbstractItemView {
 }
 
 #TrackInfoDetail {
-  color: #c9d1dc;
+  color: #d0d2d5;
   font-size: 18px;
 }
 
@@ -1334,28 +1334,28 @@ WEffectSelector QAbstractItemView {
 }
 
 #TrackInfoLoad1 {
-  background-color: #488ab3;
+  background-color: #1e8fe6;
 }
 
 #TrackInfoLoad2 {
-  background-color: #f15921;
+  background-color: #ff6a13;
 }
 
 #TrackInfoLoad1[value="1"],
 #TrackInfoLoad2[value="1"] {
-  background-color: #2a313d;
+  background-color: #2a2c2e;
 }
 
 #LibraryWrapper QPushButton,
 #LibraryWrapper QSpinBox,
 #LibraryWrapper QComboBox,
 #LibraryWrapper QComboBox QAbstractScrollArea {
-  background-color: #1f2530;
-  color: #e6e9ef;
+  background-color: #202223;
+  color: #eaeaeb;
 }
 
 WLabel {
-  color: #e5e6ea;
+  color: #e6e7e9;
 }
 
 /* Library Search */
@@ -1364,32 +1364,32 @@ WLabel {
 }
 
 #SearchBox {
-  background-color: #262d39;
-  border: 2px solid #3d4a5c;
+  background-color: #27282b;
+  border: 2px solid #3f4145;
   border-radius: 8px;
-  color: #e6e9ef;
+  color: #eaeaeb;
   font-size: 24px;
   padding: 2px 12px;
 }
 
 #SearchBox:focus {
-  border-color: #3d8bfd;
+  border-color: #1e8fff;
 }
 
 /* WSearchLineEdit sets the track table font on its line edit, the style
  * sheet font takes precedence */
 #SearchBox QLineEdit {
   font-size: 24px;
-  color: #e6e9ef;
+  color: #eaeaeb;
 }
 
 /* Sidebar (hide/show) */
 #SidebarContainer {
-  background-color: #1d232d;
-  border-bottom: 1px solid #2a313d;
+  background-color: #1e2021;
+  border-bottom: 1px solid #2a2c2e;
 }
 #SidebarButton {
-  background-color: #3d8bfd;
+  background-color: #1e8fff;
   border: 0;
   border-radius: 8px;
   color: #ffffff;
@@ -1399,10 +1399,10 @@ WLabel {
   text-transform: uppercase;
 }
 #SidebarButton:pressed {
-  background-color: #1f5fae;
+  background-color: #0a5cb0;
 }
 #LibraryBreadcrumb {
-  color: #8a94a6;
+  color: #93979d;
   font-size: 18px;
   font-weight: bold;
   padding-left: 12px;
@@ -1413,7 +1413,7 @@ WLabel {
   image: url(skin:icons/library_checkbox.svg);
 }
 #LibraryWrapper WTrackTableView::indicator:hover {
-  background-color: #2d85cd;
+  background-color: #1e8fe6;
 }
 #LibraryWrapper WTrackTableView::indicator:checked {
   image: url(skin:icons/library_checkbox_checked.svg);
@@ -1425,9 +1425,9 @@ WLabel {
 
 /* Shown over the waveform while a deck has no track (waveform.xml) */
 #Waveform_EmptyHint {
-  color: #6f7a8c;
-  background-color: #0b0e13;
-  border: 2px dashed #262d39;
+  color: #787c83;
+  background-color: #0c0d0d;
+  border: 2px dashed #27282b;
   border-radius: 12px;
   font-size: 22px;
   font-weight: bold;
@@ -1439,19 +1439,19 @@ WLabel {
 }
 
 #WaveformInfo_Header {
-  background-color: #32323c;
+  background-color: #2d2f31;
   border-top-right-radius: 10px 25px;
   padding-right: 2px;
 }
 
 #WaveformInfo_Header[highlight="1"] {
-  border: 2px solid #e5e6ea;
+  border: 2px solid #e6e7e9;
 }
 
 #WaveformInfo_Title,
 #WaveformInfo_Key,
 #WaveformInfo_Bars {
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1465,7 +1465,7 @@ WLabel {
 }
 
 #WaveformInfo_Key[highlight="1"] {
-  color: #f15921;
+  color: #ff6a13;
 }
 
 #WaveformInfo_Loop_Icon {
@@ -1510,9 +1510,9 @@ WBeatSpinBox::up-button {
 /************************************************************************/
 
 #TabControls {
-  background-color: #10141a;
-  border-bottom: 1px solid #2a313d;
-  margin-bottom: 5px;
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1c1d1f, stop:1 #121213);
+  border-bottom: 1px solid #27282b;
+  margin-bottom: 2px;
 }
 
 /* Five tabs share the bar, so at the 480px floor each cell is ~96px. The
@@ -1520,49 +1520,53 @@ WBeatSpinBox::up-button {
  * longest label — SETTINGS, 8 chars of monospace — still clears its cell. */
 #TabControls WPushButton {
   font-weight: bold;
-  font-size: 17px;
-  margin: 10px 3%;
+  font-size: 16px;
+  margin: 9px 3%;
   max-width: 250px;
   text-transform: uppercase;
 }
 
 #TabControls WPushButton[value="0"] {
   border: 0;
-  border-bottom: 3px solid transparent;
-  border-radius: 6px;
+  border-radius: 12px;
   background-color: transparent;
-  color: #8a94a6;
+  color: #94989e;
 }
 
 #TabControls WPushButton[value="1"] {
   border: 0;
-  border-bottom: 3px solid #3d8bfd;
-  border-radius: 6px;
-  background-color: #1c2330;
+  border-radius: 12px;
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
   color: #ffffff;
 }
 
-/* A recording runs while the DJ is on any tab, so it is badged where it can be
- * stopped: a red dot on SETTINGS, the page the USB Record buttons are on. Red
- * because that is what the Record button turns and what the drive's LED shows.
- * It sits in the top-right corner, which is the only placement that clears the
- * label: SETTINGS is the longest word on the bar and at the 480px floor its 8
- * monospace chars fill nearly the whole ~90px cell, so a badge anywhere on the
- * text's own baseline is painted over (WPushButton draws its <Text> across the
- * whole widget rect and ignores QSS padding, so the label cannot be moved out
- * of the way). The 40px-tall button leaves ~14px of clear space above the cap
- * height, which is what the dot occupies. Qt's background-position takes
- * alignment keywords only, so the inset lives in the image: recording_dot.svg
- * is a 14x14 canvas with the 10px dot at cx=5,cy=9, i.e. 4px of empty canvas
- * above it and to its right, and aligning that canvas top-right against the
- * border box puts the dot 4px in from both edges — 2px clear of the 2px
- * border. Change the inset in the SVG's width/cx and height/cy pairs
- * (width - cx - 5 and cy - 5). */
-#TabControls WPushButton#TabButtonSettings[recording="1"] {
-  background-image: url(skin:icons/recording_dot.svg);
-  background-origin: border;
-  background-position: right top;
-  background-repeat: no-repeat;
+/* Recording: next to the tabs on every page */
+#TopbarRec {
+  padding-right: 8px;
+  qproperty-layoutAlignment: 'AlignVCenter';
+}
+
+#TabControls WPushButton#TopbarRecButton,
+#TabControls WPushButton#TopbarRecButton[value="0"] {
+  background-color: #1b1c1d;
+  border: 2px solid #393c3f;
+  border-radius: 20px;
+  color: #e5352b;
+  font-size: 15px;
+  margin: 0;
+}
+
+#TabControls WPushButton#TopbarRecButton[displayValue="1"] {
+  background-color: #d63031;
+  border: 2px solid #ff6b6b;
+  border-radius: 20px;
+  color: #ffffff;
+}
+
+#TopbarRecTime {
+  color: #ff6b6b;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /************************************************************************/
@@ -1575,7 +1579,7 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsRow {
-  background-color: #151a21;
+  background-color: #161718;
   border-radius: 8px;
   margin-bottom: 8px;
   padding: 8px 16px;
@@ -1583,7 +1587,7 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsRowLabel {
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1605,7 +1609,7 @@ WBeatSpinBox::up-button {
  * resolved numbers behind a preset (Audio -> Priority). Dim and small so the
  * segment stays the thing the eye lands on. */
 #SettingsRowHint {
-  color: #7a7a84;
+  color: #797e85;
   font-size: 12px;
   qproperty-alignment: 'AlignRight | AlignVCenter';
   padding-right: 10px;
@@ -1617,16 +1621,16 @@ WBeatSpinBox::up-button {
 
 /* General -> Track list columns: a grid of tick buttons */
 #SettingsColumnSection {
-  background-color: #151a21;
+  background-color: #161718;
   border-radius: 8px;
   padding: 8px 16px;
 }
 
 #SettingsColumnCheck {
   background-color: transparent;
-  border: 2px solid #3a4250;
+  border: 2px solid #393b3e;
   border-radius: 6px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 14px;
   font-weight: bold;
   margin: 2px 4px;
@@ -1634,8 +1638,8 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsColumnCheck[displayValue="1"] {
-  background-color: #488ab3;
-  border-color: #488ab3;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
   color: #ffffff;
 }
 
@@ -1643,8 +1647,8 @@ WBeatSpinBox::up-button {
 #SettingsSegmentMid,
 #SettingsSegmentRight {
   background-color: transparent;
-  border: 2px solid #488ab3;
-  color: #a7a9ac;
+  border: 2px solid #1e8fe6;
+  color: #a6a9ad;
   font-size: 14px;
   font-weight: bold;
   min-width: 80px;
@@ -1698,14 +1702,14 @@ WBeatSpinBox::up-button {
 #SettingsSegmentLeft[displayValue="1"],
 #SettingsSegmentMid[displayValue="1"],
 #SettingsSegmentRight[displayValue="1"] {
-  background-color: #488ab3;
+  background-color: #1e8fe6;
   color: #e7e8e9;
 }
 
 #SettingsSegmentLeft[pressed="true"],
 #SettingsSegmentMid[pressed="true"],
 #SettingsSegmentRight[pressed="true"] {
-  background-color: #2d6488;
+  background-color: #0a5cb0;
   color: #e7e8e9;
 }
 
@@ -1716,21 +1720,21 @@ WBeatSpinBox::up-button {
  * selected segment keeps a muted fill rather than going flat, so the row still
  * says which value is stored and will apply again once the mode comes back. */
 #SettingsRowLabel:disabled {
-  color: #5c707d;
+  color: #686c71;
 }
 
 #SettingsSegmentLeft:disabled,
 #SettingsSegmentMid:disabled,
 #SettingsSegmentRight:disabled {
-  border-color: #2b3f4d;
-  color: #5c707d;
+  border-color: #313336;
+  color: #686c71;
 }
 
 #SettingsSegmentLeft[displayValue="1"]:disabled,
 #SettingsSegmentMid[displayValue="1"]:disabled,
 #SettingsSegmentRight[displayValue="1"]:disabled {
-  background-color: rgba(72, 138, 179, 0.18);
-  color: #8a99a4;
+  background-color: rgba(43, 166, 255, 0.18);
+  color: #92969c;
 }
 
 /* Samplers → DRIVE. One chip per mounted USB drive, built at runtime by
@@ -1743,9 +1747,9 @@ WBeatSpinBox::up-button {
  * that keeps four drives tappable rather than a target size. */
 #SamplerDriveChip {
   background-color: transparent;
-  border: 2px solid #488ab3;
+  border: 2px solid #1e8fe6;
   border-radius: 4px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 14px;
   font-weight: bold;
   min-width: 60px;
@@ -1754,14 +1758,14 @@ WBeatSpinBox::up-button {
 }
 
 #SamplerDriveChip[selected="true"] {
-  background-color: #488ab3;
+  background-color: #1e8fe6;
   color: #e7e8e9;
 }
 
 /* Nothing plugged in, or the drive the samples live on is not here. Muted
  * rather than styled as a chip: it is not something to tap. */
 #SamplerDrivePlaceholder {
-  color: #5c707d;
+  color: #686c71;
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1769,7 +1773,7 @@ WBeatSpinBox::up-button {
 
 #SettingsActionButton {
   background-color: transparent;
-  border: 2px solid #488ab3;
+  border: 2px solid #1e8fe6;
   border-radius: 4px;
   color: #e7e8e9;
   font-size: 14px;
@@ -1778,22 +1782,22 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsActionButton[pressed="true"] {
-  background-color: #2d6488;
+  background-color: #0a5cb0;
 }
 
 /* The Audio Rescan button binds `enabled` to [AudioDevices],reconfigure_enabled,
  * which drops to 0 while a deck plays — rescanning re-opens the devices and
  * would cut the music. */
 #SettingsActionButton:disabled {
-  border-color: #2b3f4d;
-  color: #5c707d;
+  border-color: #313336;
+  color: #686c71;
 }
 
 /* Filled accent variant for the commit action (Apply) so un-applied staged
  * settings read as a pending decision next to the outline Cancel. */
 #SettingsPrimaryButton {
-  background-color: #488ab3;
-  border: 2px solid #488ab3;
+  background-color: #1e8fe6;
+  border: 2px solid #1e8fe6;
   border-radius: 4px;
   color: #e7e8e9;
   font-size: 14px;
@@ -1803,17 +1807,17 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsPrimaryButton[pressed="true"] {
-  background-color: #2d6488;
-  border-color: #2d6488;
+  background-color: #0a5cb0;
+  border-color: #0a5cb0;
 }
 
 /* Audio Apply binds `enabled` to [AudioDevices],reconfigure_enabled, which
  * drops to 0 while a deck is playing (applying re-opens the devices and would
  * cut the music). Paint it dimmed so the block reads as deliberate. */
 #SettingsPrimaryButton:disabled {
-  background-color: rgba(72, 138, 179, 0.12);
-  border-color: #2b3f4d;
-  color: #5c707d;
+  background-color: rgba(43, 166, 255, 0.12);
+  border-color: #313336;
+  color: #686c71;
 }
 
 #SettingsSubtabBar {
@@ -1822,8 +1826,8 @@ WBeatSpinBox::up-button {
 
 #SettingsSubtabBar WPushButton {
   background-color: transparent;
-  border: 2px solid #32323c;
-  color: #a7a9ac;
+  border: 2px solid #2d2f31;
+  color: #a6a9ad;
   font-size: 14px;
   font-weight: bold;
   margin: 0 4px;
@@ -1831,8 +1835,8 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsSubtabBar WPushButton[value="1"] {
-  background-color: #488ab3;
-  border-color: #488ab3;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
   color: #e7e8e9;
 }
 
@@ -1874,7 +1878,7 @@ WBeatSpinBox::up-button {
 }
 
 #LibraryColumnRow {
-  background-color: #151515;
+  background-color: #111213;
   border-radius: 4px;
   margin-bottom: 2px;
   padding: 2px 12px;
@@ -1882,7 +1886,7 @@ WBeatSpinBox::up-button {
 }
 
 #LibraryColumnRowLabel {
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1896,9 +1900,9 @@ WBeatSpinBox::up-button {
 #LibraryColumnSizeButton,
 #CharPriorityButton {
   background-color: transparent;
-  border: 2px solid #2b3f4d;
+  border: 2px solid #313336;
   border-radius: 4px;
-  color: #5c707d;
+  color: #686c71;
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1919,15 +1923,15 @@ WBeatSpinBox::up-button {
 #CharPriorityButton[displayValue="2"],
 #CharPriorityButton[displayValue="3"],
 #CharPriorityButton[displayValue="4"] {
-  background-color: #855ea7;
-  border-color: #855ea7;
+  background-color: #1e8fe6;
+  border-color: #1e8fe6;
   color: #e7e8e9;
 }
 
 #LibraryColumnSizeButton[pressed="true"],
 #CharPriorityButton[pressed="true"] {
-  background-color: #2d6488;
-  border-color: #2d6488;
+  background-color: #0a5cb0;
+  border-color: #0a5cb0;
   color: #e7e8e9;
 }
 
@@ -1936,7 +1940,7 @@ WBeatSpinBox::up-button {
  * library column. Its button follows the same outlined/filled rule for a
  * reason that happens to line up: AUTO is the un-overridden state. */
 #CharPriorityRow {
-  background-color: #1d2229;
+  background-color: #1d1e1f;
   border-radius: 4px;
   margin-bottom: 2px;
   padding: 2px 12px;
@@ -1957,7 +1961,7 @@ WBeatSpinBox::up-button {
 }
 
 #SamplersHeaderLabel {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
@@ -1974,7 +1978,7 @@ WBeatSpinBox::up-button {
  * 8 buttons reflow narrower at the 480f minimum to make room. */
 #SamplersDeckBadge1, #SamplersDeckBadge2 {
   border-radius: 2px;
-  color: #1a1a1a;
+  color: #151617;
   font-size: 18px;
   font-weight: bold;
   margin: 4px 2px 4px 4px;
@@ -1982,11 +1986,11 @@ WBeatSpinBox::up-button {
 }
 
 #SamplersDeckBadge1 {
-  background-color: #488ab3;
+  background-color: #1e8fe6;
 }
 
 #SamplersDeckBadge2 {
-  background-color: #f15921;
+  background-color: #ff6a13;
 }
 
 /* PLAY-mode sampler button.
@@ -1994,8 +1998,8 @@ WBeatSpinBox::up-button {
  *   loaded=1  → red outline (sample loaded, idle)
  *   value=1   → solid red fill (sample playing) */
 #Sampler {
-  background-color: #32323c;
-  border: 2px solid #4a4a55;
+  background-color: #2d2f31;
+  border: 2px solid #414447;
   border-radius: 2px;
   margin: 2px 4px 4px 4px;
 }
@@ -2016,10 +2020,10 @@ WBeatSpinBox::up-button {
 
 /* LOAD-mode button: amber palette so the user knows the next press loads. */
 #SamplerLoad {
-  background-color: rgba(241, 89, 33, 0.18);
-  border: 2px dashed #f15921;
+  background-color: rgba(255, 106, 19, 0.18);
+  border: 2px dashed #ff6a13;
   border-radius: 2px;
-  color: #f15921;
+  color: #ff6a13;
   font-size: 11px;
   font-weight: bold;
   margin: 2px 4px 4px 4px;
@@ -2027,21 +2031,21 @@ WBeatSpinBox::up-button {
 }
 
 #SamplerLoad:hover {
-  background-color: rgba(241, 89, 33, 0.28);
-  border: 2px dashed #f15921;
+  background-color: rgba(255, 106, 19, 0.28);
+  border: 2px dashed #ff6a13;
 }
 
 #SamplerLoad[loaded="1"] {
-  background-color: rgba(241, 89, 33, 0.30);
+  background-color: rgba(255, 106, 19, 0.30);
 }
 
 #SamplerLoad[loaded="1"]:hover {
-  background-color: rgba(241, 89, 33, 0.40);
+  background-color: rgba(255, 106, 19, 0.40);
 }
 
 #SamplerLoad[pressed="true"] {
-  background-color: #f15921;
-  color: #1a1a1a;
+  background-color: #ff6a13;
+  color: #151617;
 }
 
 /* UNLOAD-mode button: red destructive palette when a track is loaded; the
@@ -2071,12 +2075,12 @@ WBeatSpinBox::up-button {
 
 #SamplerUnload[pressed="true"] {
   background-color: #d73535;
-  color: #1a1a1a;
+  color: #151617;
 }
 
 /* Track title sits directly above its sampler button. Small + elided. */
 #Sampler_Info {
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 10px;
   font-weight: bold;
   padding: 0 2px;
@@ -2103,7 +2107,7 @@ WBeatSpinBox::up-button {
 
 #SamplersStopAll[pressed="true"] {
   background-color: #d73535;
-  color: #1a1a1a;
+  color: #151617;
 }
 
 /************************************************************************/
@@ -2113,13 +2117,13 @@ WBeatSpinBox::up-button {
 /* Overlays the topbar tabs in a stacked layout — background must stay
    opaque so the tab buttons don't bleed through. */
 #SoftTakeoverStrip {
-  background-color: #140d00;
+  background-color: #080909;
   border-top: 1px solid #402900;
   border-bottom: 1px solid #402900;
 }
 
 #SoftTakeoverLabel {
-  color: #f15921;
+  color: #ff6a13;
   font-size: 16px;
   font-weight: bold;
   qproperty-alignment: 'AlignCenter';
@@ -2132,7 +2136,7 @@ WBeatSpinBox::up-button {
 /* Overlays the topbar tabs in a stacked layout — background must stay
    opaque so the tab buttons don't bleed through. */
 #NotificationStrip {
-  background-color: #1a1100;
+  background-color: #0b0b0c;
   border-top: 1px solid;
   border-bottom: 1px solid;
 }
@@ -2146,16 +2150,16 @@ WBeatSpinBox::up-button {
 #NotificationStrip[severity="info"],
 #NotificationStrip[severity="warning"],
 #NotificationStrip[severity="error"] {
-  background-color: #1a1100;
+  background-color: #0b0b0c;
   border-color: #593a00;
 }
 /* The strip's optional action (Warn's LOAD on a playing deck). Painted as a
  * filled button so it reads as the one thing to tap; the rest of the strip
  * dismisses. 44px tall in the 60px strip keeps it on the touch floor. */
 #NotificationStrip #NotificationAction {
-  background-color: #f15921;
+  background-color: #ff6a13;
   border-radius: 4px;
-  color: #1a1100;
+  color: #0b0b0c;
   font-size: 16px;
   font-weight: bold;
   min-height: 44px;
@@ -2167,11 +2171,11 @@ WBeatSpinBox::up-button {
 #NotificationStrip[severity="info"] #NotificationLabel,
 #NotificationStrip[severity="warning"] #NotificationLabel,
 #NotificationStrip[severity="error"] #NotificationLabel {
-  color: #f15921;
+  color: #ff6a13;
 }
 
 #SettingsHeader {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 13px;
   font-weight: bold;
   margin: 0 4px 4px 4px;
@@ -2179,7 +2183,7 @@ WBeatSpinBox::up-button {
 }
 
 #SettingsVersionLabel {
-  color: #5c5e61;
+  color: #4e5155;
   font-size: 11px;
 }
 
@@ -2199,69 +2203,52 @@ WBeatSpinBox::up-button {
 /* WWidgetGroup resets the layout margins, so they are set here instead of
  * with padding: rect(left top right bottom) */
 #MixerBody {
-  qproperty-layoutContentsMargins: rect(10 8 10 8);
+  background-color: #0b0c0d;
+}
+
+#MixerBody {
+  qproperty-layoutContentsMargins: rect(8 4 8 4);
+  qproperty-layoutSpacing: 6;
+}
+
+#MixerTitles,
+#MixerDecks {
   qproperty-layoutSpacing: 8;
 }
 
-#MixerTopRow,
-#MixerBottomRow {
+/* Cards */
+#MixerDeckHeader,
+#MixerDeck1,
+#MixerDeck2,
+#MixerCenter {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d1e1f, stop:1 #131415);
+  border: 1px solid #27282b;
+  border-radius: 14px;
+}
+
+#MixerDeckHeader {
+  qproperty-layoutContentsMargins: rect(4 0 4 0);
+  qproperty-layoutSpacing: 2;
+}
+
+#MixerDeckTitleRow {
   qproperty-layoutSpacing: 10;
-}
-
-#MixerFaderRow {
-  background-color: #12161d;
-  border: 1px solid #232a35;
-  border-radius: 10px;
-  padding: 8px 4px;
-  qproperty-layoutSpacing: 4;
-}
-
-#MixerTransport {
-  qproperty-layoutSpacing: 8;
-}
-
-/* Sound Color FX buttons in two columns around the VU meter, lit like
- * the FX picker tiles */
-#MixerColorFxColumn {
-  qproperty-layoutSpacing: 8;
-}
-
-#MixerColorFx {
-  color: #e6e9ef;
-  background-color: #1d232d;
-  border: 2px solid #343d4c;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-#MixerColorFx[displayValue="1"] {
-  color: #ffffff;
-  background-color: #f15921;
-  border-color: #ff8a5c;
 }
 
 #MixerDeckNumber1,
 #MixerDeckNumber2 {
   color: #ffffff;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: 10px;
+  font-size: 17px;
   font-weight: bold;
-  text-transform: uppercase;
 }
 
 #MixerDeckNumber1 {
-  background-color: #3d8bfd;
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
 }
 
 #MixerDeckNumber2 {
-  background-color: #f15921;
-}
-
-#MixerDeckHeader,
-#MixerDeckTitleRow {
-  qproperty-layoutSpacing: 6;
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
 }
 
 #MixerDeckTitle {
@@ -2270,108 +2257,353 @@ WBeatSpinBox::up-button {
   font-weight: bold;
 }
 
+#MixerDeckArtist,
+#MixerDeckEmpty {
+  color: #94989e;
+  font-size: 13px;
+}
+
+#MixerDeckEmpty {
+  font-size: 15px;
+}
+
+/* WKey only paints its text if the style sheet sets a background or border */
+#MixerDeckKey {
+  background-color: #0d0e0e;
+  border-radius: 9px;
+  color: #7ee787;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#MixerDeckBpm {
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#MixerDeckUnit {
+  color: #777c83;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+#MixerDeckTime {
+  color: #cacccf;
+  font-size: 17px;
+}
+
 #MixerDeckOverview {
   border-radius: 6px;
 }
 
-/* BPM next to the track title, see templates/mixer_deck_header.xml */
-#MixerDeckBpm {
-  color: #ffffff;
-  font-size: 20px;
-  font-weight: bold;
+#MixerWaveforms {
+  background-color: #060607;
+  border: 1px solid #1e2021;
+  border-radius: 10px;
+  qproperty-layoutContentsMargins: rect(6 4 6 4);
+  qproperty-layoutSpacing: 2;
 }
 
-/* Tempo strip next to the channel fader, see templates/mixer_tempo.xml */
+#MixerDeck1,
+#MixerDeck2 {
+  qproperty-layoutContentsMargins: rect(4 4 4 4);
+  qproperty-layoutSpacing: 8;
+}
+
+#MixerDeckBody {
+  qproperty-layoutSpacing: 5;
+}
+
+#MixerPadRow,
+#MixerSideColumn {
+  qproperty-layoutSpacing: 6;
+}
+
+/* Page switch: segments in one well */
+#MixerModeBar {
+  background-color: #0b0c0d;
+  border-radius: 12px;
+  qproperty-layoutContentsMargins: rect(3 3 3 3);
+  qproperty-layoutSpacing: 2;
+}
+
+#MixerMode1,
+#MixerMode2 {
+  background-color: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: #888c92;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerMode1[value="1"] {
+  background-color: rgba(43, 166, 255, 46);
+  border: 0;
+  color: #6cc4ff;
+}
+
+#MixerMode2[value="1"] {
+  background-color: rgba(255, 133, 34, 46);
+  border: 0;
+  color: #ffb288;
+}
+
+/* Tempo strip */
 #MixerTempo {
   qproperty-layoutSpacing: 6;
 }
 
 #MixerTempoValue {
   color: #ffffff;
-  background-color: #1a1f27;
-  border-radius: 6px;
-  font-size: 15px;
+  background-color: #0b0c0d;
+  border-radius: 9px;
+  font-size: 14px;
   font-weight: bold;
+}
+
+/* Buttons next to the turntable and pads */
+#MixerTempoReset,
+#MixerSide,
+#MixerPad,
+#MixerPadEmpty,
+#MixerPadDelete,
+#MixerDeckStack #CuePad[displayValue="0"],
+#MixerDeckStack #MixerColorFx {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2b2d2f, stop:1 #222426);
+  border: 1px solid #35373a;
+  border-radius: 12px;
+  color: #d0d2d5;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 #MixerTempoReset {
-  color: #a7a9ac;
-  background-color: #1a1f27;
-  border: 1px solid #333b48;
-  border-radius: 6px;
-  font-size: 15px;
+  border-radius: 9px;
+  color: #a4a7ab;
+  font-size: 13px;
+}
+
+#MixerSide {
+  font-size: 12px;
+  max-height: 62px;
+}
+
+#MixerDeckStack #MixerColorFx {
+  font-size: 13px;
+}
+
+#MixerPad {
+  font-size: 20px;
+}
+
+#MixerDeckStack #CuePad {
+  border-radius: 12px;
+}
+
+#MixerDeckStack #CuePad[displayValue="0"] {
+  color: #73777d;
+}
+
+#MixerPad,
+#MixerPadEmpty,
+#MixerPadDelete,
+#MixerDeckStack #CuePad,
+#MixerDeckStack #MixerColorFx {
+  margin: 2px;
+}
+
+#MixerPadEmpty {
+  background-color: rgba(255, 255, 255, 5);
+  border: 1px dashed #393c3f;
+  color: #777c83;
+  font-size: 13px;
+}
+
+#MixerSide[pressed="true"],
+#MixerPad[pressed="true"],
+#MixerTempoReset[pressed="true"] {
+  background-color: #393c3f;
+}
+
+#MixerDeck1 #MixerSide[displayValue="1"] {
+  background-color: rgba(43, 166, 255, 46);
+  border-color: #1f7fd0;
+  color: #8fd2ff;
+}
+
+#MixerDeck2 #MixerSide[displayValue="1"] {
+  background-color: rgba(255, 133, 34, 46);
+  border-color: #c96a38;
+  color: #ffb892;
+}
+
+#MixerDeck1 #MixerPad[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+  border-color: #7fccff;
+  color: #ffffff;
+}
+
+#MixerDeck2 #MixerPad[displayValue="1"],
+#MixerDeckStack #MixerColorFx[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+  border-color: #ffc59f;
+  color: #ffffff;
+}
+
+#MixerPadDelete[displayValue="0"] {
+  color: #46484c;
+}
+
+#MixerPadDelete[displayValue="1"],
+#MixerPadDelete[displayValue="2"] {
+  background-color: #6d2430;
+  border-color: #d6455a;
+  color: #ffffff;
+}
+
+#MixerSection {
+  color: #888c92;
+  font-size: 12px;
   font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerBigKey {
+  background-color: #0b0c0d;
+  border-radius: 12px;
+  color: #7ee787;
+  font-size: 34px;
+  font-weight: bold;
+}
+
+/* Mixer */
+#MixerCenter {
+  qproperty-layoutContentsMargins: rect(3 4 3 4);
+  qproperty-layoutSpacing: 3;
 }
 
 #MixerKnobLabel {
-  color: #8a94a6;
-  font-size: 11px;
+  color: #94989e;
+  font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
-#MixerRecButton {
-  color: #a7a9ac;
-  background-color: #1a1f27;
-  border: 2px solid #3a4352;
-  border-radius: 22px;
+/* Transport */
+#MixerBottomRow {
+  qproperty-layoutSpacing: 8;
+}
+
+#MixerTransport1,
+#MixerTransport2 {
+  qproperty-layoutSpacing: 8;
+  qproperty-layoutAlignment: 'AlignVCenter';
+}
+
+#MixerTransportCue,
+#MixerTransportPlay {
+  background-color: qradialgradient(cx:0.5, cy:0.35, radius:0.75, fx:0.5, fy:0.25, stop:0 #343639, stop:1 #18191a);
+  border: 2px solid;
+  border-radius: 34px;
   font-size: 16px;
   font-weight: bold;
-  text-transform: uppercase;
-}
-
-#MixerRecButton[displayValue="1"] {
-  color: #ffffff;
-  background-color: #d63031;
-  border-color: #ff6b6b;
-}
-
-/* Transport like the round deck buttons of DJ apps: CUE orange, PLAY green,
- * SYNC blue */
-#MixerTransportCue,
-#MixerTransportPlay,
-#MixerTransportSync {
-  background-color: #1a1f27;
-  border: 2px solid;
-  border-radius: 10px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
 }
 
 #MixerTransportCue {
-  color: #f39c12;
-  border-color: #f39c12;
+  color: #ffb640;
+  border-color: #7d5f2b;
+  text-transform: uppercase;
 }
 
 #MixerTransportCue[displayValue="1"] {
-  color: #1a1a1a;
-  background-color: #f39c12;
+  color: #2a1a00;
+  border-color: #ffd48a;
+  background-color: qradialgradient(cx:0.5, cy:0.35, radius:0.75, fx:0.5, fy:0.25, stop:0 #ffd27a, stop:1 #f59a1b);
 }
 
 #MixerTransportPlay {
-  color: #2ecc71;
-  border-color: #2ecc71;
+  border-color: #2b7552;
+  padding: 10px;
+  image: url(skin:/icons/mixer_play.svg);
 }
 
 #MixerTransportPlay[value="1"] {
-  color: #1a1a1a;
-  background-color: #2ecc71;
+  border-color: #8ff0bf;
+  background-color: qradialgradient(cx:0.5, cy:0.35, radius:0.75, fx:0.5, fy:0.25, stop:0 #6ff0ae, stop:1 #1fbf70);
+  image: url(skin:/icons/mixer_pause.svg);
+}
+
+#MixerTransportSync,
+#MixerLoopBox {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2b2d2f, stop:1 #1d1e1f);
+  border: 1px solid #35373a;
+  border-radius: 24px;
 }
 
 #MixerTransportSync {
-  color: #8cc8ff;
-  border-color: #3d8bfd;
+  color: #d0d2d5;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-#MixerTransportSync[value="1"] {
+#MixerTransport1 #MixerTransportSync[value="1"],
+#MixerTransport1 #MixerLoopOn {
   color: #ffffff;
-  background-color: #3d8bfd;
+  border-color: #7fccff;
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+}
+
+#MixerTransport2 #MixerTransportSync[value="1"],
+#MixerTransport2 #MixerLoopOn {
+  color: #ffffff;
+  border-color: #ffc59f;
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+}
+
+#MixerLoopBox {
+  qproperty-layoutContentsMargins: rect(6 4 4 4);
+}
+
+#MixerLoopStep,
+#MixerLoop,
+#MixerLoopOn {
+  background-color: transparent;
+  border: 0;
+  border-radius: 19px;
+  color: #d0d2d5;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerLoopStep {
+  border-radius: 16px;
+  color: #94989e;
+}
+
+#MixerLoopStep[pressed="true"],
+#MixerLoop[pressed="true"] {
+  background-color: #393c3f;
+}
+
+#MixerLoopSize {
+  background-color: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  qproperty-alignment: 'AlignCenter';
 }
 
 #LevelRow {
-  background-color: #151515;
-  border-radius: 4px;
+  background-color: #1a1b1d;
+  border-radius: 12px;
   margin-bottom: 8px;
   padding: 8px 4px;
 }
@@ -2382,21 +2614,21 @@ WBeatSpinBox::up-button {
  * knob in a wider column. The columns' children are all full-width instead
  * (KnobComposed at 0me paints its knob centred via STRETCH_ASPECT). */
 #LevelKnobLabel {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 12px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 #LevelKnobValue {
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 12px;
 }
 
 /* Levels -> master EQ: eight band columns plus the Flat reset share the row
  * width equally so the page still fits at the 480px floor (9 x ~48px). */
 #EQBandRow {
-  background-color: #151515;
+  background-color: #111213;
   border-radius: 4px;
   margin-bottom: 8px;
   padding: 8px 4px;
@@ -2407,13 +2639,13 @@ WBeatSpinBox::up-button {
 }
 
 #EQBandLabel {
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 12px;
   font-weight: bold;
 }
 
 #EQBandValue {
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 12px;
 }
 
@@ -2425,29 +2657,29 @@ WBeatSpinBox::up-button {
  * to live in. */
 #EQModeButton {
   background-color: transparent;
-  border: 2px solid #855ea7;
+  border: 2px solid #1e8fe6;
   border-radius: 4px;
-  color: #a7a9ac;
+  color: #a6a9ad;
   font-size: 13px;
   font-weight: bold;
   text-transform: uppercase;
 }
 
 #EQModeButton[displayValue="1"] {
-  background-color: #855ea7;
+  background-color: #1e8fe6;
   color: #e7e8e9;
 }
 
 #EQModeButton[pressed="true"] {
-  background-color: #2d6488;
+  background-color: #0a5cb0;
   color: #e7e8e9;
 }
 
 #AudioDeviceList #AudioDeviceRow {
-  background-color: #151515;
-  border: 2px solid #151515;
+  background-color: #111213;
+  border: 2px solid #111213;
   border-radius: 4px;
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 16px;
   font-weight: bold;
   min-height: 56px;
@@ -2457,26 +2689,26 @@ WBeatSpinBox::up-button {
 }
 
 #AudioDeviceList #AudioDeviceRow[assigned="false"] {
-  color: #7a7a84;
+  color: #797e85;
   border-style: dashed;
-  border-color: #32323c;
+  border-color: #2d2f31;
 }
 
 #AudioDeviceList #AudioDeviceRow:pressed {
-  background-color: #2d6488;
+  background-color: #0a5cb0;
 }
 
 #AudioDeviceList #AudioDeviceRow[empty="true"] {
   background-color: transparent;
-  border: 2px dashed #32323c;
-  color: #5a5a64;
+  border: 2px dashed #2d2f31;
+  color: #4e5155;
 }
 
 #ControllerList #ControllerRow {
-  background-color: #151515;
-  border: 2px solid #151515;
+  background-color: #111213;
+  border: 2px solid #111213;
   border-radius: 4px;
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 16px;
   font-weight: bold;
   min-height: 56px;
@@ -2486,18 +2718,18 @@ WBeatSpinBox::up-button {
 }
 
 #ControllerList #ControllerRow[active="true"] {
-  background-color: #2d6488;
-  border-color: #488ab3;
+  background-color: #0a5cb0;
+  border-color: #1e8fe6;
 }
 
 #ControllerList #ControllerRow:pressed {
-  background-color: #2d6488;
+  background-color: #0a5cb0;
 }
 
 #ControllerList #ControllerRow[empty="true"] {
   background-color: transparent;
-  border: 2px dashed #32323c;
-  color: #5a5a64;
+  border: 2px dashed #2d2f31;
+  color: #4e5155;
 }
 
 /* The rows live in a scroll area so more drives / controllers than fit the
@@ -2515,7 +2747,7 @@ WBeatSpinBox::up-button {
  * reads as a slim indicator. Track colours follow the library's scroll bar. */
 #UsbList QScrollBar:vertical,
 #ControllerList QScrollBar:vertical {
-  background-color: #151515;
+  background-color: #111213;
   border: 0;
   border-radius: 4px;
   margin: 0;
@@ -2524,7 +2756,7 @@ WBeatSpinBox::up-button {
 
 #UsbList QScrollBar::handle:vertical,
 #ControllerList QScrollBar::handle:vertical {
-  background-color: #488ab3;
+  background-color: #1e8fe6;
   border: 0;
   border-radius: 5px;
   margin: 0 4px;
@@ -2533,7 +2765,7 @@ WBeatSpinBox::up-button {
 
 #UsbList QScrollBar::handle:vertical:pressed,
 #ControllerList QScrollBar::handle:vertical:pressed {
-  background-color: #7fb2d6;
+  background-color: #7fccff;
 }
 
 #UsbList QScrollBar::add-page:vertical,
@@ -2553,10 +2785,10 @@ WBeatSpinBox::up-button {
 
 /* Drive name label carries the row's appearance (there is no container widget). */
 #UsbList #UsbRowLabel {
-  background-color: #151515;
-  border: 2px solid #151515;
+  background-color: #111213;
+  border: 2px solid #111213;
   border-radius: 4px;
-  color: #e5e6ea;
+  color: #e6e7e9;
   font-size: 16px;
   font-weight: bold;
   min-height: 56px;
@@ -2572,9 +2804,9 @@ WBeatSpinBox::up-button {
 #UsbList #UsbEjectButton,
 #UsbList #UsbRecordButton {
   background-color: transparent;
-  border: 2px solid #488ab3;
+  border: 2px solid #1e8fe6;
   border-radius: 4px;
-  color: #7fb2d6;
+  color: #7fccff;
   font-size: 14px;
   font-weight: bold;
   min-height: 56px;
@@ -2585,8 +2817,8 @@ WBeatSpinBox::up-button {
 
 #UsbList #UsbEjectButton:pressed,
 #UsbList #UsbRecordButton:pressed {
-  background-color: #2d6488;
-  color: #e5e6ea;
+  background-color: #0a5cb0;
+  color: #e6e7e9;
 }
 
 /* Recording: filled red, the one colour that means this on any deck ever built
@@ -2594,7 +2826,7 @@ WBeatSpinBox::up-button {
 #UsbList #UsbRecordButton[recording="true"] {
   background-color: #7a2622;
   border-color: #c2453d;
-  color: #f0d5d2;
+  color: #e0e1e2;
 }
 
 #UsbList #UsbRecordButton[recording="true"]:pressed {
@@ -2606,8 +2838,8 @@ WBeatSpinBox::up-button {
  * paired with the disabled widget swallowing the tap rather than queueing it,
  * the same way the Audio page's Apply does while a deck is playing. */
 #UsbList #UsbRecordButton:disabled {
-  border-color: #32323c;
-  color: #5a5a64;
+  border-color: #2d2f31;
+  color: #4e5155;
 }
 
 /* First tap arms the button; it turns danger-red to mirror the safe-to-remove
@@ -2615,7 +2847,7 @@ WBeatSpinBox::up-button {
 #UsbList #UsbEjectButton[armed="true"] {
   background-color: #7a2622;
   border-color: #c2453d;
-  color: #f0d5d2;
+  color: #e0e1e2;
 }
 
 #UsbList #UsbEjectButton[armed="true"]:pressed {
@@ -2626,9 +2858,9 @@ WBeatSpinBox::up-button {
 /* Empty-state placeholder row (a QLabel). */
 #UsbList #UsbRow[empty="true"] {
   background-color: transparent;
-  border: 2px dashed #32323c;
+  border: 2px dashed #2d2f31;
   border-radius: 4px;
-  color: #5a5a64;
+  color: #4e5155;
   font-size: 16px;
   font-weight: bold;
   min-height: 56px;
@@ -2648,4 +2880,873 @@ WBeatSpinBox::up-button {
 
 #SettingsDangerButton[pressed="true"] {
   background-color: #7a2622;
+}
+
+/************************************************************************/
+/*     Look of the PLAY, BROWSE and SETTINGS pages, matching the MIXER  */
+/************************************************************************/
+
+/* ---- PLAY */
+
+#TabStack,
+#SettingsStack {
+  background-color: #0b0c0d;
+}
+
+#WaveformInfo {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d1e1f, stop:1 #131415);
+  border: 1px solid #27282b;
+  border-radius: 12px;
+  margin: 4px 6px 4px 6px;
+}
+
+#WaveformInfo_Header,
+#WaveformInfo_Header[highlight="1"] {
+  border: 0;
+  border-radius: 9px;
+  margin: 4px 6px;
+}
+
+#Waveform_Channel1 #WaveformInfo_Header {
+  background-color: rgba(43, 166, 255, 40);
+}
+
+#Waveform_Channel2 #WaveformInfo_Header {
+  background-color: rgba(255, 133, 34, 40);
+}
+
+#Waveform_Channel1 #WaveformInfo_Header[highlight="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+}
+
+#Waveform_Channel2 #WaveformInfo_Header[highlight="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+}
+
+#WaveformInfo_Title {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+#WaveformInfo_Loop_Icon {
+  color: #94989e;
+  font-size: 13px;
+  margin: 2px 2px 2px 10px;
+}
+
+#WaveformInfo_BeatloopSizeSpinBox {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+}
+
+/* WKey only paints its text if the style sheet sets a background or border */
+#WaveformInfo_Key {
+  background-color: #0b0c0d;
+  border-radius: 7px;
+  margin: 0;
+  font-size: 14px;
+  color: #7ee787;
+  text-transform: none;
+}
+
+#WaveformInfo_QuantizeButton,
+#WaveformInfo_KeylockButton {
+  background-color: #242527;
+  border: 1px solid #35373a;
+  border-radius: 8px;
+  margin: 1px 3px;
+  padding: 3px;
+}
+
+#WaveformInfo_QuantizeButton[value="1"],
+#WaveformInfo_KeylockButton[value="1"] {
+  background-color: rgba(43, 166, 255, 60);
+  border-color: #1f7fd0;
+}
+
+#Waveform_EmptyHint {
+  color: #888c92;
+  background-color: #111213;
+  border: 1px solid #27282b;
+  border-radius: 14px;
+  font-size: 19px;
+  margin: 6px;
+}
+
+/* Deck strips */
+#DeckHeader {
+  background-color: #18191b;
+  border-top: 1px solid #27282b;
+}
+
+#DeckTitle {
+  color: #ffffff;
+  font-size: 16px;
+}
+
+#DeckArtist {
+  color: #94989e;
+  font-size: 15px;
+}
+
+#DeckKey,
+#DeckHeaderBPM,
+#DeckCueChip {
+  background-color: #0d0e0e;
+  border-radius: 6px;
+  color: #7ee787;
+}
+
+#DeckHeaderBPM {
+  color: #ffffff;
+}
+
+#DeckCueChip {
+  background-color: rgba(255, 182, 64, 40);
+  border: 0;
+  color: #ffb640;
+}
+
+#DeckHeaderTimeValue {
+  color: #cacccf;
+  font-size: 16px;
+}
+
+#DeckTitlePlaying,
+#DeckPlayingLeft,
+#DeckPlayingRight {
+  color: #3ee08f;
+}
+
+#DeckChannelTitle,
+#DeckTempoTitle,
+#TrackNumberTitle,
+#DeckTrackTimeRemainLabel,
+#DeckTrackTimeTimeLabel {
+  color: #777c83;
+  font-size: 12px;
+}
+
+#DeckTrackTimeRemainLabel[highlight="1"],
+#DeckTrackTimeTimeLabel[highlight="1"] {
+  color: #ffffff;
+}
+
+#DeckBPMWrapper {
+  background-color: #0d0e0e;
+  border: 1px solid #35373a;
+  border-radius: 9px;
+}
+
+#DeckBPMRangePercent {
+  background-color: #1d1e1f;
+  border-radius: 5px;
+}
+
+/* FX panel */
+#BeatFX_Container {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d1e1f, stop:1 #131415);
+  border: 1px solid #27282b;
+  border-radius: 12px;
+  margin: 4px;
+}
+
+#FxPanel_TabBar {
+  background-color: #0b0c0d;
+  border-radius: 10px;
+  qproperty-layoutSpacing: 2;
+}
+
+#FxPanel_TabBar WPushButton,
+#SettingsSubtabBar WPushButton {
+  background-color: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: #888c92;
+  font-size: 13px;
+}
+
+#FxPanel_TabBar WPushButton[value="1"],
+#SettingsSubtabBar WPushButton[value="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #343639, stop:1 #27282a);
+  border: 1px solid #3a3c3f;
+  color: #ffffff;
+}
+
+#BeatFX_CurrentEffect,
+#BeatFXCompact_Effect {
+  background-color: rgba(43, 166, 255, 30);
+  border: 1px solid #1f7fd0;
+  border-radius: 10px;
+  color: #a6dbff;
+  font-size: 15px;
+}
+
+#BeatFX_DeckAssign1,
+#BeatFX_DeckAssign2,
+#BeatFX_ActiveToggle,
+#BeatFXCompact_Toggle,
+#BeatFX_BucketButton,
+#BeatFX_ParamButton,
+#KeyFX_Down,
+#KeyFX_Up,
+#KeyFX_Reset,
+#Grid_DeckTab1,
+#Grid_DeckTab2,
+#Grid_Nudge,
+#Grid_Align,
+#Grid_Bpm_Down,
+#Grid_Bpm_Up,
+#Grid_Scale,
+#Grid_Undo,
+#CuePanel_BankToggle,
+#CuePanel_Close {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2b2d2f, stop:1 #222426);
+  border: 1px solid #35373a;
+  border-radius: 9px;
+  color: #d0d2d5;
+}
+
+#BeatFX_DeckAssign1,
+#BeatFX_DeckAssign2,
+#BeatFX_ActiveToggle,
+#BeatFXCompact_Toggle {
+  font-size: 15px;
+}
+
+#BeatFX_DeckAssign1[displayValue="1"],
+#Grid_DeckTab1[displayValue="1"],
+#CuePanel_BankToggle[value="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+  border-color: #7fccff;
+  color: #ffffff;
+}
+
+#BeatFX_DeckAssign2[displayValue="1"],
+#Grid_DeckTab2[displayValue="1"],
+#BeatFX_ActiveToggle[value="1"],
+#BeatFXCompact_Toggle[value="1"],
+#BeatFX_BucketButton[displayValue="1"],
+#BeatFX_ParamButton[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+  border-color: #ffc59f;
+  color: #ffffff;
+}
+
+#BeatFXCompact_Unit {
+  background-color: #111112;
+  border: 1px solid #27282b;
+  border-radius: 12px;
+}
+
+#BeatFXCompact_UnitLabel {
+  background-color: #27282a;
+  border-radius: 9px;
+  font-size: 13px;
+}
+
+#BeatFX_KnobLabel {
+  color: #94989e;
+  font-size: 11px;
+}
+
+#BeatFX_KnobValue,
+#BeatFX_KnobNumber {
+  color: #ff9a63;
+  font-size: 14px;
+}
+
+#FxPicker {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #121213, stop:1 #080809);
+}
+
+#FxPicker_Tile,
+#FxPicker_Close {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2b2d2f, stop:1 #1d1e1f);
+  border: 1px solid #35373a;
+  border-radius: 16px;
+  font-size: 22px;
+}
+
+#FxPicker_Tile[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+  border-color: #ffc59f;
+}
+
+#FxPicker_Close {
+  background-color: transparent;
+  border: 1px dashed #393c3f;
+}
+
+#CuePad {
+  border-radius: 10px;
+}
+
+/* ---- BROWSE */
+
+#SidebarContainer {
+  background-color: #0c0d0d;
+  border: 0;
+}
+
+#SearchBox {
+  background-color: #18191b;
+  border: 1px solid #2d2e31;
+  border-radius: 14px;
+  font-size: 19px;
+  padding: 2px 16px;
+}
+
+#SearchBox QLineEdit {
+  background-color: transparent;
+  font-size: 19px;
+}
+
+#SidebarButton {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #343639, stop:1 #27282a);
+  border: 1px solid #3a3c3f;
+  border-radius: 14px;
+  font-size: 17px;
+}
+
+#LibraryWrapper WLibrarySidebar {
+  background-color: #111112;
+  border: 0;
+  font-size: 19px;
+  selection-background-color: #0a5cb0;
+}
+
+#LibraryWrapper WLibrarySidebar::item {
+  border-bottom: 1px solid #1d1e1f;
+  padding: 11px 6px;
+}
+
+#LibraryWrapper WLibrarySidebar::item:selected,
+#LibraryWrapper QTableView::item:selected {
+  background-color: #0a5cb0;
+  color: #ffffff;
+}
+
+#LibraryWrapper WTrackTableViewHeader,
+#LibraryWrapper QHeaderView {
+  background-color: #18191b;
+}
+
+#LibraryWrapper WTrackTableViewHeader::section,
+#LibraryWrapper QHeaderView::section {
+  background-color: #18191b;
+  border: 0;
+  border-bottom: 1px solid #2d2e31;
+  color: #94989e;
+  font-size: 14px;
+}
+
+#LibraryWrapper QTableView,
+#LibraryWrapper WLibraryTextBrowser {
+  background-color: #111112;
+  alternate-background-color: #151617;
+  selection-background-color: #0a5cb0;
+  font-size: 21px;
+}
+
+#LibraryWrapper QTableView::item {
+  border-bottom: 1px solid #1d1e1f;
+}
+
+#LibraryWrapper QScrollBar,
+#LibraryWrapper QScrollBar::add-page,
+#LibraryWrapper QScrollBar::sub-page {
+  background-color: #111112;
+}
+
+#LibraryWrapper QScrollBar::handle:vertical {
+  background-color: #3a3c3f;
+  border-radius: 2px;
+}
+
+#TrackInfoPanel {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d1e1f, stop:1 #131415);
+  border: 1px solid #27282b;
+  border-radius: 14px;
+}
+
+#TrackInfoHeader {
+  color: #777c83;
+  font-size: 12px;
+}
+
+#TrackInfoCover {
+  background-color: #0d0e0e;
+  border-radius: 12px;
+}
+
+#TrackInfoTitle {
+  font-size: 23px;
+}
+
+#TrackInfoArtist {
+  color: #94989e;
+  font-size: 18px;
+}
+
+#TrackInfoStat {
+  background-color: #0d0e0e;
+  border-radius: 12px;
+}
+
+#TrackInfoStatLabel {
+  color: #777c83;
+  font-size: 11px;
+}
+
+#TrackInfoStatValue {
+  font-size: 19px;
+}
+
+#TrackInfoLoad1,
+#TrackInfoLoad2 {
+  border: 0;
+  border-radius: 14px;
+  font-size: 19px;
+}
+
+#TrackInfoLoad1 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+}
+
+#TrackInfoLoad2 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+}
+
+/* ---- SETTINGS */
+
+#SettingsSubtabBar {
+  background-color: #18191b;
+  border-radius: 12px;
+}
+
+#SettingsRow,
+#SettingsColumnSection,
+#LibraryColumnRow {
+  background-color: #18191b;
+  border: 1px solid #242528;
+  border-radius: 12px;
+}
+
+#SettingsRowLabel,
+#SettingsHeader {
+  color: #d0d2d5;
+}
+
+#SettingsSegmentLeft,
+#SettingsSegmentMid,
+#SettingsSegmentRight {
+  background-color: #0d0e0e;
+  border: 1px solid #2d2e31;
+  color: #94989e;
+}
+
+#SettingsSegmentLeft {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#SettingsSegmentRight {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#SettingsSegmentLeft[displayValue="1"],
+#SettingsSegmentMid[displayValue="1"],
+#SettingsSegmentRight[displayValue="1"],
+#SettingsPrimaryButton {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2ba6ff, stop:1 #0a78e6);
+  border: 1px solid #2ba6ff;
+  color: #ffffff;
+}
+
+#SettingsSegmentLeft[pressed="true"],
+#SettingsSegmentMid[pressed="true"],
+#SettingsSegmentRight[pressed="true"],
+#SettingsActionButton[pressed="true"],
+#SettingsPrimaryButton[pressed="true"] {
+  background-color: #0a5cb0;
+  color: #ffffff;
+}
+
+#SettingsActionButton,
+#SettingsColumnCheck {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2b2d2f, stop:1 #222426);
+  border: 1px solid #35373a;
+  border-radius: 10px;
+  color: #d0d2d5;
+}
+
+#SettingsPrimaryButton {
+  border-radius: 10px;
+}
+
+#SettingsColumnCheck {
+  color: #94989e;
+}
+
+#SettingsColumnCheck[displayValue="1"] {
+  background-color: rgba(43, 166, 255, 46);
+  border-color: #1f7fd0;
+  color: #a6dbff;
+}
+
+#SettingsSegmentLeft:disabled,
+#SettingsSegmentMid:disabled,
+#SettingsSegmentRight:disabled,
+#SettingsActionButton:disabled,
+#SettingsPrimaryButton:disabled {
+  background-color: #131415;
+  border-color: #242528;
+  color: #4a4d51;
+}
+
+#FxPanel_TabBar WPushButton[value="1"],
+#SettingsSubtabBar WPushButton[value="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+  border: 0;
+}
+
+/************************************************************************/
+/*     Four decks ([Skin],show_4decks)                                  */
+/************************************************************************/
+
+#CuePanel_Decks,
+#LibraryDecks {
+  background-color: #0b0c0d;
+}
+
+#DeckStrip {
+  background-color: #1a1b1d;
+  border: 1px solid #2c2d30;
+  border-radius: 9px;
+  margin: 1px 3px;
+}
+
+#DeckStripRow {
+  qproperty-layoutSpacing: 6;
+}
+
+#DeckStripTitle {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#DeckStripKey {
+  background-color: #0b0c0d;
+  border-radius: 6px;
+  color: #7ee787;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+#DeckStripBpm {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#DeckStripTime {
+  color: #c4c5c8;
+  font-size: 14px;
+}
+
+#DeckStrip #MixerDeckNumber1,
+#DeckStrip #MixerDeckNumber2,
+#DeckStrip #MixerDeckNumber3,
+#DeckStrip #MixerDeckNumber4 {
+  border-radius: 7px;
+  font-size: 14px;
+}
+
+#MixerDeckNumber3 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3fe0b0, stop:1 #0a9f78);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+#MixerMode3 {
+  background-color: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: #808288;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerMode3[value="1"] {
+  background-color: rgba(47, 214, 162, 46);
+  border: 0;
+  color: #7ff0cf;
+}
+
+#MixerDeck3 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #222326, stop:1 #151618);
+  border: 1px solid #2c2d30;
+  border-radius: 14px;
+  qproperty-layoutContentsMargins: rect(4 4 4 4);
+  qproperty-layoutSpacing: 8;
+}
+
+#MixerTransport3 {
+  qproperty-layoutSpacing: 8;
+  qproperty-layoutAlignment: 'AlignVCenter';
+}
+
+#MixerDeck3 #MixerSide[displayValue="1"] {
+  background-color: rgba(47, 214, 162, 46);
+  border-color: #1a9c77;
+  color: #7ff0cf;
+}
+
+#MixerDeck3 #MixerPad[displayValue="1"],
+#MixerTransport3 #MixerTransportSync[value="1"],
+#MixerTransport3 #MixerLoopOn,
+#BeatFX_DeckAssign3[displayValue="1"],
+#Grid_DeckTab3[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3fe0b0, stop:1 #0a9f78);
+  border-color: #9ff5dc;
+  color: #ffffff;
+}
+
+#Waveform_Channel3 #WaveformInfo_Header {
+  background-color: rgba(47, 214, 162, 40);
+}
+
+#Waveform_Channel3 #WaveformInfo_Header[highlight="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3fe0b0, stop:1 #0a9f78);
+}
+
+#KeyFX_DeckLabel_3 {
+  color: #7ff0cf;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#TrackInfoLoad3 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3fe0b0, stop:1 #0a9f78);
+  border: 0;
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerDeckNumber4 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff6b7d, stop:1 #d81e3a);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+#MixerMode4 {
+  background-color: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: #808288;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#MixerMode4[value="1"] {
+  background-color: rgba(255, 82, 104, 46);
+  border: 0;
+  color: #ff9fab;
+}
+
+#MixerDeck4 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #222326, stop:1 #151618);
+  border: 1px solid #2c2d30;
+  border-radius: 14px;
+  qproperty-layoutContentsMargins: rect(4 4 4 4);
+  qproperty-layoutSpacing: 8;
+}
+
+#MixerTransport4 {
+  qproperty-layoutSpacing: 8;
+  qproperty-layoutAlignment: 'AlignVCenter';
+}
+
+#MixerDeck4 #MixerSide[displayValue="1"] {
+  background-color: rgba(255, 82, 104, 46);
+  border-color: #b8344a;
+  color: #ff9fab;
+}
+
+#MixerDeck4 #MixerPad[displayValue="1"],
+#MixerTransport4 #MixerTransportSync[value="1"],
+#MixerTransport4 #MixerLoopOn,
+#BeatFX_DeckAssign4[displayValue="1"],
+#Grid_DeckTab4[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff6b7d, stop:1 #d81e3a);
+  border-color: #ffb3bd;
+  color: #ffffff;
+}
+
+#Waveform_Channel4 #WaveformInfo_Header {
+  background-color: rgba(255, 82, 104, 40);
+}
+
+#Waveform_Channel4 #WaveformInfo_Header[highlight="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff6b7d, stop:1 #d81e3a);
+}
+
+#KeyFX_DeckLabel_4 {
+  color: #ff9fab;
+  font-size: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#TrackInfoLoad4 {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff6b7d, stop:1 #d81e3a);
+  border: 0;
+  border-radius: 14px;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#BeatFX_DeckAssign3[displayValue="0"],
+#BeatFX_DeckAssign4[displayValue="0"],
+#Grid_DeckTab3[displayValue="0"],
+#Grid_DeckTab4[displayValue="0"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #343539, stop:1 #2a2b2e);
+  border: 1px solid #3f4146;
+  border-radius: 9px;
+  color: #c4c5c8;
+}
+
+#BeatFX_DeckAssign3,
+#BeatFX_DeckAssign4,
+#Grid_DeckTab3,
+#Grid_DeckTab4 {
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* Deck switch of the MIXER page: which deck is on this side */
+#MixerDeckSwitch {
+  background-color: #0b0c0d;
+  border-radius: 10px;
+}
+
+#MixerSwitch1,
+#MixerSwitch2,
+#MixerSwitch3,
+#MixerSwitch4 {
+  background-color: transparent;
+  border: 0;
+  border-radius: 9px;
+  color: #808288;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#MixerSwitch1[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #39b1ff, stop:1 #0a78e6);
+  color: #ffffff;
+}
+
+#MixerStripNumber1 {
+  color: #39b1ff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#MixerSwitch2[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff9d3a, stop:1 #f0590c);
+  color: #ffffff;
+}
+
+#MixerStripNumber2 {
+  color: #ff9d3a;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#MixerSwitch3[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3fe0b0, stop:1 #0a9f78);
+  color: #ffffff;
+}
+
+#MixerStripNumber3 {
+  color: #3fe0b0;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#MixerSwitch4[displayValue="1"] {
+  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #ff6b7d, stop:1 #d81e3a);
+  color: #ffffff;
+}
+
+#MixerStripNumber4 {
+  color: #ff6b7d;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#MixerFaders {
+  qproperty-layoutSpacing: 3;
+}
+
+#MixerWaveRows {
+  qproperty-layoutSpacing: 2;
+}
+
+#LibraryWrapper WTrackTableViewHeader,
+#LibraryWrapper QHeaderView {
+  color: #9b9ca1;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+#TrackInfoCover {
+  margin: 0;
+}
+
+#MixerJogNarrow {
+  qproperty-layoutSpacing: 6;
+}
+
+#MixerJogNarrow #MixerSide {
+  font-size: 11px;
+}
+
+#MixerTransport1 {
+  qproperty-layoutSpacing: 5;
+}
+
+#MixerTransport2 {
+  qproperty-layoutSpacing: 5;
+}
+
+#MixerTransport3 {
+  qproperty-layoutSpacing: 5;
+}
+
+#MixerTransport4 {
+  qproperty-layoutSpacing: 5;
+}
+
+#WaveformInfo_Key_Container {
+  qproperty-layoutContentsMargins: rect(6 2 2 2);
 }

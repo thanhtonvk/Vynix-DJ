@@ -2522,14 +2522,13 @@ class S4Mk3Deck extends Deck {
                     // FIXME there is a bug where this action has no effect when the Mixxx window has no focused. https://github.com/mixxxdj/mixxx/issues/11285
                     // As a workaround, we are using deprecated control, hoping the bug will be fixed before the controls get removed
                     const currentlyFocusWidget = engine.getValue("[Library]", "focused_widget");
-                    if (currentlyFocusWidget === 0) {
-                        if (this.shifted) {
-                            script.triggerControl("[Playlist]", right ? "SelectNextPlaylist" : "SelectPrevPlaylist");
-                        } else {
-                            script.triggerControl("[Playlist]", right ? "SelectNextTrack" : "SelectPrevTrack");
-                        }
+                    if (this.shifted) {
+                        // Waveform zoom with the Vynix DJ skin
+                        engine.setValue("[Library]", "ScrollVertical", right ? 1 : -1);
+                    } else if (currentlyFocusWidget === 0) {
+                        script.triggerControl("[Playlist]", right ? "SelectNextTrack" : "SelectPrevTrack");
                     } else {
-                        engine.setValue("[Library]", "focused_widget", this.shifted ? 2 : 3);
+                        engine.setValue("[Library]", "focused_widget", 3);
                         engine.setValue("[Library]", this.deck.turntableButton.pressed ? "ScrollVertical" : "MoveVertical", right ? 1 : -1);
                     }
                 }

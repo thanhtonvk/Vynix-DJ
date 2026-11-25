@@ -53,6 +53,7 @@
 #include "widget/weffectpushbutton.h"
 #include "widget/weffectselector.h"
 #include "widget/whotcuebutton.h"
+#include "widget/wjogwheel.h"
 #include "widget/wkey.h"
 #include "widget/wknob.h"
 #include "widget/wknobcomposed.h"
@@ -602,6 +603,8 @@ QList<QWidget*> LegacySkinParser::parseNode(const QDomElement& node) {
         result = wrapWidget(parseStandardWidget<WKnobComposed>(node));
     } else if (nodeName == "TableView") {
         result = wrapWidget(parseTableView(node));
+    } else if (nodeName == "JogWheel") {
+        result = wrapWidget(parseJogWheel(node));
     } else if (nodeName == "CoverArt") {
         result = wrapWidget(parseCoverArt(node));
     } else if (nodeName == "SearchBox") {
@@ -1495,7 +1498,13 @@ QWidget* LegacySkinParser::parseVuMeter(const QDomElement& node) {
     }
 #endif
     auto* pWaveformWidgetFactory = WaveformWidgetFactory::instance();
-    if (CmdlineArgs::Instance().getUseLegacyVuMeter() ||
+#ifdef __ANDROID__
+    // OpenGL child windows are not composed with the raster widgets there
+    constexpr bool forceLegacy = true;
+#else
+    constexpr bool forceLegacy = false;
+#endif
+    if (forceLegacy || CmdlineArgs::Instance().getUseLegacyVuMeter() ||
             (!pWaveformWidgetFactory->isOpenGlAvailable() &&
                     !pWaveformWidgetFactory->isOpenGlesAvailable())) {
         // Legacy WVuMeter
@@ -1573,6 +1582,25 @@ QWidget* LegacySkinParser::parseSearchBox(const QDomElement& node) {
     m_pLibrary->bindSearchboxWidget(pLineEditSearch);
 
     return pLineEditSearch;
+}
+
+QWidget* LegacySkinParser::parseJogWheel(const QDomElement& node) {
+    const QString group = lookupNodeGroup(node);
+    BaseTrackPlayer* pPlayer = m_pPlayerManager->getPlayer(group);
+    if (!pPlayer) {
+        SKIN_WARNING(node,
+                *m_pContext,
+                QStringLiteral("No player found for group: %1").arg(group));
+        return nullptr;
+    }
+    auto* pJogWheel = new WJogWheel(m_pParent, group, pPlayer);
+    commonWidgetSetup(node, pJogWheel);
+    pJogWheel->setup(node, *m_pContext);
+    connect(WaveformWidgetFactory::instance(),
+            &WaveformWidgetFactory::waveformUpdateTick,
+            pJogWheel,
+            &WJogWheel::slotRenderTick);
+    return pJogWheel;
 }
 
 QWidget* LegacySkinParser::parseCoverArt(const QDomElement& node) {

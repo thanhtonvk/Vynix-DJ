@@ -1,0 +1,66 @@
+<!--
+  Deck strips below the waveforms (PLAY) and the library (BROWSE): the two
+  large ones of deck.xml, or with [Skin],show_4decks one line for each of the
+  four decks.
+-->
+<Template>
+  <WidgetGroup>
+    <ObjectName>DecksAny</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+      <WidgetGroup>
+        <ObjectName>Decks</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,me</SizePolicy>
+        <Children>
+          <Template src="skin:deck.xml">
+            <SetVariable name="channel">1</SetVariable>
+          </Template>
+          <Template src="skin:deck.xml">
+            <SetVariable name="channel">2</SetVariable>
+          </Template>
+        </Children>
+        <Connection>
+          <ConfigKey>[Skin],show_4decks</ConfigKey>
+          <BindProperty>visible</BindProperty>
+          <Transform><Not/></Transform>
+        </Connection>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>DeckStripPair</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <Template src="skin:templates/deck_strip.xml">
+            <SetVariable name="channel">1</SetVariable>
+          </Template>
+          <Template src="skin:templates/deck_strip.xml">
+            <SetVariable name="channel">2</SetVariable>
+          </Template>
+        </Children>
+        <Connection>
+          <ConfigKey>[Skin],show_4decks</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>DeckStripPair</ObjectName>
+        <Layout>horizontal</Layout>
+        <SizePolicy>me,min</SizePolicy>
+        <Children>
+          <Template src="skin:templates/deck_strip.xml">
+            <SetVariable name="channel">3</SetVariable>
+          </Template>
+          <Template src="skin:templates/deck_strip.xml">
+            <SetVariable name="channel">4</SetVariable>
+          </Template>
+        </Children>
+        <Connection>
+          <ConfigKey>[Skin],show_4decks</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup>
+    </Children>
+  </WidgetGroup>
+</Template>

@@ -1,0 +1,8 @@
+{
+  global:
+    main;
+    JNI_OnLoad;
+    Java_*;
+  local:
+    *;
+};

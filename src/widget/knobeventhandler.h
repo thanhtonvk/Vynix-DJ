@@ -1,9 +1,12 @@
 #pragma once
 
 #include <QCursor>
+#include <QElapsedTimer>
+#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPoint>
+#include <QStyleHints>
 #include <QTimer>
 #include <QWheelEvent>
 
@@ -74,6 +77,17 @@ class KnobEventHandler {
                 m_startPos = e->globalPos();
 #endif
                 m_prevPos = m_startPos;
+                // Touch screens do not send double clicks, see WWidget::event()
+                if (m_lastPressTimer.isValid() &&
+                        m_lastPressTimer.elapsed() <
+                                QGuiApplication::styleHints()->mouseDoubleClickInterval() &&
+                        (m_startPos - m_lastPressPos).manhattanLength() < 40) {
+                    m_lastPressTimer.invalidate();
+                    pWidget->resetControlParameter();
+                } else {
+                    m_lastPressTimer.start();
+                }
+                m_lastPressPos = m_startPos;
                 // Somehow using Qt::BlankCursor does not work on Windows
                 // https://mixxx.org/forums/viewtopic.php?p=40298#p40298
                 pWidget->setCursor(m_blankCursor);
@@ -151,6 +165,8 @@ class KnobEventHandler {
     // Starting point when left mouse button is pressed
     QPoint m_startPos;
     QPoint m_prevPos;
+    QPoint m_lastPressPos;
+    QElapsedTimer m_lastPressTimer;
     QCursor m_blankCursor;
     QTimer* m_pWheelCursorTimer;
 };

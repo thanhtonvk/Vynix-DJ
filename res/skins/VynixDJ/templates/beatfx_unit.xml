@@ -103,6 +103,37 @@
               </PushButton>
             </Children>
           </WidgetGroup>
+          <WidgetGroup>
+            <ObjectName>BeatFX_DeckRouting</ObjectName>
+            <Layout>horizontal</Layout>
+            <Size>0me,40f</Size>
+            <Children>
+              <PushButton>
+                <ObjectName>BeatFX_DeckAssign3</ObjectName>
+                <Size>0me,40f</Size>
+                <NumberStates>2</NumberStates>
+                <State><Number>0</Number><Text>Deck 3</Text></State>
+                <State><Number>1</Number><Text>Deck 3</Text></State>
+                <Connection>
+                  <ConfigKey><Variable name="UnitGroup"/>,group_[Channel3]_enable</ConfigKey>
+                </Connection>
+              </PushButton>
+              <PushButton>
+                <ObjectName>BeatFX_DeckAssign4</ObjectName>
+                <Size>0me,40f</Size>
+                <NumberStates>2</NumberStates>
+                <State><Number>0</Number><Text>Deck 4</Text></State>
+                <State><Number>1</Number><Text>Deck 4</Text></State>
+                <Connection>
+                  <ConfigKey><Variable name="UnitGroup"/>,group_[Channel4]_enable</ConfigKey>
+                </Connection>
+              </PushButton>
+            </Children>
+            <Connection>
+              <ConfigKey>[Skin],show_4decks</ConfigKey>
+              <BindProperty>visible</BindProperty>
+            </Connection>
+          </WidgetGroup>
 
           <!-- The effect's on/off switch gets its own full-width row: next
                to the deck buttons it read as a third routing choice. -->

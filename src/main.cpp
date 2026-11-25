@@ -4,7 +4,6 @@
 #include <QString>
 #include <QStringList>
 #include <QStyle>
-#include <QTextCodec>
 #include <QThread>
 #include <QtDebug>
 #include <QtGlobal>
@@ -266,7 +265,12 @@ void adjustScaleFactor(CmdlineArgs* pArgs) {
         return;
     }
 #ifdef Q_OS_ANDROID
-    if (!pArgs->isQml()) {
+#ifdef MIXXX_USE_QML
+    const bool legacySkin = !pArgs->isQml();
+#else
+    constexpr bool legacySkin = true;
+#endif
+    if (legacySkin) {
         QString skinName = config.getValueString(
                 ConfigKey(kConfigGroup, QStringLiteral("ResizableSkin")));
         if (skinName.isEmpty()) {

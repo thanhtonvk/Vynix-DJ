@@ -520,7 +520,8 @@ TraktorS2MK3.selectTrackHandler = function(field) {
     }
 
     if (TraktorS2MK3.shiftPressed[field.group]) {
-        engine.setValue("[Library]", "MoveHorizontal", delta);
+        // Waveform zoom with the Vynix DJ skin
+        engine.setValue("[Library]", "ScrollVertical", delta);
     } else {
         engine.setValue("[Library]", "MoveVertical", delta);
     }

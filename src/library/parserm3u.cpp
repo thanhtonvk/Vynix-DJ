@@ -16,16 +16,66 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QRegularExpression>
-#include <QTextCodec>
 #include <QUrl>
 #include <QtDebug>
+#include <algorithm>
+#include <array>
 
 #include "errordialoghandler.h"
 
 namespace {
 // according to http://en.wikipedia.org/wiki/M3U the default encoding of m3u is Windows-1252
 // see also http://tools.ietf.org/html/draft-pantos-http-live-streaming-07
-const char kStandardM3uTextEncoding[] = "Windows-1250";
+
+/// Unicode code points of the upper half of the Windows-1250 code page, the
+/// standard encoding of .m3u files. Qt only provides this codec in Qt5Compat
+/// or if it has been built with ICU.
+constexpr std::array<char16_t, 128> kWindows1250 = {
+        0x20AC, 0x0081, 0x201A, 0x0083, 0x201E, 0x2026, 0x2020, 0x2021,
+        0x0088, 0x2030, 0x0160, 0x2039, 0x015A, 0x0164, 0x017D, 0x0179,
+        0x0090, 0x2018, 0x2019, 0x201C, 0x201D, 0x2022, 0x2013, 0x2014,
+        0x0098, 0x2122, 0x0161, 0x203A, 0x015B, 0x0165, 0x017E, 0x017A,
+        0x00A0, 0x02C7, 0x02D8, 0x0141, 0x00A4, 0x0104, 0x00A6, 0x00A7,
+        0x00A8, 0x00A9, 0x015E, 0x00AB, 0x00AC, 0x00AD, 0x00AE, 0x017B,
+        0x00B0, 0x00B1, 0x02DB, 0x0142, 0x00B4, 0x00B5, 0x00B6, 0x00B7,
+        0x00B8, 0x0105, 0x015F, 0x00BB, 0x013D, 0x02DD, 0x013E, 0x017C,
+        0x0154, 0x00C1, 0x00C2, 0x0102, 0x00C4, 0x0139, 0x0106, 0x00C7,
+        0x010C, 0x00C9, 0x0118, 0x00CB, 0x011A, 0x00CD, 0x00CE, 0x010E,
+        0x0110, 0x0143, 0x0147, 0x00D3, 0x00D4, 0x0150, 0x00D6, 0x00D7,
+        0x0158, 0x016E, 0x00DA, 0x0170, 0x00DC, 0x00DD, 0x0162, 0x00DF,
+        0x0155, 0x00E1, 0x00E2, 0x0103, 0x00E4, 0x013A, 0x0107, 0x00E7,
+        0x010D, 0x00E9, 0x0119, 0x00EB, 0x011B, 0x00ED, 0x00EE, 0x010F,
+        0x0111, 0x0144, 0x0148, 0x00F3, 0x00F4, 0x0151, 0x00F6, 0x00F7,
+        0x0159, 0x016F, 0x00FA, 0x0171, 0x00FC, 0x00FD, 0x0163, 0x02D9,
+};
+
+QString fromWindows1250(const QByteArray& bytes) {
+    QString result;
+    result.reserve(bytes.size());
+    for (const char c : bytes) {
+        const auto byte = static_cast<unsigned char>(c);
+        result.append(byte < 0x80 ? QChar(byte) : QChar(kWindows1250[byte - 0x80]));
+    }
+    return result;
+}
+
+/// Characters that are not available in the code page are replaced by '?'
+QByteArray toWindows1250(const QString& string) {
+    QByteArray result;
+    result.reserve(string.size());
+    for (const QChar c : string) {
+        if (c.unicode() < 0x80) {
+            result.append(static_cast<char>(c.unicode()));
+            continue;
+        }
+        const auto it = std::find(
+                kWindows1250.cbegin(), kWindows1250.cend(), c.unicode());
+        result.append(it == kWindows1250.cend()
+                        ? '?'
+                        : static_cast<char>(0x80 + (it - kWindows1250.cbegin())));
+    }
+    return result;
+}
 const char kM3uHeader[] = "#EXTM3U";
 const char kM3uCommentPrefix[] = "#";
 // Note: The RegEx pattern is compiled, when first used the first time
@@ -70,9 +120,7 @@ QList<QString> ParserM3u::parseAllLocations(const QString& playlistFile) {
     if (Parser::isUtf8(byteArray.constData())) {
         fileContents = QString::fromUtf8(byteArray);
     } else {
-        // FIXME: replace deprecated QTextCodec with direct usage of libicu
-        fileContents = QTextCodec::codecForName(kStandardM3uTextEncoding)
-                               ->toUnicode(byteArray);
+        fileContents = fromWindows1250(byteArray);
     }
 
     if (!fileContents.startsWith(kM3uHeader)) {
@@ -105,7 +153,6 @@ bool ParserM3u::writeM3UFile(const QString &file_str, const QList<QString> &item
     // On Linux and OS X \n is <CR> (which remains \n)
     bool urlEncodingUsed = false;
     QDir baseDirectory(QFileInfo(file_str).canonicalPath());
-    QTextCodec* codec = QTextCodec::codecForName(kStandardM3uTextEncoding);
     QString fileContents(QStringLiteral("#EXTM3U\n"));
     for (const QString& item : items) {
         fileContents += QStringLiteral("#EXTINF\n");
@@ -116,8 +163,7 @@ bool ParserM3u::writeM3UFile(const QString &file_str, const QList<QString> &item
                 fileContents += item + QStringLiteral("\n");
             }
         } else {
-            QByteArray trackByteArray = codec->fromUnicode(item);
-            QString trackName = codec->toUnicode(trackByteArray);
+            const QString trackName = fromWindows1250(toWindows1250(item));
             if (trackName == item) {
                 if (useRelativePath) { //Issue: URL Location is not working properly for Relative Paths
                     fileContents += baseDirectory.relativeFilePath(item) + QStringLiteral("\n");
@@ -137,9 +183,7 @@ bool ParserM3u::writeM3UFile(const QString &file_str, const QList<QString> &item
     if (useUtf8) {
         outputByteArray = fileContents.toUtf8();
     } else {
-        // FIXME: replace deprecated QTextCodec with direct usage of libicu
-        outputByteArray = QTextCodec::codecForName(kStandardM3uTextEncoding)
-                                  ->fromUnicode(fileContents);
+        outputByteArray = toWindows1250(fileContents);
     }
 
     QFile file(file_str);

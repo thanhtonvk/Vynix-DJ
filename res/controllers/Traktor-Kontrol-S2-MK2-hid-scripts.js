@@ -1274,7 +1274,9 @@ TraktorS2MK2.browseEncoder = function(field) {
     TraktorS2MK2.previousBrowse = field.value;
 
     if (TraktorS2MK2.shiftPressed["[Channel1]"] || TraktorS2MK2.shiftPressed["[Channel2]"]) {
-        delta *= 5;
+        // Waveform zoom with the Vynix DJ skin
+        engine.setValue("[Library]", "ScrollVertical", delta);
+        return;
     }
     engine.setValue("[Playlist]", "SelectTrackKnob", delta);
 };

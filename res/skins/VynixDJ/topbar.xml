@@ -25,6 +25,46 @@
             <SetVariable name="tab_name">Settings</SetVariable>
             <SetVariable name="config_key">settings</SetVariable>
           </Template>
+          <!-- Recording, on every page. The time shows the length of the
+               running recording. -->
+          <WidgetGroup>
+            <ObjectName>TopbarRec</ObjectName>
+            <Layout>horizontal</Layout>
+            <!-- Fixed width, so the tabs do not move when recording starts -->
+            <Size>176f,0me</Size>
+            <Children>
+              <PushButton>
+                <ObjectName>TopbarRecButton</ObjectName>
+                <Size>84f,40f</Size>
+                <TooltipId>toggle_recording</TooltipId>
+                <NumberStates>2</NumberStates>
+                <State><Number>0</Number><Text>● Rec</Text></State>
+                <State><Number>1</Number><Text>■ Stop</Text></State>
+                <Connection>
+                  <ConfigKey>[Recording],toggle_recording</ConfigKey>
+                  <ButtonState>LeftButton</ButtonState>
+                  <ConnectValueToWidget>false</ConnectValueToWidget>
+                </Connection>
+                <Connection>
+                  <ConfigKey>[Recording],status</ConfigKey>
+                  <Transform><Not/><Not/></Transform>
+                  <ConnectValueFromWidget>false</ConnectValueFromWidget>
+                </Connection>
+              </PushButton>
+              <RecordingDuration>
+                <ObjectName>TopbarRecTime</ObjectName>
+                <Size>78f,40f</Size>
+                <InactiveText>00:00</InactiveText>
+                <Alignment>center</Alignment>
+                <Connection>
+                  <ConfigKey>[Recording],status</ConfigKey>
+                  <Transform><Not/><Not/></Transform>
+                  <BindProperty>visible</BindProperty>
+                </Connection>
+              </RecordingDuration>
+              <WidgetGroup><Size>0me,0me</Size></WidgetGroup>
+            </Children>
+          </WidgetGroup>
         </Children>
       </WidgetGroup>
     </Children>

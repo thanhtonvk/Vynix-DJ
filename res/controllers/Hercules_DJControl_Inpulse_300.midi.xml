@@ -2652,8 +2652,8 @@
 			<!--Browser encoder-->
 			<control>
 				<group>[Library]</group>
-				<key>MoveHorizontal</key>
-				<description>Move Horizontal (Browser Knob)</description>
+				<key>ScrollVertical</key>
+				<description>Scroll Vertical (SHIFT + Browser Knob), waveform zoom with the Vynix DJ skin</description>
 				<status>0xB3</status>
 				<midino>0x01</midino>
 				<options>

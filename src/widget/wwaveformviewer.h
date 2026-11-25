@@ -28,6 +28,8 @@ class WWaveformViewer : public WWidget, public TrackDropTarget {
 
     bool handleDragAndDropEventFromWindow(QEvent* pEvent) override;
 
+    bool handleTouchEventFromWindow(QEvent* pEvent) override;
+
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
@@ -98,4 +100,6 @@ class WWaveformViewer : public WWidget, public TrackDropTarget {
     void highlightMark(WaveformMarkPointer pMark);
     void unhighlightMark(WaveformMarkPointer pMark);
     bool isPlaying() const;
+    /// Two finger zoom, returns true if the touch event has been handled
+    bool handlePinch(QEvent* pEvent);
 };

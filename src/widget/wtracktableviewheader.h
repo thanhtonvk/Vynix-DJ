@@ -112,6 +112,7 @@ class WTrackTableViewHeader : public QHeaderView {
     TrackModel* getTrackModel();
 
     void setHeightForFont();
+    void resizeShortValueColumns();
 
     QMenu m_menu;
     QMap<int, QCheckBox*> m_columnCheckBoxes;

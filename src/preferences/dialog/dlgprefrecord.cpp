@@ -9,6 +9,7 @@
 #include "encoder/encodermp3settings.h"
 #include "moc_dlgprefrecord.cpp"
 #include "recording/defs_recording.h"
+#include "recording/recordingmanager.h"
 #include "util/sandbox.h"
 
 namespace {
@@ -33,9 +34,7 @@ DlgPrefRecord::DlgPrefRecord(QWidget* parent, UserSettingsPointer pConfig)
     if (recordingsPath.isEmpty()) {
         // Initialize recordings path in config to old default path.
         // Do it here so we show current value in UI correctly.
-        QString musicDir = QStandardPaths::writableLocation(QStandardPaths::MusicLocation);
-        QDir recordDir(musicDir + "/Mixxx/Recordings");
-        recordingsPath = recordDir.absolutePath();
+        recordingsPath = RecordingManager::defaultRecordingDir();
         m_pConfig->setValue(ConfigKey(RECORDING_PREF_KEY, "Directory"), recordingsPath);
     }
     LineEditRecordings->setText(recordingsPath);

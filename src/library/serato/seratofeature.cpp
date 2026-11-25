@@ -3,7 +3,7 @@
 #include <QBuffer>
 #include <QMap>
 #include <QStandardPaths>
-#include <QTextCodec>
+#include <QStringDecoder>
 #include <QtConcurrentRun>
 #include <QtDebug>
 #include <QtEndian>
@@ -128,7 +128,10 @@ int insertTrackIntoPlaylist(const QSqlDatabase& database, int playlistId, int tr
 }
 
 inline QString utf16beToQString(const QByteArray& data, const quint32 size) {
-    return QTextCodec::codecForName("UTF-16BE")->toUnicode(data, size);
+    QStringDecoder decoder(QStringDecoder::Utf16BE);
+    // The size in a damaged file may exceed the data
+    return decoder(QByteArrayView(data).first(
+            qMin(static_cast<qsizetype>(size), data.size())));
 }
 
 inline bool bytesToBoolean(const QByteArray& data) {

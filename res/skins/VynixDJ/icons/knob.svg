@@ -1,6 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <circle cx="32" cy="32" r="26" fill="#1a1a1a" stroke="#3a3a3a" stroke-width="2"/>
-  <circle cx="32" cy="32" r="22" fill="#262626"/>
-  <line x1="32" y1="14" x2="32" y2="22" stroke="#f15921" stroke-width="3" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="6 6 52 52" width="64" height="64">
+  <defs>
+    <radialGradient id="shadow" cx="32" cy="32" r="25" gradientUnits="userSpaceOnUse">
+      <stop offset="0.8" stop-color="#000000" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="rim" cx="32" cy="32" r="21" gradientUnits="userSpaceOnUse">
+      <stop offset="0.74" stop-color="#323436"/>
+      <stop offset="0.92" stop-color="#52555a"/>
+      <stop offset="1" stop-color="#2b2d2f"/>
+    </radialGradient>
+    <radialGradient id="face" cx="32" cy="32" r="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#434549"/>
+      <stop offset="1" stop-color="#2e3032"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="25" fill="url(#shadow)"/>
+  <circle cx="32" cy="32" r="20.5" fill="url(#rim)"/>
+  <circle cx="32" cy="32" r="16" fill="url(#face)"/>
+  <line x1="32" y1="13.5" x2="32" y2="23" stroke="#ff8522" stroke-width="3.4" stroke-linecap="round"/>
 </svg>

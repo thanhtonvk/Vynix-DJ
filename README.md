@@ -38,8 +38,8 @@ complete DJ system.
 - **Your existing library.** Play from local folders or from Rekordbox USB drives with
   their playlists, cues, loops and beatgrids.
 
-> **Two decks.** Vynix DJ currently supports **2 decks**. Controllers with four decks
-> work, but only decks 1 and 2 are shown and mixed in the interface.
+> **Two or four decks.** Switch in **SETTINGS → GENERAL → DECKS**. Two decks is the
+> default and fits small screens best.
 
 ## Build ideas
 
@@ -52,19 +52,30 @@ complete DJ system.
 
 ## Features
 
-**Decks**
-- Two decks with colored waveforms (RGB / Filtered / HSV), beatgrids, cues, hot cues
-  and loops.
-- Two-finger pinch zoom on the waveforms.
+**Decks** (PLAY tab)
+- Two or four decks with colored waveforms (RGB / Filtered / HSV), beatgrids, cues, hot
+  cues and loops.
+- Waveform zoom: two-finger pinch, or Shift + browse knob on many controllers.
 - Touch interface that scales to phone, tablet and desktop screens, truly full screen,
   including the camera cutout (notch) area on phones.
 
-**Mixer** (MIXER tab)
-- GAIN, tempo fader with pitch % and 0 % reset, channel faders, LOW / MID / HI EQ
-  and FX faders, master VU meter, CUE / PLAY / SYNC and crossfader for both decks.
+**Mixer** (MIXER tab), laid out like DJ apps for phones and tablets
+- Turntables with the cover art: drag the record to scratch, the outer ring to nudge.
+  The ring around it shows the position in the track.
+- Each deck switches between turntable, 8 hot cues, loops and beat jumps, effects, key
+  (shift, key lock, match) and 8 sample pads.
+- GAIN, HI / MID / LOW EQ and FX knobs, channel and tempo faders, VU meters, crossfader,
+  CUE / PLAY / SYNC and a loop of adjustable size. Tap a knob twice to reset it.
+- Scrolling waveforms, overview, key, BPM and time of the decks on the same page.
+- With four decks: four waveforms, volume faders and VU meters, **1 | 3** and **2 | 4**
+  choose the deck on each side.
 - **Sound Color FX** like on Pioneer XDJ mixers: FILTER, SPACE, DUB ECHO, SWEEP, NOISE
-  and CRUSH choose the effect of the FX fader of both decks.
-- Tap an EQ or FX fader twice to center it.
+  and CRUSH choose the effect of the FX knobs of all decks.
+
+**Recording**
+- **REC** on top of every page records the mix as MP3, WAV or FLAC. On Android the
+  recordings are saved in `Music/Vynix DJ` and show up in other music apps, on computers
+  in `Music/Vynix DJ/Recordings`.
 
 **Beat FX** (PLAY tab)
 - Hardware-style effect unit: pick an effect from a full-screen picker, turn it on and
@@ -74,7 +85,7 @@ complete DJ system.
 
 **Library**
 - Music folders on the device or computer, with search and a track info panel: cover
-  art, BPM, key, duration, overview waveform and LOAD 1 / LOAD 2 buttons.
+  art, BPM, key, duration, overview waveform and a LOAD button for each deck.
 - Rekordbox USB drives: playlists, cues, loops and beatgrids from drives exported with
   Rekordbox. Rekordbox and Serato are listed right after Tracks.
 
@@ -85,8 +96,9 @@ complete DJ system.
   Denon MC, Numark, Hercules, Roland, …).
 - Import mappings from the community (`.xml`, `.js` or a `.zip` with both) right in
   the app, also on Android where the mapping folder cannot be opened.
-- Controller-first browsing: turning the browse knob opens the library, loading a track
-  returns to the decks.
+- Controller-first browsing: turning the browse knob opens the library, pressing it
+  opens folders and playlists, the back button leaves them, and loading a track returns
+  to the decks.
 
 **Settings**
 - In-app settings pages for touch screens, plus the full Preferences dialog with large
@@ -108,7 +120,7 @@ Download the package for your platform from the
 | Platform | File |
 |---|---|
 | Android | `VynixDJ-<version>-android-arm64.apk` |
-| Windows | `VynixDJ-<version>-windows-x64.zip` |
+| Windows | `VynixDJ-<version>-windows-x64.msi` |
 | Linux (PC) | `VynixDJ-<version>-linux-x64.deb` |
 | Linux (ARM64, e.g. Raspberry Pi) | `VynixDJ-<version>-linux-arm64.deb` |
 | macOS (Apple Silicon) | `VynixDJ-<version>-macos-arm64.dmg` |
@@ -117,7 +129,9 @@ Download the package for your platform from the
 or install it from a computer with `adb install VynixDJ-<version>-android-arm64.apk`.
 Launch Vynix DJ and grant file access when asked.
 
-**Windows:** unzip the archive and run `VynixDJ.exe`.
+**Windows:** open the MSI and follow the installer, then start Vynix DJ from the Start
+menu or the desktop. The installer is not signed: if SmartScreen blocks it, choose
+**More info** → **Run anyway**. It does not touch an installed Mixxx.
 
 **Linux:** `sudo apt install ./VynixDJ-<version>-linux-x64.deb` (or the ARM64 package),
 then start Vynix DJ from the applications menu.
@@ -146,18 +160,24 @@ with an Apple Developer ID, so macOS blocks it the first time: right-click the a
 - To add another folder: **SETTINGS → DEVICE → Music library → OPEN → Add**.
 - Open **BROWSE → TRACKS** (or turn the browse knob), select a track and press
   **LOAD 1** / **LOAD 2**, double-tap it, or use the load buttons of the controller.
+- Four decks: **SETTINGS → GENERAL → DECKS → 4 DECKS**.
 
 **Mixing** (MIXER tab)
 
-- Tempo, volume, LOW / MID / HI and FX faders, GAIN knobs, CUE / PLAY / SYNC and the
-  crossfader for both decks.
-- The buttons in the middle choose the effect of the FX faders. The fader is off in the
-  center; FILTER cuts the highs or lows, the other effects grow to both sides.
+- Drag the record of a turntable to scratch, its outer ring to nudge.
+- The bar above a turntable switches to hot cues, loops and beat jumps, effects, key or
+  sample pads.
+- GAIN, HI / MID / LOW and FX knobs (tap one twice to reset it), tempo and volume
+  faders, CUE / PLAY / SYNC, a loop of adjustable size and the crossfader.
+- **FX → COLOR FX** chooses the effect of the FX knobs. The knob is off in the center;
+  FILTER cuts the highs or lows, the other effects grow to both sides.
+- With four decks, **1 | 3** and **2 | 4** choose the deck shown on each side.
+- **REC** on top records the mix. The format is in **SETTINGS → GENERAL → RECORDING**.
 
 **Beat FX** (PLAY tab, right panel)
 
 1. Tap the effect name to open the picker, then choose an effect.
-2. Select **Deck 1** / **Deck 2** to apply it to.
+2. Select the decks to apply it to.
 3. Press **FX ON**, then turn up **LEVEL** and set **BEAT**.
 4. One or two FX units: **SETTINGS → GENERAL → FX units**.
 
@@ -201,13 +221,13 @@ cmake -G Ninja \
       -DCMAKE_SYSTEM_NAME=Android \
       -DVCPKG_TARGET_TRIPLET=arm64-android \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DQT6=ON -DQML=ON -DHID=ON -DBULK=ON \
+      -DQT6=ON -DHID=ON -DBULK=ON \
       -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF \
       -DCMAKE_CXX_SCAN_FOR_MODULES=OFF \
       ..
 cmake --build . --parallel
 
-# The APK is written to:
+# The APK (about 57 MB) is written to:
 # build/android-build/build/outputs/apk/release/android-build-release-signed.apk
 ```
 
@@ -229,25 +249,32 @@ adb install -r build/android-build/build/outputs/apk/release/android-build-relea
 
 | Component | Main changes |
 |---|---|
-| `res/skins/VynixDJ/` | Touch skin: MIXER tab with Sound Color FX, Beat FX picker, track info panel |
+| `res/skins/VynixDJ/` | Touch skin: two or four decks, MIXER tab with turntables and Sound Color FX, Beat FX picker, track info panel |
 | `src/controllers/controllermanager.cpp` | Auto-enables new controllers and picks a mapping by name |
 | `src/controllers/controllermappingimport.*` | Import mapping files and ZIP archives into the user mapping folder |
 | `src/controllers/midi/androidmidi*` | Android MIDI backend (`android.media.midi`) |
 | `src/library/` | Controller-first browsing, search from the sidebar, Rekordbox / Serato first |
 | `src/effects/` | Beat FX knobs, `beat_period` control, BQ EQ as the default deck EQ |
-| `src/widget/` | Two-finger pinch zoom on waveforms, double-tap to center faders |
+| `src/widget/wjogwheel.*` | Touch turntable with scratching and nudging |
+| `src/widget/` | Two-finger pinch zoom on waveforms, double-tap to reset knobs and faders |
+| `src/mixer/playermanager.*` | Lighter track selection: delayed preview and analysis on slow computers |
+| `src/recording/` | Recording folder and format for touch skins |
 | `src/preferences/dialog/dlgpreferences.cpp` | Large-text Preferences with swipe scrolling |
 | `src/soundio/` | Detects the built-in speaker on Android, selects Oboe and a default output |
-| `packaging/android/src/com/tondz/vynixdj/` | `MidiBridge` (MIDI), `StorageVolumes` (USB drives), `MainActivity` (full screen) |
+| `packaging/android/src/com/tondz/vynixdj/` | `MidiBridge` (MIDI), `StorageVolumes` (USB drives), `Recordings` (media scan), `MainActivity` (full screen) |
+| `packaging/android/build.gradle`, `libmixxx.map` | Small APK: compressed libraries, no QML, unused code removed |
+| `packaging/wix/` | Windows MSI installer |
 | `src/util/androidlibccompat.c` | libc functions missing on Android 9–13 |
 
 It also includes several fixes for Mixxx on Android: a crash on launch on Android 9–13,
 empty waveforms, no audio output, Rekordbox USB drives not found, and effects and fonts
-not loading from the APK assets.
+not loading from the APK assets. On all platforms, unreadable or damaged files on
+Rekordbox USB drives no longer crash the app.
 
 ## Known limitations
 
-- Only **2 decks** are supported.
+- Four decks need a screen of tablet or laptop size to be comfortable.
+- The Windows and macOS packages are not signed.
 - Controllers with a built-in sound card (e.g. Denon MC7000) may only play the Master
   output on Android; separate headphone cueing is not supported there yet.
 - Controllers plugged in while the app is running are only detected after a restart.

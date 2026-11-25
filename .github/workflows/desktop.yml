@@ -5,6 +5,11 @@ on:
   push:
     tags:
       - "v*"
+    branches:
+      - main
+    paths:
+      - ".github/workflows/desktop.yml"
+      - "packaging/wix/**"
 
 permissions:
   contents: write
@@ -57,25 +62,52 @@ jobs:
           CC: cl
           CXX: cl
 
+      - name: Install WiX
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 4.0.6
+          "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+          & "$env:USERPROFILE\.dotnet\tools\wix.exe" extension add --global WixToolset.UI.wixext/4.0.6
+
       - name: Package
         working-directory: build
         shell: pwsh
         run: |
-          cpack -G ZIP -V
-          $zip = Get-ChildItem *.zip | Select-Object -First 1
-          # Tag v1.0.5 -> VynixDJ-1.0.5-windows-x64.zip, like the other packages
-          $version = "${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}".TrimStart('v')
-          Rename-Item $zip.FullName "VynixDJ-$version-windows-x64.zip"
+          # Tag v1.0.5 -> VynixDJ-1.0.5-windows-x64.msi, like the other packages
+          $tag = "${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}".TrimStart('v')
+          # Product version in the installer, must be numeric
+          $version = if ($tag -match '^\d+\.\d+\.\d+$') { $tag } else { '0.0.1' }
+          cpack -G WIX -V -R $version
+          if ($LASTEXITCODE -ne 0) {
+            Get-ChildItem -Recurse -Filter wix.log | Get-Content -Tail 60
+            exit 1
+          }
+          $msi = Get-ChildItem *.msi | Select-Object -First 1
+          Rename-Item $msi.FullName "VynixDJ-$tag-windows-x64.msi"
+
+      - name: Test the installer
+        working-directory: build
+        shell: pwsh
+        run: |
+          $msi = Get-ChildItem VynixDJ-*.msi | Select-Object -First 1
+          $p = Start-Process msiexec -Wait -PassThru -ArgumentList "/i `"$($msi.FullName)`" /qn /l*v install.log"
+          if ($p.ExitCode -ne 0) { Get-Content install.log -Tail 60; exit 1 }
+          $exe = "$env:ProgramFiles\Vynix DJ\VynixDJ.exe"
+          if (-not (Test-Path $exe)) { throw "$exe is missing" }
+          $app = Start-Process $exe -PassThru -ArgumentList "--settings-path `"$env:RUNNER_TEMP\vynix`""
+          Start-Sleep 30
+          if ($app.HasExited) { throw "VynixDJ.exe exited with code $($app.ExitCode)" }
+          Stop-Process $app
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: VynixDJ-windows-x64
-          path: build/VynixDJ-*-windows-x64.zip
+          path: build/VynixDJ-*-windows-x64.msi
           if-no-files-found: error
 
       - name: Attach to release
         if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v2
         with:
-          files: build/VynixDJ-*-windows-x64.zip
+          files: build/VynixDJ-*-windows-x64.msi

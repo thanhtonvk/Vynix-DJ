@@ -27,12 +27,12 @@
             </control>
             <control>
                 <description>BROWSE +SHIFT - Zoom waveform</description>
-                <group>[Channel1]</group>
-                <key>PioneerDDJFLX4.waveformZoom</key>
+                <group>[Library]</group>
+                <key>ScrollVertical</key>
                 <status>0xB6</status>
                 <midino>0x64</midino>
                 <options>
-                  <Script-Binding/>
+                  <SelectKnob/>
                 </options>
             </control>
             <control>

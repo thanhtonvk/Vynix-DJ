@@ -1,0 +1,52 @@
+<!--
+  Sample pad of the MIXER page: plays the sample, or loads the track that is
+  selected in the library if the pad is empty.
+  Variables:
+    sampler: sampler number
+-->
+<Template>
+  <SetVariable name="Group">[Sampler<Variable name="sampler"/>]</SetVariable>
+  <WidgetGroup>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,me</SizePolicy>
+    <Children>
+      <PushButton>
+        <ObjectName>MixerPad</ObjectName>
+        <SizePolicy>me,me</SizePolicy>
+        <NumberStates>2</NumberStates>
+        <State><Number>0</Number><Text><Variable name="sampler"/></Text></State>
+        <State><Number>1</Number><Text><Variable name="sampler"/></Text></State>
+        <LeftClickIsPushButton>true</LeftClickIsPushButton>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,cue_gotoandplay</ConfigKey>
+          <ConnectValueToWidget>false</ConnectValueToWidget>
+          <ButtonState>LeftButton</ButtonState>
+        </Connection>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,play</ConfigKey>
+          <ConnectValueFromWidget>false</ConnectValueFromWidget>
+        </Connection>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </PushButton>
+      <PushButton>
+        <ObjectName>MixerPadEmpty</ObjectName>
+        <SizePolicy>me,me</SizePolicy>
+        <NumberStates>1</NumberStates>
+        <State><Number>0</Number><Text>+ Load</Text></State>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,LoadSelectedTrack</ConfigKey>
+          <EmitOnDownPress>true</EmitOnDownPress>
+          <ConnectValueToWidget>false</ConnectValueToWidget>
+        </Connection>
+        <Connection>
+          <ConfigKey><Variable name="Group"/>,track_loaded</ConfigKey>
+          <Transform><Not/></Transform>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </PushButton>
+    </Children>
+  </WidgetGroup>
+</Template>

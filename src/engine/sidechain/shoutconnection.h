@@ -5,9 +5,11 @@
 #include <QMutex>
 #include <QSemaphore>
 #include <QSharedPointer>
+#include <QStringEncoder>
 #include <QThread>
 #include <QVector>
 #include <QWaitCondition>
+#include <memory>
 
 #include "control/pollingcontrolproxy.h"
 #include "encoder/encoder.h"
@@ -22,7 +24,6 @@
 typedef struct shout shout_t;
 typedef struct _util_dict shout_metadata_t;
 
-class QTextCodec;
 
 class ShoutConnection
         : public QThread, public EncoderCallback, public NetworkOutputStreamWorker {
@@ -110,7 +111,7 @@ class ShoutConnection
     void tryReconnect();
     void insertMetaData(const char *name, const char *value);
 
-    QTextCodec* m_pTextCodec;
+    std::unique_ptr<QStringEncoder> m_pTextEncoder;
     TrackPointer m_pMetaData;
     shout_t *m_pShout;
     shout_metadata_t *m_pShoutMetaData;

@@ -1264,10 +1264,8 @@ PioneerDDJSB3.rotarySelector = function(channel, control, value) {
 };
 
 PioneerDDJSB3.shiftedRotarySelector = function(channel, control, value) {
-    var delta = PioneerDDJSB3.getRotaryDelta(value),
-        f = (delta > 0 ? "SelectNextPlaylist" : "SelectPrevPlaylist");
-
-    engine.setValue("[Playlist]", f, Math.abs(delta));
+    // Waveform zoom with the Vynix DJ skin
+    engine.setValue("[Library]", "ScrollVertical", PioneerDDJSB3.getRotaryDelta(value));
 };
 
 PioneerDDJSB3.rotarySelectorClick = function(channel, control, value) {

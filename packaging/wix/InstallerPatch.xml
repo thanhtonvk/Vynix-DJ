@@ -1,0 +1,27 @@
+<CPackWiXPatch>
+  <!--
+    "Open Vynix DJ" check box on the last page of the installer.
+
+    The upgrade custom action of Mixxx is left out on purpose: it looks for the
+    upgrade code of Mixxx and would remove an installed Mixxx.
+  -->
+  <CPackWiXFragment Id="#PRODUCT">
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Open Vynix DJ" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+
+    <CustomAction Id="LaunchVynixDJ"
+                  Directory="INSTALL_ROOT"
+                  ExeCommand="&quot;[INSTALL_ROOT]VynixDJ.exe&quot;"
+                  Execute="immediate"
+                  Impersonate="yes"
+                  Return="asyncNoWait" />
+
+    <UI>
+      <Publish Dialog="ExitDialog"
+               Control="Finish"
+               Event="DoAction"
+               Value="LaunchVynixDJ"
+               Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed" />
+    </UI>
+  </CPackWiXFragment>
+</CPackWiXPatch>

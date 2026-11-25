@@ -1277,13 +1277,14 @@ NS6II.BrowseSection = function() {
             group: "[Library]",
             inKey: "MoveVertical",
             shift: function() {
-                this.stepsize = engine.getSetting("navEncoderAcceleration");
+                // Waveform zoom with the Vynix DJ skin
+                this.inKey = "ScrollVertical";
             },
             unshift: function() {
-                this.stepsize = 1;
+                this.inKey = "MoveVertical";
             },
             input: function(_midiChannel, _control, value, _status, _group) {
-                this.inSetValue(value === 0x01 ? this.stepsize : -this.stepsize);
+                this.inSetValue(value === 0x01 ? 1 : -1);
             },
         }),
         press: new components.Button({

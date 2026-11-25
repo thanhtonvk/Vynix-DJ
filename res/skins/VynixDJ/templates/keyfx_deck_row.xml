@@ -1,6 +1,6 @@
 <!--
   One deck's block on the KEY page of the Overview panel (effects.xml):
-  the deck's current key plus +/-1 and +/-2 semitone nudges and a reset.
+  the deck's current key plus +/-1 semitone buttons and a reset.
 
   The key badge binds [Channel<N>],visual_key for the text and the
   fork-added [Channel<N>],key_shifted for `highlight`, which turns it
@@ -9,10 +9,7 @@
   compares the rounded keys, so a sub-semitone offset that still renders
   as the same key doesn't light it up.
 
-  Nudges are the fork-added pitch_up_1/pitch_down_1 and
-  pitch_up_2/pitch_down_2 push buttons on KeyControl; reset is stock
-  reset_key (pitch back to 0). Four nudges fill the 164px content width at
-  ~38px each, so Reset moved up into the header row beside the key.
+  The buttons are the stock pitch_up, pitch_down and reset_key (pitch back to 0).
 
   Variables:
     channel: channel number (e.g. 1, 2)
@@ -73,20 +70,6 @@
         <Size>0me,44f</Size>
         <Children>
 
-          <PushButton>
-            <ObjectName>KeyFX_Down</ObjectName>
-            <Size>0me,44f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>&#8722;2</Text>
-            </State>
-            <Connection>
-              <ConfigKey>[Channel<Variable name="channel"/>],pitch_down_2</ConfigKey>
-              <ConnectValueToWidget>false</ConnectValueToWidget>
-              <EmitOnDownPress>true</EmitOnDownPress>
-            </Connection>
-          </PushButton>
 
           <PushButton>
             <ObjectName>KeyFX_Down</ObjectName>
@@ -97,7 +80,7 @@
               <Text>&#8722;1</Text>
             </State>
             <Connection>
-              <ConfigKey>[Channel<Variable name="channel"/>],pitch_down_1</ConfigKey>
+              <ConfigKey>[Channel<Variable name="channel"/>],pitch_down</ConfigKey>
               <ConnectValueToWidget>false</ConnectValueToWidget>
               <EmitOnDownPress>true</EmitOnDownPress>
             </Connection>
@@ -112,26 +95,12 @@
               <Text>+1</Text>
             </State>
             <Connection>
-              <ConfigKey>[Channel<Variable name="channel"/>],pitch_up_1</ConfigKey>
+              <ConfigKey>[Channel<Variable name="channel"/>],pitch_up</ConfigKey>
               <ConnectValueToWidget>false</ConnectValueToWidget>
               <EmitOnDownPress>true</EmitOnDownPress>
             </Connection>
           </PushButton>
 
-          <PushButton>
-            <ObjectName>KeyFX_Up</ObjectName>
-            <Size>0me,44f</Size>
-            <NumberStates>1</NumberStates>
-            <State>
-              <Number>0</Number>
-              <Text>+2</Text>
-            </State>
-            <Connection>
-              <ConfigKey>[Channel<Variable name="channel"/>],pitch_up_2</ConfigKey>
-              <ConnectValueToWidget>false</ConnectValueToWidget>
-              <EmitOnDownPress>true</EmitOnDownPress>
-            </Connection>
-          </PushButton>
 
         </Children>
       </WidgetGroup>

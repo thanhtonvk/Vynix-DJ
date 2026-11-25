@@ -2814,13 +2814,12 @@ int mp3guessenc_timing_shift_case(const char *file)
 
 //    input_file = fopen(argv[optind],"rb");
     input_file = fopen(file,"rb");
-/*    
     if (input_file == NULL)
     {
-        printf("Fatal: error opening `%s'.\nDouble-check the provided file name or ensure you have the proper access rights.\n", argv[optind]);
+        /* e.g. macOS denies the access to a removable volume */
         return EXIT_CODE_ACCESS_ERROR;
     }
-
+/*
     if (verbose_flags&VERBOSE_FLAG_PROGRESS)
         printf("Reading `%s'...\n",argv[optind]);
 */

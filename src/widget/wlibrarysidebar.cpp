@@ -246,6 +246,30 @@ bool WLibrarySidebar::isLeafNodeSelected() {
     return false;
 }
 
+bool WLibrarySidebar::isExpandedFolderSelected() {
+    const QModelIndex index = selectedIndex();
+    return index.isValid() && index.parent().isValid() && isExpanded(index);
+}
+
+bool WLibrarySidebar::goBack() {
+    const QModelIndex index = selectedIndex();
+    if (!index.isValid()) {
+        return false;
+    }
+    if (isExpanded(index)) {
+        collapse(index);
+        return true;
+    }
+    const QModelIndex parentIndex = index.parent();
+    if (!parentIndex.isValid()) {
+        return false;
+    }
+    selectIndex(parentIndex);
+    emit pressed(parentIndex);
+    collapse(parentIndex);
+    return true;
+}
+
 bool WLibrarySidebar::isChildIndexSelected(const QModelIndex& index) {
     // qDebug() << "WLibrarySidebar::isChildIndexSelected" << index;
     QModelIndex selIndex = selectedIndex();
@@ -515,7 +539,8 @@ bool WLibrarySidebar::event(QEvent* pEvent) {
     if (pEvent->type() == QEvent::ToolTip) {
         updateTooltip();
     } else if (pEvent->type() == QEvent::LayoutRequest ||
-            pEvent->type() == QEvent::Resize) {
+            pEvent->type() == QEvent::Resize ||
+            pEvent->type() == QEvent::Show) {
         // Force-resize the header to expand the item's clickable area.
         //
         // Reason:
@@ -538,7 +563,11 @@ bool WLibrarySidebar::event(QEvent* pEvent) {
         // Though we can listen to LayoutRequest and adjust the headers minimum
         // section size to viewport width (-1 for section separator?).
         // This event occurs after Show, Resize or model data change.
+        // Let the viewport adopt the new size first.
+        const bool result = QTreeView::event(pEvent);
         header()->setMinimumSectionSize(viewport()->width() - 1);
+        header()->resizeSections(QHeaderView::ResizeToContents);
+        return result;
     }
     return QTreeView::event(pEvent);
 }

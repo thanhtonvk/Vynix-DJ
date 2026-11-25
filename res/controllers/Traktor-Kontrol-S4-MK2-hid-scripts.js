@@ -1468,7 +1468,8 @@ TraktorS4MK2.callbackBrowse = function(field) {
         TraktorS4MK2.controller.shift_pressed["deck1"] ||
         TraktorS4MK2.controller.shift_pressed["deck2"]
     ) {
-        engine.setValue("[Library]", "MoveFocus", delta);
+        // Waveform zoom with the Vynix DJ skin
+        engine.setValue("[Library]", "ScrollVertical", delta);
     } else {
         engine.setValue("[Library]", "MoveVertical", delta);
     }

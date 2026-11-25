@@ -37,8 +37,8 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 - **Dùng thư viện nhạc sẵn có.** Phát nhạc từ thư mục trên máy hoặc từ USB Rekordbox,
   giữ nguyên playlist, cue, loop và beatgrid.
 
-> **Hai deck.** Hiện tại Vynix DJ hỗ trợ **2 deck**. Controller 4 deck vẫn dùng được,
-> nhưng giao diện chỉ hiển thị và mix deck 1 và 2.
+> **2 hoặc 4 deck.** Chuyển ở **SETTINGS → GENERAL → DECKS**. Mặc định là 2 deck, hợp
+> với màn hình nhỏ nhất.
 
 ## Gợi ý cấu hình
 
@@ -51,18 +51,30 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 
 ## Tính năng
 
-**Deck**
-- Hai deck với sóng nhạc màu (RGB / Filtered / HSV), beatgrid, cue, hot cue và loop.
-- Phóng to / thu nhỏ sóng nhạc bằng hai ngón tay.
+**Deck** (tab PLAY)
+- 2 hoặc 4 deck với sóng nhạc màu (RGB / Filtered / HSV), beatgrid, cue, hot cue và loop.
+- Phóng to / thu nhỏ sóng nhạc bằng hai ngón tay, hoặc Shift + núm browse trên nhiều
+  controller.
 - Giao diện cảm ứng co giãn theo màn hình điện thoại, máy tính bảng và máy tính, hiển
   thị toàn màn hình, kể cả vùng tai thỏ trên điện thoại.
 
-**Mixer** (tab MIXER)
-- GAIN, fader tempo kèm % tempo và nút về 0 %, fader kênh, fader EQ LOW / MID / HI và
-  FX, VU master, CUE / PLAY / SYNC và crossfader cho cả hai deck.
+**Mixer** (tab MIXER), bố cục kiểu app DJ trên điện thoại và máy tính bảng
+- Đĩa xoay có ảnh bìa: kéo mặt đĩa để cào (scratch), kéo viền đĩa để đẩy nhịp (nudge).
+  Vòng ngoài cho biết vị trí trong bài.
+- Mỗi deck chuyển được giữa đĩa xoay, 8 hot cue, loop và nhảy nhịp, hiệu ứng, key (đổi
+  tông, key lock, match) và 8 pad sample.
+- Núm GAIN, EQ HI / MID / LOW và FX, fader kênh và tempo, VU, crossfader, CUE / PLAY /
+  SYNC và loop chỉnh được độ dài. Chạm đúp vào núm để về mặc định.
+- Sóng nhạc chạy, sóng tổng quan, key, BPM và thời gian của các deck trên cùng một trang.
+- Khi dùng 4 deck: 4 sóng nhạc, 4 fader âm lượng và VU, nút **1 | 3** và **2 | 4** chọn
+  deck ở mỗi bên.
 - **Sound Color FX** như trên mixer Pioneer XDJ: FILTER, SPACE, DUB ECHO, SWEEP, NOISE
-  và CRUSH chọn hiệu ứng cho fader FX của cả hai deck.
-- Chạm 2 lần vào fader EQ hoặc FX để đưa về giữa.
+  và CRUSH chọn hiệu ứng cho núm FX của tất cả các deck.
+
+**Thu âm**
+- Nút **REC** trên mọi trang để thu bản mix ra MP3, WAV hoặc FLAC. Trên Android file nằm
+  ở `Music/Vynix DJ` và hiện trong các app nghe nhạc khác, trên máy tính ở
+  `Music/Vynix DJ/Recordings`.
 
 **Beat FX** (tab PLAY)
 - Bộ hiệu ứng kiểu phần cứng: chọn hiệu ứng trong màn hình chọn toàn màn hình, bật và
@@ -72,7 +84,7 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 
 **Thư viện nhạc**
 - Thư mục nhạc trên thiết bị hoặc máy tính, có tìm kiếm và bảng thông tin bài hát: ảnh
-  bìa, BPM, key, thời lượng, sóng nhạc tổng quan và nút LOAD 1 / LOAD 2.
+  bìa, BPM, key, thời lượng, sóng nhạc tổng quan và nút LOAD cho từng deck.
 - USB Rekordbox: playlist, cue, loop và beatgrid từ USB đã export bằng Rekordbox.
   Rekordbox và Serato nằm ngay sau mục Tracks.
 
@@ -83,8 +95,8 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
   Hercules, Roland, …).
 - Import mapping của cộng đồng (`.xml`, `.js` hoặc file `.zip` chứa cả hai) ngay trong
   app, kể cả trên Android, nơi không mở được thư mục mapping.
-- Điều khiển ưu tiên bằng controller: xoay núm browse sẽ mở thư viện, load bài xong tự
-  quay về màn deck.
+- Điều khiển ưu tiên bằng controller: xoay núm browse sẽ mở thư viện, nhấn núm để vào
+  thư mục và playlist, nút back để quay ra, load bài xong tự quay về màn deck.
 
 **Cài đặt**
 - Các trang cài đặt trong app dành cho màn hình cảm ứng, cùng hộp thoại Preferences đầy
@@ -106,7 +118,7 @@ Tải bản cho nền tảng của bạn ở trang
 | Nền tảng | File |
 |---|---|
 | Android | `VynixDJ-<version>-android-arm64.apk` |
-| Windows | `VynixDJ-<version>-windows-x64.zip` |
+| Windows | `VynixDJ-<version>-windows-x64.msi` |
 | Linux (PC) | `VynixDJ-<version>-linux-x64.deb` |
 | Linux (ARM64, ví dụ Raspberry Pi) | `VynixDJ-<version>-linux-arm64.deb` |
 | macOS (Apple Silicon) | `VynixDJ-<version>-macos-arm64.dmg` |
@@ -115,7 +127,9 @@ Tải bản cho nền tảng của bạn ở trang
 hoặc cài từ máy tính bằng `adb install VynixDJ-<version>-android-arm64.apk`. Mở Vynix DJ
 và cấp quyền truy cập tệp khi được hỏi.
 
-**Windows:** giải nén file zip và chạy `VynixDJ.exe`.
+**Windows:** mở file MSI và làm theo trình cài đặt, rồi mở Vynix DJ từ menu Start hoặc
+desktop. Bộ cài chưa được ký: nếu SmartScreen chặn, chọn **More info** → **Run anyway**.
+Cài Vynix DJ không ảnh hưởng tới Mixxx đã cài.
 
 **Linux:** `sudo apt install ./VynixDJ-<version>-linux-x64.deb` (hoặc gói ARM64), rồi
 mở Vynix DJ từ menu ứng dụng.
@@ -144,18 +158,24 @@ Apple Developer ID nên lần đầu mở macOS sẽ chặn: chuột phải vào
 - Thêm thư mục khác: **SETTINGS → DEVICE → Music library → OPEN → Add**.
 - Mở **BROWSE → TRACKS** (hoặc xoay núm browse), chọn bài rồi bấm **LOAD 1** /
   **LOAD 2**, chạm 2 lần vào bài, hoặc dùng nút load trên controller.
+- Dùng 4 deck: **SETTINGS → GENERAL → DECKS → 4 DECKS**.
 
 **Mix** (tab MIXER)
 
-- Fader tempo, volume, LOW / MID / HI và FX, núm GAIN, CUE / PLAY / SYNC và crossfader
-  cho cả hai deck.
-- Các nút ở giữa chọn hiệu ứng cho fader FX. Fader ở giữa là tắt; FILTER cắt tiếng cao
-  hoặc tiếng trầm, các hiệu ứng khác mạnh dần khi kéo về hai phía.
+- Kéo mặt đĩa để cào (scratch), kéo viền đĩa để đẩy nhịp (nudge).
+- Thanh tab phía trên đĩa chuyển sang hot cue, loop và nhảy nhịp, hiệu ứng, key hoặc pad
+  sample.
+- Núm GAIN, HI / MID / LOW và FX (chạm đúp để về giữa), fader tempo và volume, CUE /
+  PLAY / SYNC, loop chỉnh được độ dài và crossfader.
+- **FX → COLOR FX** chọn hiệu ứng cho núm FX. Núm ở giữa là tắt; FILTER cắt tiếng cao
+  hoặc tiếng trầm, các hiệu ứng khác mạnh dần về hai phía.
+- Khi dùng 4 deck, **1 | 3** và **2 | 4** chọn deck hiện ở mỗi bên.
+- Nút **REC** phía trên để thu bản mix. Định dạng ở **SETTINGS → GENERAL → RECORDING**.
 
 **Beat FX** (tab PLAY, khung bên phải)
 
 1. Chạm vào tên hiệu ứng để mở màn hình chọn, rồi chọn hiệu ứng.
-2. Chọn **Deck 1** / **Deck 2** để áp dụng.
+2. Chọn các deck để áp dụng.
 3. Bấm **FX ON**, rồi vặn **LEVEL** lên và chỉnh **BEAT**.
 4. Một hay hai bộ FX: **SETTINGS → GENERAL → FX units**.
 
@@ -199,13 +219,13 @@ cmake -G Ninja \
       -DCMAKE_SYSTEM_NAME=Android \
       -DVCPKG_TARGET_TRIPLET=arm64-android \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DQT6=ON -DQML=ON -DHID=ON -DBULK=ON \
+      -DQT6=ON -DHID=ON -DBULK=ON \
       -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF \
       -DCMAKE_CXX_SCAN_FOR_MODULES=OFF \
       ..
 cmake --build . --parallel
 
-# File APK nằm ở:
+# File APK (khoảng 57 MB) nằm ở:
 # build/android-build/build/outputs/apk/release/android-build-release-signed.apk
 ```
 
@@ -226,25 +246,32 @@ adb install -r build/android-build/build/outputs/apk/release/android-build-relea
 
 | Thành phần | Thay đổi chính |
 |---|---|
-| `res/skins/VynixDJ/` | Skin cảm ứng: tab MIXER với Sound Color FX, màn hình chọn Beat FX, bảng thông tin bài hát |
+| `res/skins/VynixDJ/` | Skin cảm ứng: 2 hoặc 4 deck, tab MIXER với đĩa xoay và Sound Color FX, màn hình chọn Beat FX, bảng thông tin bài hát |
 | `src/controllers/controllermanager.cpp` | Tự bật controller mới và chọn mapping theo tên |
 | `src/controllers/controllermappingimport.*` | Import file mapping và file ZIP vào thư mục mapping của người dùng |
 | `src/controllers/midi/androidmidi*` | Backend MIDI cho Android (`android.media.midi`) |
 | `src/library/` | Điều khiển thư viện bằng controller, tìm kiếm từ sidebar, Rekordbox / Serato lên đầu |
 | `src/effects/` | Núm Beat FX, control `beat_period`, BQ EQ làm EQ mặc định của deck |
-| `src/widget/` | Phóng to sóng nhạc bằng hai ngón tay, chạm 2 lần để đưa fader về giữa |
+| `src/widget/wjogwheel.*` | Đĩa xoay cảm ứng, cào và đẩy nhịp |
+| `src/widget/` | Phóng to sóng nhạc bằng hai ngón tay, chạm đúp để đưa núm và fader về mặc định |
+| `src/mixer/playermanager.*` | Chọn bài nhẹ hơn: nghe thử và phân tích trễ lại trên máy yếu |
+| `src/recording/` | Thư mục và định dạng thu âm cho skin cảm ứng |
 | `src/preferences/dialog/dlgpreferences.cpp` | Preferences chữ lớn, vuốt để cuộn |
 | `src/soundio/` | Nhận loa trong của Android, chọn Oboe và đầu ra mặc định |
-| `packaging/android/src/com/tondz/vynixdj/` | `MidiBridge` (MIDI), `StorageVolumes` (USB), `MainActivity` (toàn màn hình) |
+| `packaging/android/src/com/tondz/vynixdj/` | `MidiBridge` (MIDI), `StorageVolumes` (USB), `Recordings` (quét media), `MainActivity` (toàn màn hình) |
+| `packaging/android/build.gradle`, `libmixxx.map` | APK nhỏ: nén thư viện, bỏ QML, bỏ mã không dùng |
+| `packaging/wix/` | Bộ cài MSI cho Windows |
 | `src/util/androidlibccompat.c` | Các hàm libc thiếu trên Android 9–13 |
 
 Ngoài ra có nhiều bản sửa lỗi cho Mixxx trên Android: crash khi mở trên Android 9–13,
 sóng nhạc trống, không có tiếng, không thấy USB Rekordbox, hiệu ứng và font không tải
-được từ APK.
+được từ APK. Trên mọi nền tảng, file không đọc được hoặc hỏng trên USB Rekordbox không còn
+làm app bị crash.
 
 ## Hạn chế hiện tại
 
-- Chỉ hỗ trợ **2 deck**.
+- Dùng 4 deck nên có màn hình cỡ máy tính bảng hoặc laptop.
+- Bản Windows và macOS chưa được ký.
 - Controller có sound card riêng (ví dụ Denon MC7000) trên Android có thể chỉ phát được
   đường Master; chưa hỗ trợ nghe thử (cue) tai nghe riêng.
 - Controller cắm vào khi app đang chạy chỉ được nhận sau khi khởi động lại app.

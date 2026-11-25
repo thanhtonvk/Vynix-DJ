@@ -34,11 +34,15 @@ class RecordingManager : public QObject {
     bool isRecordingActive() const;
     void setRecordingDir();
     QString& getRecordingDir();
+    /// The folder for recordings if the user has not chosen another one
+    static QString defaultRecordingDir();
     // Returns the currently recording file
     const QString& getRecordingFile() const;
     const QString& getRecordingLocation() const;
 
   signals:
+    /// A recording has been stopped and its files are complete
+    void recordingSaved(const QStringList& filePaths);
     // Emits the cumulative number of bytes currently recorded.
     void bytesRecorded(int);
     void isRecording(bool);
@@ -73,6 +77,8 @@ class RecordingManager : public QObject {
     QString m_recordingFile;
     // Absolute file
     QString m_recordingLocation;
+    // Absolute files of the current recording, more than one if it was split
+    QStringList m_recordedFiles;
 
     bool m_bRecording;
     bool m_dfSilence;

@@ -1,4 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="400" viewBox="0 0 120 400">
   <!-- Track of the MIXER page faders -->
-  <rect x="52" y="8" width="16" height="384" rx="8" fill="#05070a"/>
+  <path d="M34 24.0h12M74 24.0h12" stroke="#ffffff" stroke-opacity="0.34" stroke-width="1.6"/>
+  <path d="M40 41.6h6M74 41.6h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 59.2h6M74 59.2h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 76.8h6M74 76.8h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 94.4h6M74 94.4h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M34 112.0h12M74 112.0h12" stroke="#ffffff" stroke-opacity="0.34" stroke-width="1.6"/>
+  <path d="M40 129.6h6M74 129.6h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 147.2h6M74 147.2h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 164.8h6M74 164.8h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 182.4h6M74 182.4h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M34 200.0h12M74 200.0h12" stroke="#ffffff" stroke-opacity="0.34" stroke-width="1.6"/>
+  <path d="M40 217.6h6M74 217.6h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 235.2h6M74 235.2h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 252.8h6M74 252.8h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 270.4h6M74 270.4h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M34 288.0h12M74 288.0h12" stroke="#ffffff" stroke-opacity="0.34" stroke-width="1.6"/>
+  <path d="M40 305.6h6M74 305.6h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 323.2h6M74 323.2h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 340.8h6M74 340.8h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M40 358.4h6M74 358.4h6" stroke="#ffffff" stroke-opacity="0.13" stroke-width="1.6"/>
+  <path d="M34 376.0h12M74 376.0h12" stroke="#ffffff" stroke-opacity="0.34" stroke-width="1.6"/>
+  <rect x="55" y="8" width="10" height="384" rx="5" fill="#090a0a" stroke="#333538" stroke-width="1.5"/>
 </svg>

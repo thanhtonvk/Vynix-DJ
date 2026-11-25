@@ -596,8 +596,8 @@ class TraktorMX2Class {
         }
 
         if (this.shiftPressed[field.group]) {
-            engine.setValue("[Library]", "focused_widget", 2);
-            engine.setValue("[Library]", "MoveVertical", delta);
+            // Waveform zoom with the Vynix DJ skin
+            engine.setValue("[Library]", "ScrollVertical", delta);
         } else {
             engine.setValue("[Library]", "focused_widget", 3);
             engine.setValue("[Library]", "MoveVertical", delta);

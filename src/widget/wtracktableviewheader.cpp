@@ -269,15 +269,7 @@ void WTrackTableViewHeader::setModel(QAbstractItemModel* pModel) {
     if (titleColumn >= 0 && titleColumn < count()) {
         setSectionResizeMode(titleColumn, QHeaderView::Stretch);
     }
-    // Short value columns must stay readable next to the stretched title
-    for (const auto sortColumn : {TrackModel::SortColumnId::Key,
-                 TrackModel::SortColumnId::Bpm,
-                 TrackModel::SortColumnId::Duration}) {
-        const int column = pTrackModel->columnIndexFromSortColumnId(sortColumn);
-        if (column >= 0 && column < count()) {
-            setSectionResizeMode(column, QHeaderView::ResizeToContents);
-        }
-    }
+    resizeShortValueColumns();
 
     // Here we can override values to prevent restoring corrupt values from database
     setSectionsMovable(true);
@@ -358,6 +350,41 @@ void WTrackTableViewHeader::setModel(QAbstractItemModel* pModel) {
         for (int i = 0; i < columns; ++i) {
             showSection(i);
         }
+    }
+}
+
+void WTrackTableViewHeader::resizeShortValueColumns() {
+    // Short value columns must stay readable next to the stretched title.
+    // QHeaderView::ResizeToContents would measure the rows again after every
+    // change of the table, which makes selecting tracks slow.
+    TrackModel* pTrackModel = getTrackModel();
+    const auto* pTableView = qobject_cast<const QWidget*>(parent());
+    if (!pTrackModel || !pTableView) {
+        return;
+    }
+    struct ShortValueColumn {
+        TrackModel::SortColumnId id;
+        QString widestValue;
+        // Number of additional squares of the row height, e.g. the BPM lock
+        int icons;
+    };
+    static const QList<ShortValueColumn> kColumns = {
+            {TrackModel::SortColumnId::Key, QStringLiteral("12A/G#m"), 0},
+            {TrackModel::SortColumnId::Bpm, QStringLiteral("888.8"), 1},
+            {TrackModel::SortColumnId::Duration, QStringLiteral("8:88:88"), 0},
+    };
+    const QFontMetrics tableMetrics = pTableView->fontMetrics();
+    for (const auto& column : kColumns) {
+        const int index = pTrackModel->columnIndexFromSortColumnId(column.id);
+        if (index < 0 || index >= count()) {
+            continue;
+        }
+        const int height = tableMetrics.height();
+        const int valueWidth = tableMetrics.horizontalAdvance(column.widestValue) +
+                column.icons * height;
+        const int titleWidth = fontMetrics().horizontalAdvance(
+                model()->headerData(index, orientation()).toString());
+        resizeSection(index, math_max(valueWidth, titleWidth) + height);
     }
 }
 
@@ -506,6 +533,7 @@ void WTrackTableViewHeader::setFont(const QFont& font) {
     updateGeometry(); // Tells layout to re-query sizeHint()
     adjustSize();     // Resizes to sizeHint()
     update();         // Repaints the widget
+    resizeShortValueColumns();
 }
 
 void WTrackTableViewHeader::setHeightForFont() {

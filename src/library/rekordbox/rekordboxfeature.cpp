@@ -10,7 +10,7 @@
 #include <QSettings>
 #include <QString>
 #include <QStringList>
-#include <QTextCodec>
+#include <QStringDecoder>
 #include <QtDebug>
 #ifdef __ANDROID__
 #include <QCoreApplication>
@@ -415,14 +415,19 @@ inline bool instanceof (const T* ptr) {
 
 QString fromUtf16LeString(const std::string& toConvert) {
     // Kaitai uses std::string as single container for all string encodings.
-    return QTextCodec::codecForName("UTF-16LE")
-            ->toUnicode(toConvert.data(), static_cast<int>(toConvert.length()));
+    QStringDecoder decoder(QStringDecoder::Utf16LE);
+    return decoder(QByteArrayView(toConvert.data(),
+            static_cast<qsizetype>(toConvert.length())));
 }
 
 QString fromUtf16BeString(const std::string& toConvert) {
     // Kaitai uses std::string as single container for all string encodings.
-    int length = static_cast<int>(toConvert.length()) - 2; // strip off trailing nullbyte
-    return QTextCodec::codecForName("UTF-16BE")->toUnicode(toConvert.data(), length);
+    const auto length = static_cast<qsizetype>(toConvert.length()) - 2; // strip off trailing nullbyte
+    if (length <= 0) {
+        return {};
+    }
+    QStringDecoder decoder(QStringDecoder::Utf16BE);
+    return decoder(QByteArrayView(toConvert.data(), length));
 }
 
 // Functions getText and parseDeviceDB are roughly based on the following Java file:
@@ -1028,7 +1033,8 @@ void setHotCue(TrackPointer track,
     }
 }
 
-void readAnalyze(TrackPointer track,
+/// Throws if the file can't be read or is damaged, see readAnalyze()
+void readAnalyzeOrThrow(TrackPointer track,
         mixxx::audio::SampleRate sampleRate,
         int timingOffset,
         bool ignoreCues,
@@ -1250,6 +1256,19 @@ void readAnalyze(TrackPointer track,
     }
 }
 
+void readAnalyze(TrackPointer track,
+        mixxx::audio::SampleRate sampleRate,
+        int timingOffset,
+        bool ignoreCues,
+        const QString& anlzPath) {
+    try {
+        readAnalyzeOrThrow(track, sampleRate, timingOffset, ignoreCues, anlzPath);
+    } catch (const std::exception& e) {
+        // The track can be played without the data of Rekordbox
+        qWarning() << "Failed to read Rekordbox analysis file" << anlzPath << e.what();
+    }
+}
+
 } // anonymous namespace
 
 #ifdef __ANDROID__
@@ -1397,7 +1416,9 @@ TrackPointer RekordboxPlaylistModel::getTrack(const QModelIndex& index) const {
 #endif
     TrackPointer track = BaseExternalPlaylistModel::getTrack(index);
 
-    if (!QFile(location).exists()) {
+    // The file may exist but not be readable, e.g. if macOS denies the access
+    // to removable volumes
+    if (!track || !QFile(location).exists()) {
         return track;
     }
 

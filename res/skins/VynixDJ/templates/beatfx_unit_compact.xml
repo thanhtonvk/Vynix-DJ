@@ -106,6 +106,37 @@
           </PushButton>
         </Children>
       </WidgetGroup>
+      <WidgetGroup>
+        <ObjectName>BeatFXCompact_Row</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,36f</Size>
+        <Children>
+          <PushButton>
+            <ObjectName>BeatFX_DeckAssign3</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>D3</Text></State>
+            <State><Number>1</Number><Text>D3</Text></State>
+            <Connection>
+              <ConfigKey><Variable name="UnitGroup"/>,group_[Channel3]_enable</ConfigKey>
+            </Connection>
+          </PushButton>
+          <PushButton>
+            <ObjectName>BeatFX_DeckAssign4</ObjectName>
+            <Size>0me,36f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>D4</Text></State>
+            <State><Number>1</Number><Text>D4</Text></State>
+            <Connection>
+              <ConfigKey><Variable name="UnitGroup"/>,group_[Channel4]_enable</ConfigKey>
+            </Connection>
+          </PushButton>
+        </Children>
+        <Connection>
+          <ConfigKey>[Skin],show_4decks</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup>
 
       <!-- See the knobs in beatfx_unit.xml -->
       <WidgetGroup>

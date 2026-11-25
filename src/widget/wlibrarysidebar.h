@@ -27,6 +27,11 @@ class WLibrarySidebar : public QTreeView, public WBaseWidget {
     void toggleSelectedItem();
     void renameSelectedItem();
     bool isLeafNodeSelected();
+    /// An expanded item below a root item is selected, e.g. a directory
+    bool isExpandedFolderSelected();
+    /// Collapses the selected item, or selects and collapses its parent.
+    /// Returns false if there is nothing to go back to.
+    bool goBack();
     bool isChildIndexSelected(const QModelIndex& index);
     bool isFeatureRootIndexSelected(LibraryFeature* pFeature);
 

@@ -35,8 +35,15 @@ public class MainActivity extends QtActivityBase {
 
         super.onCreate(savedInstanceState);
 
-
         hideSystemBars();
+
+        // Qt calls main() from the first global layout of its view. On rare
+        // first launches that never came and the screen stayed empty, so ask
+        // for another layout. It does nothing if Qt has started already.
+        for (final long delay : new long[] {1000, 3000, 6000}) {
+            getWindow().getDecorView().postDelayed(
+                    () -> getWindow().getDecorView().requestLayout(), delay);
+        }
     }
 
     @Override

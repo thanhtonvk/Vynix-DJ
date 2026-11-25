@@ -24,6 +24,8 @@ WKey::WKey(const QString& group, UserSettingsPointer pConfig, QWidget* pParent)
     setValue();
     m_keyNotation.connectValueChanged(this, &WKey::keyNotationChanged);
     m_engineKeyDistance.connectValueChanged(this, &WKey::setCents);
+    // Set after visual_key, which skins connect to
+    m_engineKey.connectValueChanged(this, &WKey::setCents);
 }
 
 void WKey::onConnectedControlChanged(double dParameter, double dValue) {

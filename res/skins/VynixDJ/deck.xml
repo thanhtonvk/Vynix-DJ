@@ -180,7 +180,7 @@
                         <ObjectName>DeckPlayingLeft</ObjectName>
                         <Text>&lt;&lt;</Text>
                         <Style>
-                          color: #f15921;
+                          color: #2fe07c;
                         </Style>
                         <!-- To override basic style -->
                         <Connection>
@@ -197,7 +197,7 @@
                         <ObjectName>DeckPlayingRight</ObjectName>
                         <Text>&gt;&gt;</Text>
                         <Style>
-                          color: #f15921;
+                          color: #2fe07c;
                         </Style>
                         <!-- To override basic style -->
                         <Connection>

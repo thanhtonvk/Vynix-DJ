@@ -103,16 +103,11 @@
       </WidgetGroup>
 
       <WidgetGroup>
-        <ObjectName>Decks</ObjectName>
+        <ObjectName>LibraryDecks</ObjectName>
         <Layout>horizontal</Layout>
-        <Size>0me,50max</Size>
+        <Size>0me,80max</Size>
         <Children>
-          <Template src="skin:deck.xml">
-            <SetVariable name="channel">1</SetVariable>
-          </Template>
-          <Template src="skin:deck.xml">
-            <SetVariable name="channel">2</SetVariable>
-          </Template>
+          <Template src="skin:decks.xml"/>
         </Children>
       </WidgetGroup>
     </Children>

@@ -136,6 +136,64 @@
                               <ButtonState>LeftButton</ButtonState>
                             </Connection>
                           </PushButton>
+                          <WidgetGroup>
+                            <Size>8f,0me</Size>
+                          </WidgetGroup>
+                          <PushButton>
+                            <ObjectName>SettingsActionButton</ObjectName>
+                            <Size>64f,40f</Size>
+                            <NumberStates>3</NumberStates>
+                            <State>
+                              <Number>0</Number>
+                              <Text>3: A</Text>
+                            </State>
+                            <State>
+                              <Number>1</Number>
+                              <Text>3: Thru</Text>
+                            </State>
+                            <State>
+                              <Number>2</Number>
+                              <Text>3: B</Text>
+                            </State>
+                            <Connection>
+                              <ConfigKey>[Channel3],orientation</ConfigKey>
+                              <EmitOnDownPress>true</EmitOnDownPress>
+                              <ButtonState>LeftButton</ButtonState>
+                            </Connection>
+                            <Connection>
+                              <ConfigKey>[Skin],show_4decks</ConfigKey>
+                              <BindProperty>visible</BindProperty>
+                            </Connection>
+                          </PushButton>
+                          <WidgetGroup>
+                            <Size>8f,0me</Size>
+                          </WidgetGroup>
+                          <PushButton>
+                            <ObjectName>SettingsActionButton</ObjectName>
+                            <Size>64f,40f</Size>
+                            <NumberStates>3</NumberStates>
+                            <State>
+                              <Number>0</Number>
+                              <Text>4: A</Text>
+                            </State>
+                            <State>
+                              <Number>1</Number>
+                              <Text>4: Thru</Text>
+                            </State>
+                            <State>
+                              <Number>2</Number>
+                              <Text>4: B</Text>
+                            </State>
+                            <Connection>
+                              <ConfigKey>[Channel4],orientation</ConfigKey>
+                              <EmitOnDownPress>true</EmitOnDownPress>
+                              <ButtonState>LeftButton</ButtonState>
+                            </Connection>
+                            <Connection>
+                              <ConfigKey>[Skin],show_4decks</ConfigKey>
+                              <BindProperty>visible</BindProperty>
+                            </Connection>
+                          </PushButton>
                         </Children>
                       </WidgetGroup>
                       <WidgetGroup>
@@ -232,6 +290,37 @@
                         <Children>
                           <Label>
                             <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Decks</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>150f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">2 Decks</SetVariable>
+                                <SetVariable name="ConfigKey">[Skin],show_4decks</SetVariable>
+                                <SetVariable name="Value">0</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">4 Decks</SetVariable>
+                                <SetVariable name="ConfigKey">[Skin],show_4decks</SetVariable>
+                                <SetVariable name="Value">1</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
+                        </Children>
+                      </WidgetGroup>
+                      <WidgetGroup>
+                        <ObjectName>SettingsRow</ObjectName>
+                        <Layout>horizontal</Layout>
+                        <Size>0me,52f</Size>
+                        <Children>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
                             <Text>FX units</Text>
                             <Size>0me,0me</Size>
                           </Label>
@@ -251,6 +340,45 @@
                                 <SetVariable name="Text">2 FX</SetVariable>
                                 <SetVariable name="ConfigKey">[Skin],dual_fx</SetVariable>
                                 <SetVariable name="Value">1</SetVariable>
+                              </Template>
+                            </Children>
+                          </WidgetGroup>
+                        </Children>
+                      </WidgetGroup>
+                      <!-- Format of recordings. The quality and the folder are
+                           in Preferences > Recording -->
+                      <WidgetGroup>
+                        <ObjectName>SettingsRow</ObjectName>
+                        <Layout>horizontal</Layout>
+                        <Size>0me,52f</Size>
+                        <Children>
+                          <Label>
+                            <ObjectName>SettingsRowLabel</ObjectName>
+                            <Text>Recording</Text>
+                            <Size>0me,0me</Size>
+                          </Label>
+                          <WidgetGroup>
+                            <ObjectName>SettingsSegmented</ObjectName>
+                            <Layout>horizontal</Layout>
+                            <Size>240f,40f</Size>
+                            <Children>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentLeft</SetVariable>
+                                <SetVariable name="Text">MP3</SetVariable>
+                                <SetVariable name="ConfigKey">[Recording],format</SetVariable>
+                                <SetVariable name="Value">0</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentMid</SetVariable>
+                                <SetVariable name="Text">WAV</SetVariable>
+                                <SetVariable name="ConfigKey">[Recording],format</SetVariable>
+                                <SetVariable name="Value">1</SetVariable>
+                              </Template>
+                              <Template src="skin:templates/setting_segment_button.xml">
+                                <SetVariable name="ObjectName">SettingsSegmentRight</SetVariable>
+                                <SetVariable name="Text">FLAC</SetVariable>
+                                <SetVariable name="ConfigKey">[Recording],format</SetVariable>
+                                <SetVariable name="Value">2</SetVariable>
                               </Template>
                             </Children>
                           </WidgetGroup>
@@ -542,16 +670,11 @@
         </Children>
       </WidgetStack>
       <WidgetGroup>
-        <ObjectName>Decks</ObjectName>
+        <ObjectName>LibraryDecks</ObjectName>
         <Layout>horizontal</Layout>
         <Size>0me,80max</Size>
         <Children>
-          <Template src="skin:deck.xml">
-            <SetVariable name="channel">1</SetVariable>
-          </Template>
-          <Template src="skin:deck.xml">
-            <SetVariable name="channel">2</SetVariable>
-          </Template>
+          <Template src="skin:decks.xml"/>
         </Children>
       </WidgetGroup>
     </Children>

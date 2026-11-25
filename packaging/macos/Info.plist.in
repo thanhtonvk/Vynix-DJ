@@ -32,6 +32,21 @@
     <key>NSMicrophoneUsageDescription</key>
     <string>Vynix DJ requires microphone access for microphone and vinyl input.</string>
 
+    <key>NSRemovableVolumesUsageDescription</key>
+    <string>Vynix DJ reads your music from USB drives.</string>
+
+    <key>NSNetworkVolumesUsageDescription</key>
+    <string>Vynix DJ reads your music from network drives.</string>
+
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>Vynix DJ reads the music on your desktop.</string>
+
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Vynix DJ reads the music in your documents.</string>
+
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>Vynix DJ reads the music in your downloads.</string>
+
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 

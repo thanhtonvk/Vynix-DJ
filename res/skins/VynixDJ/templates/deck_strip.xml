@@ -1,0 +1,108 @@
+<!--
+  One deck in one line, for four decks on PLAY and BROWSE ([Skin],show_4decks),
+  where four of the strips of deck.xml do not fit. The overview waveform is
+  shown on the PLAY page only.
+  Variables:
+    channel: deck number
+-->
+<Template>
+  <SetVariable name="Group">[Channel<Variable name="channel"/>]</SetVariable>
+  <WidgetGroup>
+    <ObjectName>DeckStrip</ObjectName>
+    <Layout>vertical</Layout>
+    <SizePolicy>me,min</SizePolicy>
+    <Children>
+      <WidgetGroup>
+        <ObjectName>DeckStripRow</ObjectName>
+        <Layout>horizontal</Layout>
+        <Size>0me,28f</Size>
+        <Children>
+          <Label>
+            <ObjectName>MixerDeckNumber<Variable name="channel"/></ObjectName>
+            <Text><Variable name="channel"/></Text>
+            <Size>26f,24f</Size>
+            <Alignment>center</Alignment>
+          </Label>
+          <TrackProperty>
+            <ObjectName>DeckStripTitle</ObjectName>
+            <Group><Variable name="Group"/></Group>
+            <Property>titleInfo</Property>
+            <Elide>right</Elide>
+            <Size>0me,26f</Size>
+          </TrackProperty>
+          <Key>
+            <ObjectName>DeckStripKey</ObjectName>
+            <Size>50f,22f</Size>
+            <Alignment>center</Alignment>
+            <Channel><Variable name="channel"/></Channel>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,visual_key</ConfigKey>
+            </Connection>
+          </Key>
+          <NumberBpm>
+            <ObjectName>DeckStripBpm</ObjectName>
+            <Channel><Variable name="channel"/></Channel>
+            <NumberOfDigits>1</NumberOfDigits>
+            <Size>58f,26f</Size>
+            <Alignment>center</Alignment>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,visual_bpm</ConfigKey>
+            </Connection>
+          </NumberBpm>
+          <NumberPos>
+            <ObjectName>DeckStripTime</ObjectName>
+            <Group><Variable name="Group"/></Group>
+            <TabularNumbers>true</TabularNumbers>
+            <Size>150f,26f</Size>
+            <Alignment>right</Alignment>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+            </Connection>
+          </NumberPos>
+          <!-- Opens the cue drawer, see cuepanel.xml -->
+          <PushButton>
+            <ObjectName>DeckCueChip</ObjectName>
+            <Size>50f,24f</Size>
+            <NumberStates>2</NumberStates>
+            <State><Number>0</Number><Text>Cue</Text></State>
+            <State><Number>1</Number><Text>Cue</Text></State>
+            <LeftClickIsPushButton>true</LeftClickIsPushButton>
+            <Connection>
+              <ConfigKey>[Skin],cue_deck<Variable name="channel"/></ConfigKey>
+              <EmitOnDownPress>true</EmitOnDownPress>
+            </Connection>
+            <Connection>
+              <ConfigKey>[Tab],overview</ConfigKey>
+              <BindProperty>visible</BindProperty>
+            </Connection>
+          </PushButton>
+        </Children>
+      </WidgetGroup>
+      <WidgetGroup>
+        <Layout>vertical</Layout>
+        <Size>0me,32f</Size>
+        <Children>
+          <Overview>
+            <ObjectName>MixerDeckOverview</ObjectName>
+            <Channel><Variable name="channel"/></Channel>
+            <SizePolicy>me,me</SizePolicy>
+            <BgColor>#161718</BgColor>
+            <SignalColor>#2ba6ff</SignalColor>
+            <PlayedOverlayColor>#a0101113</PlayedOverlayColor>
+            <Mark>
+              <Control>cue_point</Control>
+              <Color>#ffb020</Color>
+            </Mark>
+            <Connection>
+              <ConfigKey><Variable name="Group"/>,playposition</ConfigKey>
+            </Connection>
+          </Overview>
+        </Children>
+        <Connection>
+          <ConfigKey>[Tab],overview</ConfigKey>
+          <BindProperty>visible</BindProperty>
+        </Connection>
+      </WidgetGroup>
+    </Children>
+  </WidgetGroup>
+</Template>

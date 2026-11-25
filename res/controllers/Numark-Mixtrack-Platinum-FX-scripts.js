@@ -6,7 +6,7 @@ var MixtrackPlatinumFX = {};
 MixtrackPlatinumFX.toggleFXControlEnable = true;
 MixtrackPlatinumFX.toggleFXControlSuper = false;
 
-MixtrackPlatinumFX.shiftBrowseIsZoom = false;
+MixtrackPlatinumFX.shiftBrowseIsZoom = true;
 
 // setting this to false sets tap the file bpm, but without a way to reset its dangerous
 MixtrackPlatinumFX.tapChangesTempo = true;

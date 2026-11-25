@@ -150,6 +150,16 @@ class LibraryControl : public QObject {
     /// Opens the library page of touch skins with [Tab] pages.
     /// Returns true if it was not shown yet.
     bool showTouchSkinLibrary();
+    /// Select and back buttons of controllers on the library page of touch
+    /// skins: select opens the item in the sidebar or loads the track, back
+    /// returns to the sidebar, its parent items and finally to the decks.
+    /// Return false if the skin is no touch skin.
+    bool selectTouchSkinItem();
+    bool backFromTouchSkinItem();
+    /// The library page of a touch skin currently shows the sidebar
+    bool touchSkinSidebarVisible() const;
+    /// Zooms the waveforms of all decks if a touch skin is used
+    bool zoomTouchSkinWaveforms(double v);
 
     // Controls to navigate vertically within currently focused widget (up/down buttons)
     std::unique_ptr<ControlPushButton> m_pMoveUp;

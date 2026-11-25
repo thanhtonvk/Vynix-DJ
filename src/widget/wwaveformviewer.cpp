@@ -87,6 +87,11 @@ void WWaveformViewer::mousePressEvent(QMouseEvent* event) {
         return;
     }
 
+    // Windows sends mouse events for the first finger in addition
+    if (m_bPinching) {
+        return;
+    }
+
     m_mouseAnchor = event->pos();
 
     if (event->button() == Qt::LeftButton) {
@@ -209,57 +214,85 @@ void WWaveformViewer::wheelEvent(QWheelEvent* event) {
 }
 
 bool WWaveformViewer::event(QEvent* pEvent) {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    // Pinch with two fingers to zoom the waveform. A single finger is
-    // translated into mouse events by WWidget (scratching).
-    switch (pEvent->type()) {
-    case QEvent::TouchBegin:
-    case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:
-    case QEvent::TouchCancel: {
-        auto* pTouchEvent = static_cast<QTouchEvent*>(pEvent);
-        const auto& points = pTouchEvent->points();
-        if (pEvent->type() == QEvent::TouchEnd || pEvent->type() == QEvent::TouchCancel) {
-            if (m_bPinching) {
-                m_bPinching = false;
-                pEvent->accept();
-                return true;
-            }
-            break;
-        }
-        if (points.size() >= 2 && m_waveformWidget) {
-            const QPointF delta = points.at(0).position() - points.at(1).position();
-            const double distance = m_waveformWidget->getOrientation() == Qt::Horizontal
-                    ? std::abs(delta.x())
-                    : std::abs(delta.y());
-            if (!m_bPinching) {
-                // The first finger started scratching, stop that
-                if (m_bScratching) {
-                    m_pScratchPositionEnable->set(0.0);
-                    m_bScratching = false;
-                }
-                m_bPinching = true;
-                m_pinchStartDistance = std::max(distance, 1.0);
-                m_pinchStartZoom = m_waveformWidget->getZoom();
-            } else if (distance > 0) {
-                // Spreading the fingers zooms in, i.e. fewer samples per pixel
-                onZoomChange(m_pinchStartZoom * m_pinchStartDistance / distance);
-            }
-            pEvent->accept();
-            return true;
-        }
-        if (m_bPinching) {
-            // One finger lifted, ignore the remaining one until all are up
-            pEvent->accept();
-            return true;
-        }
-        break;
+    if (handlePinch(pEvent)) {
+        return true;
     }
-    default:
-        break;
+#ifdef __WINDOWS__
+    if (pEvent->type() == QEvent::TouchBegin) {
+        // Without accepting the first finger, Qt does not report the second
+        // one. A single finger additionally arrives as mouse events, see
+        // WWidget::event().
+        pEvent->accept();
+        return true;
     }
 #endif
     return WWidget::event(pEvent);
+}
+
+bool WWaveformViewer::handleTouchEventFromWindow(QEvent* pEvent) {
+#if defined(__WINDOWS__) || defined(__APPLE__)
+    return handlePinch(pEvent);
+#else
+    // Includes the translation of a single finger to mouse events
+    return event(pEvent);
+#endif
+}
+
+bool WWaveformViewer::handlePinch(QEvent* pEvent) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    // Pinch with two fingers to zoom the waveform. A single finger is
+    // translated into mouse events by WWidget or the OS (scratching).
+    switch (pEvent->type()) {
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate: {
+        const auto& points = static_cast<QTouchEvent*>(pEvent)->points();
+        const auto isDown = [](const QEventPoint& point) {
+            return point.state() != QEventPoint::State::Released;
+        };
+        const bool twoFingers = points.size() >= 2 &&
+                isDown(points.at(0)) && isDown(points.at(1));
+        if (!twoFingers || !m_waveformWidget) {
+            // One finger lifted, ignore the remaining one until all are up
+            if (m_bPinching) {
+                pEvent->accept();
+            }
+            return m_bPinching;
+        }
+        const QPointF delta = points.at(0).position() - points.at(1).position();
+        const double distance = m_waveformWidget->getOrientation() == Qt::Horizontal
+                ? std::abs(delta.x())
+                : std::abs(delta.y());
+        if (!m_bPinching) {
+            // The first finger started scratching, stop that
+            if (m_bScratching) {
+                m_pScratchPositionEnable->set(0.0);
+                m_bScratching = false;
+            }
+            m_bPinching = true;
+            m_pinchStartDistance = std::max(distance, 1.0);
+            m_pinchStartZoom = m_waveformWidget->getZoom();
+        } else if (distance > 0) {
+            // Spreading the fingers zooms in, i.e. fewer samples per pixel
+            onZoomChange(m_pinchStartZoom * m_pinchStartDistance / distance);
+        }
+        pEvent->accept();
+        return true;
+    }
+    case QEvent::TouchEnd:
+    case QEvent::TouchCancel:
+        if (m_bPinching) {
+            m_bPinching = false;
+            pEvent->accept();
+            return true;
+        }
+        return false;
+    default:
+        return false;
+    }
+#else
+    Q_UNUSED(pEvent);
+    return false;
+#endif
 }
 
 void WWaveformViewer::dragEnterEvent(QDragEnterEvent* pEvent) {

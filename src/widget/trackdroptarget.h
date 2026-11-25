@@ -26,6 +26,13 @@ class TrackDropTarget {
         return false;
     }
 
+    /// Touch events of the OpenGLWindow that covers this widget. Returns true
+    /// if the event has been handled.
+    virtual bool handleTouchEventFromWindow(QEvent* pEvent) {
+        Q_UNUSED(pEvent);
+        return false;
+    }
+
   signals:
     virtual void trackDropped(const QString& filename, const QString& group) = 0;
     virtual void cloneDeck(const QString& sourceGroup, const QString& targetGroup) = 0;

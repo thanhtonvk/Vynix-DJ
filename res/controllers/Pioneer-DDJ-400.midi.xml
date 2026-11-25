@@ -26,6 +26,16 @@
                 </options>
             </control>
             <control>
+                <description>BROWSE +SHIFT - rotate - Zoom waveforms (Vynix DJ skin)</description>
+                <group>[Library]</group>
+                <key>ScrollVertical</key>
+                <status>0xB6</status>
+                <midino>0x64</midino>
+                <options>
+                    <SelectKnob/>
+                </options>
+            </control>
+            <control>
                 <description>BROWSE - press - Move cursor between track list and tree view</description>
                 <group>[Library]</group>
                 <key>MoveFocusForward</key> <!-- missing function to open Folder -->

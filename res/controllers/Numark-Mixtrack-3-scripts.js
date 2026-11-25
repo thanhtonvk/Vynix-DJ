@@ -1112,20 +1112,13 @@ NumarkMixtrack3.BrowseKnob = function(channel, control, value, status, group) {
     // value = 1 / 2 / 3 ... for positive //value = 1 / 2 / 3
     var nval = (value > 0x40 ? value - 0x80 : value);
 
-    if (engine.getSetting("libraryMode") === "focus") {
-        // SHIFT+Turn BROWSE Knob : change focus between search, track table, and sidebar
-        if (shifted) {
-            engine.setValue("[Library]", "MoveFocus", nval);
-        } else {
-            engine.setValue("[Library]", "MoveVertical", nval);
-        }
+    if (shifted) {
+        // Waveform zoom with the Vynix DJ skin
+        engine.setValue("[Library]", "ScrollVertical", nval);
+    } else if (engine.getSetting("libraryMode") === "focus") {
+        engine.setValue("[Library]", "MoveVertical", nval);
     } else { // Classic mode
-        // SHIFT+Turn BROWSE Knob : directory mode --> select Play List/Side bar item
-        if (shifted) {
-            engine.setValue("[Playlist]", "SelectPlaylist", nval);
-        } else {
-            engine.setValue("[Playlist]", "SelectTrackKnob", nval);
-        }
+        engine.setValue("[Playlist]", "SelectTrackKnob", nval);
     }
 };
 

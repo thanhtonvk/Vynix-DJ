@@ -1901,17 +1901,8 @@ ReloopBeatpad.ReverseRoll = function(channel, control, value, status, group) {
 };
 
 ReloopBeatpad.SelectPlayList = function(channel, control, value, status, group) {
-    var i;
-    value = value - 0x40;
-    if (value < 0) {
-        for (i = 0; i < -value; i++) {
-            engine.setValue(group, "SelectPrevPlaylist", true);
-        }
-    } else {
-        for (i = 0; i < value; i++) {
-            engine.setValue(group, "SelectNextPlaylist", true);
-        }
-    }
+    // Waveform zoom with the Vynix DJ skin
+    engine.setValue("[Library]", "ScrollVertical", value - 0x40);
 };
 
 ReloopBeatpad.RecBtn = function(channel, control, value, status, group) {

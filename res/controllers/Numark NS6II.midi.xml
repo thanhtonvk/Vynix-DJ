@@ -16,14 +16,6 @@
             <description>All buttons that have an LED will stay dimly lit even when turned off so they're easier to see in dark environments</description>
         </option>
         <option
-            variable="navEncoderAcceleration"
-            type="integer"
-            min="1"
-            default="5"
-            label="Move this many tracks at once when pressing :hwbtn:SHIFT and moving the Browse Encoder">
-            <description>Amount of tracks moved in a single step when turning the BROWSE encoder while pressing SHIFT</description>
-        </option>
-        <option
             variable="defaultLoopRootSize"
             type="enum"
             label="Loop size of the smallest Pad in Auto-Loop (and similar) Padmodes">

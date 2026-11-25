@@ -34,15 +34,12 @@
                 <Layout>horizontal</Layout>
                 <Size>0me,30f</Size>
                 <Children>
-                  <!-- Left, not centred: the key used to share this row with a
-                       ♭♯ chip and centred in what was left of it. On its own it
-                       fills the row, so centring would float it in from the
-                       edge and break the left rule the BARS row below keeps. -->
                   <Key>
                     <ObjectName>WaveformInfo_Key</ObjectName>
                     <TooltipId>visual_key</TooltipId>
                     <Channel><Variable name="channel"/></Channel>
-                    <Alignment>left</Alignment>
+                    <Size>74f,24f</Size>
+                    <Alignment>center</Alignment>
                     <Connection>
                       <ConfigKey>[Channel<Variable name="channel"/>],visual_key</ConfigKey>
                     </Connection>
@@ -102,6 +99,11 @@
                   </Template>
 
                 </Children>
+                <Connection>
+                  <ConfigKey>[Skin],show_4decks</ConfigKey>
+                  <BindProperty>visible</BindProperty>
+                  <Transform><Not/></Transform>
+                </Connection>
               </WidgetGroup>
             </Children>
           </WidgetGroup>

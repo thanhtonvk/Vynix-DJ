@@ -5,6 +5,7 @@
 #include <QList>
 #include <QMap>
 #include <QObject>
+#include <QTimer>
 
 #include "analyzer/trackanalysisscheduler.h"
 #include "engine/channelhandle.h"
@@ -210,6 +211,7 @@ class PlayerManager : public PlayerManagerInterface {
     /// if [Library],preview_selected_track is enabled, so skins can show its
     /// metadata and waveform overview.
     void slotPreviewSelectedTrack(TrackPointer pTrack);
+    void slotAnalyzePreviewTrack(TrackPointer pTrack);
     void slotLoadLocationToPlayer(const QString& location, const QString& group, bool play);
     void slotLoadLocationToPlayerMaybePlay(const QString& location, const QString& group);
 
@@ -267,6 +269,9 @@ class PlayerManager : public PlayerManagerInterface {
     void trackAnalyzerIdle();
 
   private:
+    void loadSelectedTrackToPreviewDeck();
+    void analyzeSelectedTrack();
+
     TrackPointer lookupTrack(QString location);
     // Must hold m_mutex before calling this method. Internal method that
     // creates a new deck.
@@ -302,6 +307,9 @@ class PlayerManager : public PlayerManagerInterface {
     std::unique_ptr<ControlObject> m_pCONumMicrophones;
     std::unique_ptr<ControlObject> m_pCONumAuxiliaries;
     std::unique_ptr<ControlPushButton> m_pPreviewSelectedTrack;
+    TrackPointer m_pSelectedTrack;
+    QTimer m_previewSelectedTrackTimer;
+    QTimer m_analyzeSelectedTrackTimer;
     parented_ptr<ControlProxy> m_pAutoDjEnabled;
 
     TrackAnalysisScheduler::Pointer m_pTrackAnalysisScheduler;

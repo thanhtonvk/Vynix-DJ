@@ -27,10 +27,10 @@
         <MinAngle>-135</MinAngle>
         <MaxAngle>135</MaxAngle>
         <ArcRadius>21</ArcRadius>
-        <ArcThickness>4</ArcThickness>
-        <ArcBgThickness>4</ArcBgThickness>
+        <ArcThickness>3.5</ArcThickness>
+        <ArcBgThickness>3.5</ArcBgThickness>
         <ArcColor><Variable name="Color"/></ArcColor>
-        <ArcBgColor>#2a313d</ArcBgColor>
+        <ArcBgColor>#27282a</ArcBgColor>
         <ArcRoundCaps>true</ArcRoundCaps>
         <ArcUnipolar>false</ArcUnipolar>
         <Connection>

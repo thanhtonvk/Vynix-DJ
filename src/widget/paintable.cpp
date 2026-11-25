@@ -249,24 +249,22 @@ void Paintable::drawInternal(const QRectF& targetRect, QPainter* pPainter,
             // it to a pixmap which will then get tiled.
             pPainter->drawTiledPixmap(targetRect, *m_pPixmap);
         } else {
+            const qreal devicePixelRatio = pPainter->device()->devicePixelRatio();
+            const QSize targetSize = targetRect.size().toSize();
+            const QSize pixmapSize = targetSize * devicePixelRatio;
             if (!m_pPixmap ||
-                    m_pPixmap->size() != targetRect.size().toSize() ||
+                    m_pPixmap->size() != pixmapSize ||
                     m_lastSourceRect != sourceRect) {
                 // qDebug() << "Paintable cache miss";
-                qreal devicePixelRatio = pPainter->device()->devicePixelRatio();
-                m_pPixmap = std::make_unique<QPixmap>(
-                        targetRect.size().toSize() * devicePixelRatio);
+                m_pPixmap = std::make_unique<QPixmap>(pixmapSize);
                 m_pPixmap->setDevicePixelRatio(devicePixelRatio);
                 m_pPixmap->fill(Qt::transparent);
                 { // QPainter Scope
                     auto pixmapPainter = QPainter(m_pPixmap.get());
-                    QRectF deviceSourceRect = QRectF(
-                            sourceRect.x() * devicePixelRatio,
-                            sourceRect.y() * devicePixelRatio,
-                            sourceRect.width() * devicePixelRatio,
-                            sourceRect.height() * devicePixelRatio);
-                    m_pSvg->setViewBox(deviceSourceRect);
-                    m_pSvg->render(&pixmapPainter);
+                    // The painter uses device independent pixels, and the view
+                    // box is in SVG units, so neither of them is scaled
+                    m_pSvg->setViewBox(sourceRect);
+                    m_pSvg->render(&pixmapPainter, QRectF(QPointF(0, 0), targetSize));
                 }
                 mayCorrectColors();
                 m_lastSourceRect = sourceRect;

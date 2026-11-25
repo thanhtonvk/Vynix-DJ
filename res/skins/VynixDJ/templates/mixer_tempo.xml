@@ -1,7 +1,7 @@
 <!--
   Tempo strip of one deck on the MIXER page (mixer.xml), next to its
   channel fader: pitch in % on top, the vertical tempo fader and a reset
-  to 0 % below. The BPM is next to the track title (mixer_deck_header.xml).
+  to 0 % below. The BPM is next to the track title (mixer.xml).
   Variables:
     channel: deck number
 -->
@@ -16,7 +16,7 @@
         <ObjectName>MixerTempoValue</ObjectName>
         <Channel><Variable name="channel"/></Channel>
         <NumberOfDigits>1</NumberOfDigits>
-        <Size>0me,26f</Size>
+        <Size>0me,34f</Size>
         <Alignment>center</Alignment>
       </NumberRate>
       <SliderComposed>
@@ -33,7 +33,7 @@
            the fader is at its default, see levels.xml -->
       <PushButton>
         <ObjectName>MixerTempoReset</ObjectName>
-        <Size>0me,32f</Size>
+        <Size>0me,34f</Size>
         <NumberStates>1</NumberStates>
         <State><Number>0</Number><Text>0 %</Text></State>
         <Connection>

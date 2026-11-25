@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QMutex>
+#include <QStandardPaths>
 #include <QStorageInfo>
 
 #include "control/controlpushbutton.h"
@@ -15,6 +16,11 @@
 #include "recording/defs_recording.h"
 
 #define MIN_DISK_FREE 1024 * 1024 * 1024ll // one gibibyte
+
+namespace {
+/// 320 kbit/s, see EncoderMp3Settings
+constexpr int kDefaultMp3QualityIndex = 11;
+} // namespace
 
 RecordingManager::RecordingManager(UserSettingsPointer pConfig, EngineMixer* pEngine)
         : m_pConfig(pConfig),
@@ -38,6 +44,24 @@ RecordingManager::RecordingManager(UserSettingsPointer pConfig, EngineMixer* pEn
             &RecordingManager::slotToggleRecording);
     m_pCoRecStatus = std::make_unique<ControlObject>(ConfigKey(RECORDING_PREF_KEY, "status"));
 
+    const ConfigKey directoryKey(RECORDING_PREF_KEY, "Directory");
+    const QString directory = m_pConfig->getValueString(directoryKey);
+    bool useDefaultDirectory = directory.isEmpty();
+#ifdef Q_OS_ANDROID
+    // The former default is private to the app, other apps and file managers
+    // can not access it
+    useDefaultDirectory |= directory.contains(QStringLiteral("/Android/data/"));
+#endif
+    if (useDefaultDirectory) {
+        m_pConfig->setValue(directoryKey, defaultRecordingDir());
+    }
+    const ConfigKey encodingKey(RECORDING_PREF_KEY, "Encoding");
+    if (m_pConfig->getValueString(encodingKey).isEmpty()) {
+        m_pConfig->setValue(encodingKey, QStringLiteral(ENCODING_MP3));
+        m_pConfig->setValue(ConfigKey(RECORDING_PREF_KEY, "MP3_Quality"),
+                kDefaultMp3QualityIndex);
+    }
+
     // Register EngineRecord with the engine sidechain.
     EngineSideChain* pSidechain = pEngine->getSideChain();
     if (pSidechain) {
@@ -56,6 +80,17 @@ RecordingManager::RecordingManager(UserSettingsPointer pConfig, EngineMixer* pEn
                 &RecordingManager::slotDurationRecorded);
         pSidechain->addSideChainWorker(pEngineRecord);
     }
+}
+
+// static
+QString RecordingManager::defaultRecordingDir() {
+#ifdef Q_OS_ANDROID
+    return QStringLiteral("/storage/emulated/0/Music/Vynix DJ");
+#else
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::MusicLocation) +
+            QStringLiteral("/Vynix DJ/Recordings"))
+            .absolutePath();
+#endif
 }
 
 QString RecordingManager::formatDateTimeForFilename(const QDateTime& dateTime) const {
@@ -136,6 +171,7 @@ void RecordingManager::startRecording() {
     m_recordingLocation = m_recording_base_file + QChar('.') + fileExtension;
     m_pConfig->set(ConfigKey(RECORDING_PREF_KEY, "Path"), m_recordingLocation);
     m_pConfig->set(ConfigKey(RECORDING_PREF_KEY, "CuePath"), ConfigValue(m_recording_base_file + QStringLiteral(".cue")));
+    m_recordedFiles = {m_recordingLocation};
 
     m_pCoRecStatus->set(RECORD_READY);
 }
@@ -159,6 +195,7 @@ void RecordingManager::splitContinueRecording()
     m_pConfig->set(ConfigKey(RECORDING_PREF_KEY, "Path"), m_recordingLocation);
     m_pConfig->set(ConfigKey(RECORDING_PREF_KEY, "CuePath"), ConfigValue(new_base_filename + QStringLiteral(".cue")));
     m_recordingFile = QFileInfo(m_recordingLocation).fileName();
+    m_recordedFiles.append(m_recordingLocation);
 
     m_pCoRecStatus->set(RECORD_SPLIT_CONTINUE);
 }
@@ -281,8 +318,12 @@ void RecordingManager::slotIsRecording(bool isRecordingActive, bool error) {
     //qDebug() << "SlotIsRecording " << isRecording << error;
 
     // Notify the GUI controls, see dlgrecording.cpp.
+    const bool wasRecording = m_bRecording;
     m_bRecording = isRecordingActive;
     emit isRecording(isRecordingActive);
+    if (wasRecording && !isRecordingActive && !error) {
+        emit recordingSaved(m_recordedFiles);
+    }
 
     if (error) {
         ErrorDialogProperties* props = ErrorDialogHandler::instance()->newDialogProperties();

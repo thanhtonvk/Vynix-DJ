@@ -1,5 +1,10 @@
 #include "mixxxmainwindow.h"
 
+#ifdef __ANDROID__
+#include <QCoreApplication>
+#include <QJniObject>
+#endif
+
 #include <QCheckBox>
 #include <QCloseEvent>
 #include <QDebug>
@@ -36,6 +41,7 @@
 #include "moc_mixxxmainwindow.cpp"
 #include "preferences/dialog/dlgpreferences.h"
 #include "preferences/interface.h"
+#include "recording/defs_recording.h"
 #include "widget/wtracktableviewheader.h"
 #ifdef __BROADCAST__
 #include "broadcast/broadcastmanager.h"
@@ -905,6 +911,47 @@ void MixxxMainWindow::createSkinSettingsControls() {
         m_skinSettingsControls.push_back(std::move(pShowColumn));
     }
 
+    // Recording format for touch skins, the same setting as in Preferences >
+    // Recording. Positions in this list are the values of the control.
+    static const QStringList kRecordingFormats = {
+            QStringLiteral(ENCODING_MP3),
+            QStringLiteral(ENCODING_WAVE),
+            QStringLiteral(ENCODING_FLAC),
+    };
+    const ConfigKey encodingKey(
+            QStringLiteral(RECORDING_PREF_KEY), QStringLiteral("Encoding"));
+    auto pRecordingFormat = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral(RECORDING_PREF_KEY), QStringLiteral("format")));
+    pRecordingFormat->set(static_cast<double>(
+            kRecordingFormats.indexOf(pConfig->getValueString(encodingKey))));
+    connect(pRecordingFormat.get(),
+            &ControlObject::valueChanged,
+            this,
+            [pConfig, encodingKey](double value) {
+                const int index = static_cast<int>(value);
+                if (index >= 0 && index < kRecordingFormats.size()) {
+                    pConfig->setValue(encodingKey, kRecordingFormats.at(index));
+                }
+            });
+    m_skinSettingsControls.push_back(std::move(pRecordingFormat));
+
+#ifdef __ANDROID__
+    connect(m_pCoreServices->getRecordingManager().get(),
+            &RecordingManager::recordingSaved,
+            this,
+            [](const QStringList& filePaths) {
+                // Shows a message and makes the files visible for other apps
+                const QJniObject context = QNativeInterface::QAndroidApplication::context();
+                QJniObject::callStaticMethod<void>(
+                        "com/tondz/vynixdj/Recordings",
+                        "onSaved",
+                        "(Landroid/content/Context;Ljava/lang/String;)V",
+                        context.object(),
+                        QJniObject::fromString(filePaths.join(QChar('\n')))
+                                .object<jstring>());
+            });
+#endif
+
     // Touch skins with [Tab] pages: show the decks again after a track was
     // loaded from the library, so a controller's load buttons work without
     // touching the screen. Turning the browse knob opens the library page,
@@ -923,6 +970,29 @@ void MixxxMainWindow::createSkinSettingsControls() {
             &Library::loadTrack,
             this,
             showDecksPage);
+
+    // Two or four decks on the pages of touch skins. Persisted. On the MIXER
+    // page each side shows one of its decks, [Skin],mixer_left3 is deck 3
+    // instead of 1 and [Skin],mixer_right4 is deck 4 instead of 2.
+    auto pShow4Decks = std::make_unique<ControlObject>(
+            ConfigKey(QStringLiteral("[Skin]"), QStringLiteral("show_4decks")),
+            true,
+            false,
+            true);
+    for (const QString& item : {QStringLiteral("mixer_left3"), QStringLiteral("mixer_right4")}) {
+        auto pSide = std::make_unique<ControlObject>(
+                ConfigKey(QStringLiteral("[Skin]"), item));
+        connect(pShow4Decks.get(),
+                &ControlObject::valueChanged,
+                pSide.get(),
+                [pSide = pSide.get()](double value) {
+                    if (value <= 0) {
+                        pSide->set(0);
+                    }
+                });
+        m_skinSettingsControls.push_back(std::move(pSide));
+    }
+    m_skinSettingsControls.push_back(std::move(pShow4Decks));
 
     // One Beat FX unit like on DDJ controllers, or one per side like on
     // Denon DJ and Numark controllers ([EffectRack1_EffectUnit1] for the left

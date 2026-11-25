@@ -1,6 +1,6 @@
 #include "engine/sidechain/shoutconnection.h"
 
-#include <QTextCodec>
+#include <QStringEncoder>
 #include <QUrl>
 
 // These includes are only required by ignoreSigpipe, which is unix-only
@@ -47,8 +47,7 @@ const mixxx::Logger kLogger("ShoutConnection");
 
 ShoutConnection::ShoutConnection(BroadcastProfilePtr profile,
         UserSettingsPointer pConfig)
-        : m_pTextCodec(nullptr),
-          m_pMetaData(),
+        : m_pMetaData(),
           m_pShout(nullptr),
           m_pShoutMetaData(nullptr),
           m_iMetaDataLife(0),
@@ -157,8 +156,8 @@ void ShoutConnection::applySettings() {
 }
 
 QByteArray ShoutConnection::encodeString(const QString& string) {
-    if (m_pTextCodec) {
-        return m_pTextCodec->fromUnicode(string);
+    if (m_pTextEncoder) {
+        return m_pTextEncoder->encode(string);
     }
     return string.toLatin1();
 }
@@ -205,8 +204,10 @@ void ShoutConnection::updateFromPreferences() {
     QString codec = m_pProfile->getMetadataCharset();
     if (!codec.isEmpty()) {
         QByteArray baCodec = codec.toLatin1();
-        m_pTextCodec = QTextCodec::codecForName(baCodec);
-        if (!m_pTextCodec) {
+        m_pTextEncoder = std::make_unique<QStringEncoder>(
+                baCodec.constData(), QStringEncoder::Flag::Stateless);
+        if (!m_pTextEncoder->isValid()) {
+            m_pTextEncoder.reset();
             kLogger.warning()
                     << "Couldn't find broadcast metadata codec for codec:" << codec
                     << " defaulting to ISO-8859-1.";

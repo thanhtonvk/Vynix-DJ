@@ -6,6 +6,7 @@
 #include <QModelIndex>
 #include <QWindow>
 #include <QtDebug>
+#include <cmath>
 
 #include "control/controlencoder.h"
 #include "control/controlobject.h"
@@ -15,6 +16,8 @@
 #include "mixer/playermanager.h"
 #include "moc_librarycontrol.cpp"
 #include "util/cmdlineargs.h"
+#include "util/math.h"
+#include "waveform/renderers/waveformwidgetrenderer.h"
 #include "widget/wlibrary.h"
 #include "widget/wlibrarysidebar.h"
 #include "widget/wsearchlineedit.h"
@@ -23,6 +26,9 @@
 
 namespace {
 const QString kAppGroup = QStringLiteral("[App]");
+
+/// Zoom factor of one detent of the browse knob
+constexpr double kWaveformZoomStep = 1.2;
 } // namespace
 
 LoadToGroupController::LoadToGroupController(LibraryControl* pParent, const QString& group)
@@ -678,6 +684,12 @@ void LibraryControl::slotLoadSelectedTrackToGroup(const QString& group, bool pla
         return;
     }
 
+    // The tracks are not visible, open the selected item instead
+    if (touchSkinSidebarVisible()) {
+        selectTouchSkinItem();
+        return;
+    }
+
     WTrackTableView* pTrackTableView = m_pLibraryWidget->getCurrentTrackTableView();
     if (pTrackTableView) {
 #ifdef __STEM__
@@ -690,6 +702,12 @@ void LibraryControl::slotLoadSelectedTrackToGroup(const QString& group, bool pla
 
 void LibraryControl::slotLoadSelectedIntoFirstStopped(double v) {
     if (!m_pLibraryWidget || v <= 0) {
+        return;
+    }
+
+    // The tracks are not visible, open the selected item instead
+    if (touchSkinSidebarVisible()) {
+        selectTouchSkinItem();
         return;
     }
 
@@ -746,6 +764,15 @@ void LibraryControl::slotSelectPrevTrack(double v) {
 
 void LibraryControl::slotSelectTrack(double v) {
     if (!m_pLibraryWidget || v == 0) {
+        return;
+    }
+
+    // Touch skins show either the sidebar or the tracks
+    if (showTouchSkinLibrary()) {
+        return;
+    }
+    if (touchSkinSidebarVisible()) {
+        slotSelectSidebarItem(v);
         return;
     }
 
@@ -825,7 +852,21 @@ void LibraryControl::slotMoveVertical(double v) {
     if (showTouchSkinLibrary()) {
         return;
     }
-    focusVisibleTouchSkinWidget();
+    if (focusVisibleTouchSkinWidget()) {
+        // Move in what is visible, no matter if it could be focused. While a
+        // controller is used, there may be no focused widget at all.
+        if (touchSkinSidebarVisible()) {
+            slotSelectSidebarItem(v);
+            return;
+        }
+        WTrackTableView* pTrackTableView = m_pLibraryWidget
+                ? m_pLibraryWidget->getCurrentTrackTableView()
+                : nullptr;
+        if (pTrackTableView) {
+            pTrackTableView->moveSelection(static_cast<int>(v));
+            return;
+        }
+    }
 
     switch (m_focusedWidget) {
     case FocusWidget::Sidebar: {
@@ -892,7 +933,81 @@ void LibraryControl::slotScrollDown(double v) {
     }
 }
 
+bool LibraryControl::touchSkinSidebarVisible() const {
+    const ConfigKey libraryTabKey(QStringLiteral("[Tab]"), QStringLiteral("library"));
+    const ConfigKey sidebarVisibleKey(
+            QStringLiteral("[Sidebar]"), QStringLiteral("sidebar_visible"));
+    return m_pSidebarWidget &&
+            ControlObject::exists(libraryTabKey) &&
+            ControlObject::get(libraryTabKey) > 0 &&
+            ControlObject::exists(sidebarVisibleKey) &&
+            ControlObject::get(sidebarVisibleKey) > 0;
+}
+
+bool LibraryControl::selectTouchSkinItem() {
+    if (!ControlObject::exists(ConfigKey(
+                QStringLiteral("[Tab]"), QStringLiteral("library"))) ||
+            m_focusedWidget == FocusWidget::Dialog ||
+            m_focusedWidget == FocusWidget::ContextMenu ||
+            m_focusedWidget == FocusWidget::SearchRelatedMenu) {
+        return false;
+    }
+    slotGoToItem(1);
+    return true;
+}
+
+bool LibraryControl::backFromTouchSkinItem() {
+    const ConfigKey libraryTabKey(QStringLiteral("[Tab]"), QStringLiteral("library"));
+    const ConfigKey sidebarVisibleKey(
+            QStringLiteral("[Sidebar]"), QStringLiteral("sidebar_visible"));
+    if (!m_pSidebarWidget || !ControlObject::exists(libraryTabKey) ||
+            !ControlObject::exists(sidebarVisibleKey) ||
+            m_focusedWidget == FocusWidget::Dialog ||
+            m_focusedWidget == FocusWidget::ContextMenu ||
+            m_focusedWidget == FocusWidget::SearchRelatedMenu) {
+        return false;
+    }
+    if (ControlObject::get(libraryTabKey) <= 0) {
+        // Nothing to go back to on the other pages
+        return true;
+    }
+    if (ControlObject::get(sidebarVisibleKey) <= 0) {
+        ControlObject::set(sidebarVisibleKey, 1);
+        setLibraryFocus(FocusWidget::Sidebar);
+    } else if (!m_pSidebarWidget->goBack()) {
+        ControlObject::set(ConfigKey(QStringLiteral("[Tab]"), QStringLiteral("overview")), 1);
+    }
+    return true;
+}
+
+bool LibraryControl::zoomTouchSkinWaveforms(double v) {
+    const ConfigKey libraryTabKey(QStringLiteral("[Tab]"), QStringLiteral("library"));
+    if (v == 0 || !ControlObject::exists(libraryTabKey)) {
+        return false;
+    }
+    // Clockwise zooms in, i.e. fewer samples per pixel. All decks get the zoom
+    // of the first one, so it does not matter if their zoom is synchronized.
+    const double zoom = math_clamp(
+            ControlObject::get(ConfigKey(QStringLiteral("[Channel1]"),
+                    QStringLiteral("waveform_zoom"))) *
+                    std::pow(kWaveformZoomStep, -v),
+            WaveformWidgetRenderer::s_waveformMinZoom,
+            WaveformWidgetRenderer::s_waveformMaxZoom);
+    const int numDecks = static_cast<int>(ControlObject::get(
+            ConfigKey(QStringLiteral("[App]"), QStringLiteral("num_decks"))));
+    for (int i = 0; i < numDecks; ++i) {
+        ControlObject::set(
+                ConfigKey(PlayerManager::groupForDeck(i), QStringLiteral("waveform_zoom")),
+                zoom);
+    }
+    return true;
+}
+
 void LibraryControl::slotScrollVertical(double v) {
+    // Mappings use this for the browse knob with Shift
+    if (zoomTouchSkinWaveforms(v)) {
+        return;
+    }
     const auto key = (v < 0) ? Qt::Key_PageUp : Qt::Key_PageDown;
     const auto times = static_cast<unsigned short>(std::abs(v));
     emitKeyEvent(QKeyEvent{QEvent::KeyPress, key, Qt::NoModifier, QString(), false, times});
@@ -917,18 +1032,24 @@ void LibraryControl::slotMoveHorizontal(double v) {
 }
 
 void LibraryControl::slotMoveFocusForward(double v) {
-    if (v > 0) {
+    if (v > 0 && !selectTouchSkinItem()) {
         slotMoveFocus(1);
     }
 }
 
 void LibraryControl::slotMoveFocusBackward(double v) {
-    if (v > 0) {
+    if (v > 0 && !backFromTouchSkinItem()) {
         slotMoveFocus(-1);
     }
 }
 
 void LibraryControl::slotMoveFocus(double v) {
+    if (v == 0) {
+        return;
+    }
+    if (v > 0 ? selectTouchSkinItem() : backFromTouchSkinItem()) {
+        return;
+    }
     // Don't use Key_Tab + ShiftModifier for moving focus backwards!
     // This would indeed move the focus, though it has a significant side-effect
     // compared to pressing Shift + Tab on a real keyboard:
@@ -1141,7 +1262,12 @@ void LibraryControl::slotSelectPrevSidebarItem(double v) {
 }
 
 void LibraryControl::slotToggleSelectedSidebarItem(double v) {
-    if (m_pSidebarWidget && v > 0) {
+    if (!m_pSidebarWidget || v <= 0) {
+        return;
+    }
+    if (touchSkinSidebarVisible()) {
+        selectTouchSkinItem();
+    } else if (!backFromTouchSkinItem()) {
         m_pSidebarWidget->toggleSelectedItem();
     }
 }
@@ -1178,14 +1304,23 @@ void LibraryControl::slotGoToItem(double v) {
         return;
     }
     const bool touchSkin = focusVisibleTouchSkinWidget();
+    FocusWidget target = m_focusedWidget;
+    if (touchSkin) {
+        // What is visible, no matter if it could be focused
+        target = touchSkinSidebarVisible()
+                ? FocusWidget::Sidebar
+                : FocusWidget::TracksTable;
+    }
 
-    switch (m_focusedWidget) {
+    switch (target) {
     case FocusWidget::Sidebar:
         // Focus the library if this is a leaf node in the tree
         // Note that Tracks and AutoDJ always return 'false':
         // expanding those root items via controllers is considered dispensable
         // because the subfeatures' actions can't be accessed by controllers anyway.
-        if (m_pSidebarWidget->isLeafNodeSelected()) {
+        // Touch skins: an expanded folder that is selected again shows its tracks
+        if (m_pSidebarWidget->isLeafNodeSelected() ||
+                (touchSkin && m_pSidebarWidget->isExpandedFolderSelected())) {
             if (touchSkin) {
                 // Show the track table in place of the sidebar, like a tap
                 ControlObject::set(ConfigKey(QStringLiteral("[Sidebar]"),
