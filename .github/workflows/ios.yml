@@ -66,9 +66,10 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p ~/vcpkg-cache
-          "$VCPKG_ROOT/vcpkg" install \
+          "$VCPKG_ROOT/vcpkg" install --keep-going \
             --x-manifest-root="$GITHUB_WORKSPACE/packaging/ios/vcpkg" \
             --x-install-root="$DEPS" \
+            --overlay-ports="$GITHUB_WORKSPACE/packaging/ios/vcpkg/ports" \
             --overlay-ports="$VCPKG_ROOT/overlay/ports" \
             --overlay-triplets="$GITHUB_WORKSPACE/packaging/ios/vcpkg/triplets" \
             --overlay-triplets="$VCPKG_ROOT/overlay/triplets" \
@@ -133,6 +134,11 @@ jobs:
           # around the errors as an annotation
           grep -nE -B3 -A6 "error[: ]|Error|FAILED|CMake Error|undefined|Undefined symbols|BUILD FAILED" "$LOG" | head -150 > errors.txt || true
           test -s errors.txt || tail -80 "$LOG" > errors.txt
+          grep -oE "/Users/runner/vcpkg/buildtrees/[^ ]*-(err|out)\.log" "$LOG" | sort -u | while read -r f; do
+            if [ -f "$f" ]; then
+              { echo "== $f"; grep -nE -A4 "error|Error|undefined" "$f" | head -40; tail -8 "$f"; } >> errors.txt
+            fi
+          done
           msg="$(head -c 60000 errors.txt | sed -e 's/%/%25/g' | awk '{printf "%s%%0A", $0}')"
           echo "::error title=Build errors::${msg}"
 
