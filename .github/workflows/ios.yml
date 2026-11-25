@@ -129,6 +129,15 @@ jobs:
           du -sh Payload/VynixDJ.app; ls Payload/VynixDJ.app
           zip -qry VynixDJ-1.1.0-ios-unsigned.ipa Payload
           ls -l ./*.ipa
+          # Fail if something the app cannot start without is missing
+          cd Payload/VynixDJ.app
+          test -f skins/VynixDJ/skin.xml
+          test -f schema.xml
+          test -f Assets.car
+          test -d controllers
+          lipo -archs VynixDJ
+          info="$(ls; du -sh .; lipo -archs VynixDJ; plutil -p Info.plist | grep -E "Bundle(Identifier|Version|ShortVersion|Executable|IconName)|MinimumOS|Orientation|Launch")"
+          echo "::notice title=App contents::$(printf '%s' "$info" | awk '{printf "%s%%0A", $0}')"
 
       - name: Report errors
         if: failure()
