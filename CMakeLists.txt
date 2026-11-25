@@ -2478,7 +2478,11 @@ if(QT6)
         C_VISIBILITY_PRESET hidden
         LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/compat"
     )
-    target_link_options(vynixcompat PRIVATE "LINKER:-z,global")
+    # 16 KB pages like the other libraries, for Android 15 and later
+    target_link_options(
+      vynixcompat
+      PRIVATE "LINKER:-z,global" "LINKER:-z,max-page-size=16384"
+    )
     target_link_libraries(vynixcompat PRIVATE dl)
     target_link_libraries(mixxx-lib PUBLIC vynixcompat)
     set_target_properties(
