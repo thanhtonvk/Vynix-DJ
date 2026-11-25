@@ -1498,7 +1498,7 @@ QWidget* LegacySkinParser::parseVuMeter(const QDomElement& node) {
     }
 #endif
     auto* pWaveformWidgetFactory = WaveformWidgetFactory::instance();
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     // OpenGL child windows are not composed with the raster widgets there
     constexpr bool forceLegacy = true;
 #else

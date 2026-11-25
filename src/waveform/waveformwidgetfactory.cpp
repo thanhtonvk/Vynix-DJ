@@ -1433,9 +1433,9 @@ WaveformWidgetBackend WaveformWidgetFactory::getBackendFromConfig() const {
         // editing the INI file to target a specific rendering backend. If no
         // complains come back, we can convert this safely to a backend eventually.
         backend = m_config->getValue(kHardwareAccelerationKey, backend);
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
         // Accelerated waveforms are rendered in an embedded OpenGL window,
-        // which stays blank inside the legacy QWidget UI on Android.
+        // which stays blank inside the legacy QWidget UI on phones.
         backend = WaveformWidgetBackend::None;
 #endif
     }
@@ -1470,7 +1470,7 @@ WaveformWidgetBackend WaveformWidgetFactory::getBackendFromConfig() const {
 }
 
 WaveformWidgetBackend WaveformWidgetFactory::preferredBackend() const {
-#if defined(Q_OS_ANDROID) && defined(MIXXX_USE_QML)
+#if (defined(Q_OS_ANDROID) || defined(Q_OS_IOS)) && defined(MIXXX_USE_QML)
     // See getBackendFromConfig(): only software rendering works in the legacy UI
     if (!isQmlMode()) {
         return WaveformWidgetBackend::None;

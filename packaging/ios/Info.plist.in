@@ -12,7 +12,7 @@
     <string>@IOS_BUNDLE_NAME@</string>
 
     <key>CFBundleDisplayName</key>
-    <string>@IOS_BUNDLE_NAME@</string>
+    <string>Vynix DJ</string>
 
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
@@ -21,10 +21,10 @@
     <string>$(EXECUTABLE_NAME)</string>
 
     <key>CFBundleVersion</key>
-    <string>$(CURRENT_PROJECT_VERSION)</string>
+    <string>@IOS_BUNDLE_VERSION@</string>
 
     <key>CFBundleShortVersionString</key>
-    <string>$(MARKETING_VERSION)</string>
+    <string>@IOS_BUNDLE_SHORTVERSION@</string>
 
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -40,19 +40,29 @@
     <key>UIFileSharingEnabled</key>
 	<true/>
 
+    <key>UIRequiresFullScreen</key>
+    <true/>
+
+    <key>UIStatusBarHidden</key>
+    <true/>
+
+    <!-- Keep playing with the screen locked -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>audio</string>
+    </array>
+
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
 
     <key>NSMicrophoneUsageDescription</key>
-    <string>Mixxx requires microphone access for microphone and vinyl input.</string>
+    <string>Vynix DJ requires microphone access for microphone and vinyl input.</string>
 
     <key>NSAppleMusicUsageDescription</key>
-    <string>Mixxx accesses the Apple Music library to presents its tracks and playlists in the library.</string>
+    <string>Vynix DJ accesses the Apple Music library to present its tracks and playlists in the library.</string>
 
     <key>UISupportedInterfaceOrientations</key>
     <array>
-        <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationPortraitUpsideDown</string>
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>

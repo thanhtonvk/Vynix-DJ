@@ -28,7 +28,7 @@ class WEffectSelector : public QComboBox, public WBaseWidget {
     void slotPresetListShowRequest(bool show);
     void populate();
     bool event(QEvent* pEvent) override;
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     void mousePressEvent(QMouseEvent* pEvent) override;
     void mouseReleaseEvent(QMouseEvent* pEvent) override;
 #endif

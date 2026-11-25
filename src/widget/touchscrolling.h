@@ -17,7 +17,7 @@ inline void enableTouchScrolling(QAbstractItemView* pView) {
     pView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     pView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     QWidget* pViewport = pView->viewport();
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     QScroller::grabGesture(pViewport, QScroller::LeftMouseButtonGesture);
 #else
     QScroller::grabGesture(pViewport, QScroller::TouchGesture);

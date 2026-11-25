@@ -42,6 +42,9 @@
 #include "util/logging.h"
 #include "util/sandbox.h"
 #include "util/versionstore.h"
+#ifdef Q_OS_IOS
+#include "util/iosscreen.h"
+#endif
 
 namespace {
 
@@ -124,7 +127,7 @@ int runMixxx(MixxxApplication* pApp, const CmdlineArgs& args) {
             qInfo() << "User previously ran the unstable version on this profile";
         }
 
-#ifdef MIXXX_USE_QOPENGL
+#if defined(MIXXX_USE_QOPENGL) && !defined(Q_OS_IOS)
         // Will call initialize when the initial wglwidget's
         // qopenglwindow has been exposed
         mainWindow.initializeQOpenGL();
@@ -264,6 +267,15 @@ void adjustScaleFactor(CmdlineArgs* pArgs) {
         pArgs->setScaleFactor(scaleFactor);
         return;
     }
+#ifdef Q_OS_IOS
+    // The skins are designed for desktop screens, shrink them on phones and
+    // tablets like on Android. Sizes are in points.
+    constexpr double kTabletShortSide = 700;
+    scaleFactor = mixxx::iosScreenShortSide() < kTabletShortSide ? 0.6 : 0.8;
+    qDebug() << "Using iOS skin ScaleFactor" << scaleFactor;
+    qputenv(kScaleFactorEnvVar, QByteArray::number(scaleFactor));
+    pArgs->setScaleFactor(scaleFactor);
+#endif
 #ifdef Q_OS_ANDROID
 #ifdef MIXXX_USE_QML
     const bool legacySkin = !pArgs->isQml();
@@ -333,7 +345,7 @@ int main(int argc, char * argv[]) {
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
-#ifdef MIXXX_USE_QOPENGL
+#if defined(MIXXX_USE_QOPENGL) && !defined(Q_OS_IOS)
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 #endif
 

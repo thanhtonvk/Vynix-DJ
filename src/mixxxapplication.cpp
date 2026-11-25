@@ -44,7 +44,7 @@ Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
 #else
 #error "Q_IMPORT_PLUGIN() for the current patform is missing"
 #endif
-#if !defined(Q_OS_WASM)
+#if !defined(Q_OS_WASM) && !defined(Q_OS_IOS)
 Q_IMPORT_PLUGIN(QOffscreenIntegrationPlugin)
 Q_IMPORT_PLUGIN(QMinimalIntegrationPlugin)
 #endif

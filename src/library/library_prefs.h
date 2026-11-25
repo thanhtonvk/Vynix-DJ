@@ -17,7 +17,7 @@ extern const ConfigKey kRescanOnStartupConfigKey;
 extern const ConfigKey kRepairDatabaseOnNextRestartConfigKey;
 
 extern const ConfigKey kShowScanSummaryConfigKey;
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
 // A modal summary after every scan interrupts touch use
 inline constexpr bool kShowScanSummaryDefault = false;
 #else

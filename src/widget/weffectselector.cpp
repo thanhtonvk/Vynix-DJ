@@ -171,7 +171,7 @@ bool WEffectSelector::event(QEvent* pEvent) {
     return QComboBox::event(pEvent);
 }
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
 // QComboBox opens its popup on press. With touch input the popup appears
 // under the finger and the following release selects the item there (the
 // current one), closing the popup right away. Open it on release instead.

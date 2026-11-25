@@ -363,7 +363,7 @@ void WTrackTableView::loadTrackModel(QAbstractItemModel* pNewModel, bool restore
     } else {
         setDragDropMode(QAbstractItemView::DragOnly);
     }
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     // A finger drag scrolls the list, see mixxx::enableTouchScrolling().
     // Dragging tracks would start a drag & drop operation instead.
     setDragEnabled(false);

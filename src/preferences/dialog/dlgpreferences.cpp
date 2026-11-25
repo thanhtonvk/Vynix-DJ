@@ -11,7 +11,7 @@
 #include <QSlider>
 #include <QStyle>
 #include <QtGlobal>
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #include <QAbstractItemView>
 #include <QComboBox>
 #include <QScroller>
@@ -59,7 +59,7 @@
 #include "util/darkappearance.h"
 #endif
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 namespace {
 
 // The preferences are a desktop dialog. On touch screens, dragging must scroll
@@ -160,7 +160,7 @@ DlgPreferences::DlgPreferences(
     setupUi(this);
     fixSliderStyle();
     contentsTreeWidget->setHeaderHidden(true);
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     setStyleSheet(touchStyleSheet());
     contentsTreeWidget->setIconSize(QSize(touchPx(24), touchPx(24)));
     contentsTreeWidget->setMinimumWidth(touchPx(210));
@@ -676,7 +676,7 @@ void DlgPreferences::addPageWidget(const PreferencesPage& page,
     sa->setWidget(pageCopy.pDlg);
     pagesWidget->addWidget(sa);
     m_allPages.append(pageCopy);
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     enableTouchScrollingRecursive(sa);
 #endif
 

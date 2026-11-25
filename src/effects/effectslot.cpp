@@ -369,7 +369,7 @@ void EffectSlot::loadEffectInner(const EffectManifestPointer pManifest,
         }
     } else {
         double metaParameter = pEffectPreset->metaParameter();
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
         // Most effects default to a metaknob of 0, i.e. no audible effect
         // until the super knob is turned up. Start halfway so enabling an
         // effect on a touch screen has an audible result right away.

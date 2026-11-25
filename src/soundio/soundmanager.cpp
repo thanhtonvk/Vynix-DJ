@@ -724,10 +724,10 @@ void SoundManager::devicesEnumerated() {
         qDebug() << "!m_config.validateDevices()";
         m_config.loadDefaults(this, SoundManagerConfig::DEVICES);
     }
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     // A saved configuration without any output (e.g. stored while no output
     // device was detected) would leave the app silent forever. There is
-    // always a built-in output on Android, so pick the default one.
+    // always a built-in output on phones, so pick the default one.
     if (m_config.getOutputs().isEmpty()) {
         qDebug() << "No sound output configured, loading default devices";
         m_config.loadDefaults(this, SoundManagerConfig::DEVICES);

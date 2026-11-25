@@ -1,0 +1,39 @@
+{
+  "name": "vynixdj-ios",
+  "version": "1.1.0",
+  "description": "Libraries of the iOS app, see .github/workflows/ios.yml. Qt is the prebuilt one.",
+  "dependencies": [
+    "chromaprint",
+    "fftw3",
+    "libebur128",
+    "libflac",
+    "libkeyfinder",
+    "libmodplug",
+    "libogg",
+    {
+      "name": "libsndfile",
+      "default-features": false
+    },
+    "libvorbis",
+    "mp3lame",
+    "ms-gsl",
+    "opus",
+    "opusfile",
+    {
+      "name": "portaudio",
+      "default-features": false
+    },
+    "portmidi",
+    "protobuf",
+    {
+      "name": "protobuf",
+      "host": true
+    },
+    "rubberband",
+    "soundtouch",
+    "sqlite3",
+    "taglib",
+    "wavpack",
+    "zlib"
+  ]
+}

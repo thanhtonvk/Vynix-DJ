@@ -1,0 +1,154 @@
+name: iOS build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - ios
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ios:
+    name: iOS arm64 (IPA, unsigned)
+    runs-on: macos-15
+    env:
+      QT_VERSION: 6.8.3
+      # Branch 2.7-rel of https://github.com/mixxxdj/vcpkg
+      VCPKG_COMMIT: cf1cceaf01c345356007a045e8fcf457fd67bb6f
+      VCPKG_ROOT: /Users/runner/vcpkg
+      TRIPLET: arm64-ios-release
+      HOST_TRIPLET: arm64-osx-min1100-release
+      DEPS: /Users/runner/ios-deps
+      LOG: /Users/runner/step.log
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install tools
+        run: |
+          brew install ninja nasm autoconf autoconf-archive automake libtool || true
+          python3 -m venv ~/aqt && ~/aqt/bin/pip install -q aqtinstall==3.3.0
+
+      - name: Cache Qt
+        id: qt
+        uses: actions/cache@v4
+        with:
+          path: ~/Qt
+          key: qt-ios-${{ env.QT_VERSION }}
+
+      - name: Download Qt
+        if: steps.qt.outputs.cache-hit != 'true'
+        run: |
+          ~/aqt/bin/aqt install-qt mac desktop "$QT_VERSION" clang_64 -m qtshadertools -O ~/Qt
+          ~/aqt/bin/aqt install-qt mac ios "$QT_VERSION" ios -m qtshadertools -O ~/Qt
+
+      - name: Check out vcpkg
+        run: |
+          git init -q "$VCPKG_ROOT" && cd "$VCPKG_ROOT"
+          git fetch -q --depth 1 https://github.com/mixxxdj/vcpkg.git "$VCPKG_COMMIT"
+          git checkout -q FETCH_HEAD
+          ./bootstrap-vcpkg.sh -disableMetrics
+
+      - name: Cache libraries
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/vcpkg-cache
+          key: vcpkg-ios-${{ hashFiles('packaging/ios/vcpkg/**') }}-${{ github.run_id }}
+          restore-keys: vcpkg-ios-
+
+      - name: Build libraries
+        run: |
+          set -o pipefail
+          mkdir -p ~/vcpkg-cache
+          "$VCPKG_ROOT/vcpkg" install \
+            --x-manifest-root="$GITHUB_WORKSPACE/packaging/ios/vcpkg" \
+            --x-install-root="$DEPS" \
+            --overlay-ports="$VCPKG_ROOT/overlay/ports" \
+            --overlay-triplets="$GITHUB_WORKSPACE/packaging/ios/vcpkg/triplets" \
+            --overlay-triplets="$VCPKG_ROOT/overlay/triplets" \
+            --triplet="$TRIPLET" --host-triplet="$HOST_TRIPLET" \
+            --binarysource="clear;files,$HOME/vcpkg-cache,readwrite" 2>&1 | tee "$LOG"
+
+      - name: Save libraries
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/vcpkg-cache
+          key: vcpkg-ios-${{ hashFiles('packaging/ios/vcpkg/**') }}-${{ github.run_id }}
+
+      - name: Configure
+        run: |
+          set -o pipefail
+          export PKG_CONFIG_LIBDIR="$DEPS/$TRIPLET/lib/pkgconfig:$DEPS/$TRIPLET/share/pkgconfig"
+          cmake -G Xcode -S . -B build \
+            -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" \
+            -DVCPKG_MANIFEST_MODE=OFF \
+            -DVCPKG_INSTALLED_DIR="$DEPS" \
+            -DVCPKG_TARGET_TRIPLET="$TRIPLET" \
+            -DVCPKG_HOST_TRIPLET="$HOST_TRIPLET" \
+            -DVCPKG_OVERLAY_TRIPLETS="$GITHUB_WORKSPACE/packaging/ios/vcpkg/triplets;$VCPKG_ROOT/overlay/triplets" \
+            -DCMAKE_SYSTEM_NAME=iOS \
+            -DCMAKE_OSX_SYSROOT=iphoneos \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=16.0 \
+            -DCMAKE_PREFIX_PATH="$HOME/Qt/$QT_VERSION/ios" \
+            -DCMAKE_FIND_ROOT_PATH="$HOME/Qt/$QT_VERSION/ios" \
+            -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH \
+            -DQT_HOST_PATH="$HOME/Qt/$QT_VERSION/macos" \
+            -DProtobuf_PROTOC_EXECUTABLE="$DEPS/$HOST_TRIPLET/tools/protobuf/protoc" \
+            -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
+            -DQT6=ON -DQML=OFF -DCOREAUDIO=ON -DFFMPEG=OFF -DMAD=OFF \
+            -DHID=OFF -DBULK=OFF -DBROADCAST=OFF -DBATTERY=OFF -DLILV=OFF \
+            -DENGINEPRIME=OFF -DQTKEYCHAIN=OFF -DSTEM=OFF -DFAAD=OFF \
+            -DIOS_ITUNES_LIBRARY=OFF -DAU_EFFECTS=OFF \
+            -DBUILD_TESTING=OFF -DBUILD_BENCH=OFF 2>&1 | tee "$LOG"
+
+      - name: Build
+        run: |
+          set -o pipefail
+          cmake --build build --config Release --target mixxx --parallel -- \
+            CODE_SIGNING_ALLOWED=NO -quiet 2>&1 | tee "$LOG"
+
+      - name: Package
+        run: |
+          app=$(find build -maxdepth 3 -name "VynixDJ.app" -type d | head -n 1)
+          test -n "$app"
+          # Only used by the desktop QML interface
+          rm -rf "$app/skins/LateNight" "$app/skins/LateNightQML"
+          mkdir Payload && cp -R "$app" Payload/
+          du -sh Payload/VynixDJ.app; ls Payload/VynixDJ.app
+          zip -qry VynixDJ-1.1.0-ios-unsigned.ipa Payload
+          ls -l ./*.ipa
+
+      - name: Report errors
+        if: failure()
+        run: |
+          # The raw log needs admin rights to download, so publish the part
+          # around the errors as an annotation
+          grep -nE -B3 -A6 "error[: ]|Error|FAILED|CMake Error|undefined|Undefined symbols|BUILD FAILED" "$LOG" | head -150 > errors.txt || true
+          test -s errors.txt || tail -80 "$LOG" > errors.txt
+          msg="$(head -c 60000 errors.txt | sed -e 's/%/%25/g' | awk '{printf "%s%%0A", $0}')"
+          echo "::error title=Build errors::${msg}"
+
+      - name: Upload vcpkg logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: logs
+          path: |
+            /Users/runner/step.log
+            /Users/runner/vcpkg/buildtrees/**/*.log
+          if-no-files-found: ignore
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v7
+        with:
+          name: VynixDJ-ios-unsigned
+          path: VynixDJ-*.ipa
+          if-no-files-found: error

@@ -54,7 +54,7 @@ ControllerScriptEngineLegacy::~ControllerScriptEngineLegacy() {
 }
 
 void ControllerScriptEngineLegacy::watchFilePath(const QString& path) {
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     return;
 #endif
     if (m_fileWatcher.files().contains(path) || m_fileWatcher.directories().contains(path)) {

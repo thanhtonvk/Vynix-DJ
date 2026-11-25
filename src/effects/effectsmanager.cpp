@@ -226,7 +226,7 @@ EffectChainPointer EffectsManager::getEffectChain(
 }
 
 bool EffectsManager::isAdoptMetaknobSettingEnabled() const {
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     // Touch skins usually have no super/meta knob. Keeping the metaknob at
     // its initial 0 would leave every newly loaded effect at its minimum
     // (e.g. no flanger depth), so load the effect's default meta value.

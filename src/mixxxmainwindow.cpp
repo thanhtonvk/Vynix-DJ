@@ -375,8 +375,8 @@ void MixxxMainWindow::initialize() {
     // The Fullscreen menu item is refreshed in connectMenuBar()
     bool fullscreenPref = m_pCoreServices->getSettings()->getValue<bool>(
             ConfigKey("[Config]", "StartInFullscreen"));
-#ifdef __ANDROID__
-    // Always fullscreen on Android, which also hides the system bars
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
+    // Always fullscreen on phones, which also hides the system bars
     fullscreenPref = true;
 #endif
     if ((CmdlineArgs::Instance().getStartInFullscreen() || fullscreenPref) &&
@@ -589,7 +589,12 @@ void MixxxMainWindow::initialize() {
 
     // Show the menubar after the launch image is replaced by the skin widget,
     // otherwise it would shift the launch image shortly before the skin is visible.
+#ifdef Q_OS_IOS
+    // Not native on iOS, the touch skins open the preferences
+    m_pMenuBar->hide();
+#else
     m_pMenuBar->show();
+#endif
 
     // The launch image widget is automatically disposed, but we still have a
     // pointer to it.

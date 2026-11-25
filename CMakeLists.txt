@@ -535,7 +535,7 @@ elseif(APPLE)
     set(CMAKE_SYSTEM_NAME iOS CACHE STRING "Target iOS")
     set(
       CMAKE_OSX_DEPLOYMENT_TARGET
-      14.0
+      16.0
       CACHE STRING
       "Minimum iOS version to target"
     )
@@ -2104,7 +2104,10 @@ if(APPLE)
   if(IOS)
     target_sources(
       mixxx-lib
-      PRIVATE src/soundio/soundmanagerios.mm src/util/screensaverios.mm
+      PRIVATE
+        src/soundio/soundmanagerios.mm
+        src/util/iosscreen.mm
+        src/util/screensaverios.mm
     )
 
     option(IOS_ITUNES_LIBRARY "Native iOS music library integration" ON)
@@ -2317,13 +2320,13 @@ elseif(APPLE AND IOS)
   set(MIXXX_INSTALL_BINDIR "${CMAKE_INSTALL_BINDIR}")
   set(
     IOS_BUNDLE_NAME
-    Mixxx
+    VynixDJ
     CACHE STRING
     "The iOS app bundle and executable name"
   )
   set(
     IOS_BUNDLE_IDENTIFIER
-    org.mixxx.mixxx
+    com.tondz.vynixdj
     CACHE STRING
     "The iOS app bundle identifier"
   )
@@ -2379,9 +2382,9 @@ if(QT6)
     fatal_error_missing_env()
   endif()
 
-  # The Android app only uses the widget based skin, the QML user interface
-  # would add dozens of Qt libraries to the APK
-  if(ANDROID)
+  # The phone apps only use the widget based skin, the QML user interface
+  # would add dozens of Qt libraries
+  if(ANDROID OR IOS)
     set(QML_DEFAULT OFF)
   else()
     set(QML_DEFAULT ON)
@@ -2570,12 +2573,21 @@ target_link_libraries(mixxx PRIVATE mixxx-lib mixxx-gitinfostore)
 #
 if(APPLE)
   if(IOS)
-    set(IOS_BUNDLE_VERSION "${CMAKE_PROJECT_VERSION}")
-    set(IOS_BUNDLE_SHORTVERSION "${CMAKE_PROJECT_VERSION}")
+    # Same as versionCode and versionName of the Android app
+    set(IOS_BUNDLE_VERSION "11")
+    set(IOS_BUNDLE_SHORTVERSION "1.1.0")
 
     # https://stackoverflow.com/questions/54830302/how-to-add-the-copy-bundle-resources-phase-with-cmake-in-xcode
     # https://discourse.cmake.org/t/ios-resource-management/758/7
     file(GLOB IOS_RESOURCES res/**)
+    # Not used by the app
+    list(
+      FILTER
+      IOS_RESOURCES
+      EXCLUDE
+      REGEX
+      "/res/(qml|linux|osx|windows|shaders|translations)$"
+    )
     list(APPEND IOS_RESOURCES packaging/ios/Assets.xcassets)
     target_sources(mixxx PUBLIC ${IOS_RESOURCES})
     set_source_files_properties(
@@ -2599,6 +2611,11 @@ if(APPLE)
           "${CMAKE_CURRENT_SOURCE_DIR}/packaging/ios/Info.plist.in"
         MACOSX_BUNDLE_GUI_IDENTIFIER "${IOS_BUNDLE_IDENTIFIER}"
         XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon"
+        XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${IOS_BUNDLE_IDENTIFIER}"
+        # iPhone and iPad
+        XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
+        XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET
+          "${CMAKE_OSX_DEPLOYMENT_TARGET}"
     )
   elseif(MACOS_BUNDLE)
     install(
@@ -3937,7 +3954,6 @@ set(
   Gui
   Network
   OpenGL
-  PrintSupport
   Qml # for QJSEngine
   Sql
   Svg
@@ -3946,6 +3962,9 @@ set(
   Xml
 )
 set(QT_EXTRA_COMPONENTS "")
+if(NOT IOS)
+  list(APPEND QT_COMPONENTS PrintSupport)
+endif()
 if(QT6)
   find_package(QT 6.2 NAMES Qt6 COMPONENTS Core REQUIRED)
   list(APPEND QT_EXTRA_COMPONENTS "ShaderTools")
@@ -4198,6 +4217,9 @@ if(QML)
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/res/qml"
     DESTINATION "${MIXXX_INSTALL_DATADIR}"
   )
+elseif(IOS)
+  # Adds the Qt plugins and the launch screen
+  qt_finalize_target(mixxx)
 elseif(ANDROID)
   # Only package the plugins that are used. The QML debugger would also need
   # the Qt Quick library.
@@ -4287,7 +4309,7 @@ if(Qt_IS_STATIC)
       mixxx-lib
       PRIVATE Qt${QT_VERSION_MAJOR}::QWasmIntegrationPlugin
     )
-  else()
+  elseif(NOT IOS)
     target_link_libraries(
       mixxx-lib
       PRIVATE
@@ -5007,7 +5029,7 @@ cmake_dependent_option(
   BATTERY
   "Battery meter support"
   ON
-  "WIN32 OR (UNIX AND NOT ANDROID)"
+  "WIN32 OR (UNIX AND NOT ANDROID AND NOT IOS)"
   OFF
 )
 if(BATTERY)

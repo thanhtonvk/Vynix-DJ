@@ -152,7 +152,7 @@ void WPushButton::setup(const QDomNode& node, const SkinContext& context) {
                 m_leftButtonMode = p->getButtonMode();
             }
         }
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
         // A touch tap often lasts longer than the power window time, which
         // turns the intended latching press into a momentary one: the
         // control (e.g. an effect's enabled button) switches off again on

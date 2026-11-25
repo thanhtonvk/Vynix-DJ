@@ -132,7 +132,7 @@ void DlgPrefEffects::slotUpdate() {
 
     loadChainPresetLists();
 
-#ifdef __ANDROID__
+#if defined(__ANDROID__) || defined(Q_OS_IOS)
     // Same default as EffectsManager::isAdoptMetaknobSettingEnabled()
     constexpr bool kAdoptMetaknobValueDefault = false;
 #else
