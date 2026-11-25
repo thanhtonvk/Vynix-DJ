@@ -7,6 +7,7 @@
 - **Controllers:** Shift + browse knob zooms the waveforms on many controllers. The browse knob and the back button now work in the whole library, not only inside a playlist.
 - **Windows:** MSI installer instead of a ZIP. It is not signed: if SmartScreen blocks it, choose **More info → Run anyway**. Pinch zoom with touch screens.
 - **Android:** the APK is 57 MB instead of 249 MB.
+- **iPhone and iPad** (new, experimental): an unsigned IPA to install with your own Apple ID, e.g. with Sideloadly. See [Installation](https://github.com/thanhtonvk/Vynix-DJ#installation).
 
 ## Fixed
 
@@ -17,6 +18,7 @@
 | Platform | File |
 |---|---|
 | Android 9+ (arm64) | `VynixDJ-1.1.0-android-arm64.apk` |
+| iOS / iPadOS 16+ | `VynixDJ-1.1.0-ios-unsigned.ipa` |
 | Windows 10+ (x64) | `VynixDJ-1.1.0-windows-x64.msi` |
 | Linux x64 / ARM64 | `VynixDJ-1.1.0-linux-x64.deb` / `VynixDJ-1.1.0-linux-arm64.deb` |
 | macOS 11+ (Apple Silicon) | `VynixDJ-1.1.0-macos-arm64.dmg` |

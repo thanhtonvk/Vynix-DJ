@@ -3,11 +3,13 @@ name: iOS build
 on:
   workflow_dispatch:
   push:
+    tags:
+      - "v*"
     branches:
       - ios
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ios-${{ github.ref }}
@@ -127,7 +129,9 @@ jobs:
           rm -rf "$app/skins/LateNight" "$app/skins/LateNightQML"
           mkdir Payload && cp -R "$app" Payload/
           du -sh Payload/VynixDJ.app; ls Payload/VynixDJ.app
-          zip -qry VynixDJ-1.1.0-ios-unsigned.ipa Payload
+          # Tag v1.0.5 -> VynixDJ-1.0.5-ios-unsigned.ipa, like the other packages
+          version="${{ github.ref_type == 'tag' && github.ref_name || 'dev' }}"
+          zip -qry "VynixDJ-${version#v}-ios-unsigned.ipa" Payload
           ls -l ./*.ipa
           # Fail if something the app cannot start without is missing
           cd Payload/VynixDJ.app
@@ -170,3 +174,9 @@ jobs:
           name: VynixDJ-ios-unsigned
           path: VynixDJ-*.ipa
           if-no-files-found: error
+
+      - name: Attach to release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: VynixDJ-*-ios-unsigned.ipa

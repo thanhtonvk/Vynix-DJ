@@ -6,7 +6,7 @@
 
 <p align="center">
   Turn your DJ controller into an <b>all-in-one DJ system</b>.<br>
-  Open-source DJ software for Android, Windows, Linux and macOS, built for touch screens
+  Open-source DJ software for Android, iOS, Windows, Linux and macOS, built for touch screens
   and USB DJ controllers. Based on <a href="https://mixxx.org">Mixxx</a>.
 </p>
 
@@ -35,8 +35,8 @@ complete DJ system.
 - **Made for modding.** The interface is designed for a screen mounted on or next to the
   controller: large touch targets, full-screen layout and controller-first browsing, so
   a whole set can be played from the controller alone.
-- **Runs on what you have.** The same software and interface on Android, Windows, Linux
-  (x64 and ARM64) and macOS. Pick the hardware that fits your build.
+- **Runs on what you have.** The same software and interface on Android, iPhone and iPad,
+  Windows, Linux (x64 and ARM64) and macOS. Pick the hardware that fits your build.
 - **Plug and play controllers.** More than 140 controller mappings ship with Mixxx, and
   a mapping is picked automatically when a controller is plugged in.
 - **Your existing library.** Play from local folders or from Rekordbox USB drives with
@@ -50,6 +50,7 @@ complete DJ system.
 | Build | Platform | Notes |
 |---|---|---|
 | Controller + phone or tablet | Android | USB OTG cable or hub to the controller. The most compact build. |
+| Controller + iPhone or iPad | iOS | USB-C, or Lightning with a camera adapter. MIDI controllers only. |
 | Controller + ARM64 board with a touch screen (e.g. Raspberry Pi) | Linux ARM64 | A fixed "XDJ style" unit, the board can be mounted in a case. |
 | Controller + mini PC or old laptop | Windows / Linux x64 | The most processing power for large libraries. |
 | Controller + Mac | macOS | Apple Silicon Macs. |
@@ -112,6 +113,7 @@ complete DJ system.
 
 - **Android:** Android 9 (API 28) or later, **arm64-v8a** CPU. **All files access**
   permission to read your music, and a **USB OTG** cable or adapter for the controller.
+- **iOS:** iPhone or iPad with iOS / iPadOS 16 or later, and a computer to install the app.
 - **Windows:** Windows 10 or later, 64-bit.
 - **Linux:** Debian / Ubuntu based distributions, x86_64 or ARM64.
 - **macOS:** macOS 11 or later, Apple Silicon (M1 or later).
@@ -124,6 +126,7 @@ Download the package for your platform from the
 | Platform | File |
 |---|---|
 | Android | `VynixDJ-<version>-android-arm64.apk` |
+| iOS / iPadOS | `VynixDJ-<version>-ios-unsigned.ipa` |
 | Windows | `VynixDJ-<version>-windows-x64.msi` |
 | Linux (PC) | `VynixDJ-<version>-linux-x64.deb` |
 | Linux (ARM64, e.g. Raspberry Pi) | `VynixDJ-<version>-linux-arm64.deb` |
@@ -132,6 +135,23 @@ Download the package for your platform from the
 **Android:** open the APK on the device and allow installing apps from unknown sources,
 or install it from a computer with `adb install VynixDJ-<version>-android-arm64.apk`.
 Launch Vynix DJ and grant file access when asked.
+
+**iOS / iPadOS:** the app is not on the App Store, you sign and install it with your own
+Apple ID. No jailbreak is needed.
+
+1. Install [Sideloadly](https://sideloadly.io) on a Windows PC or a Mac (on Windows also
+   iTunes and iCloud from apple.com, not from the Microsoft Store). Connect the iPhone or
+   iPad with a cable and tap **Trust** on it.
+2. Drag the IPA into Sideloadly, enter your Apple ID and press **Start**.
+3. On the device, turn on **Settings → Privacy & Security → Developer Mode** and restart it.
+4. **Settings → General → VPN & Device Management** → your Apple ID → **Trust**.
+5. Open Vynix DJ. Then copy music with the **Files** app to **On My iPhone → Vynix DJ →
+   Music** (or with Finder / iTunes file sharing) and start Vynix DJ again.
+
+With a free Apple ID the app has to be signed again after 7 days (install the IPA again the
+same way, your library is kept) and only 3 such apps are possible per device.
+[AltStore](https://altstore.io) and [SideStore](https://sidestore.io) can renew it
+automatically. With a paid Apple Developer account it lasts for one year.
 
 **Windows:** open the MSI and follow the installer, then start Vynix DJ from the Start
 menu or the desktop. The installer is not signed: if SmartScreen blocks it, choose
@@ -194,9 +214,9 @@ with an Apple Developer ID, so macOS blocks it the first time: right-click the a
 
 ## Building from source
 
-### Windows, Linux and macOS
+### Windows, Linux, macOS and iOS
 
-The Windows (x64), Linux (x64, ARM64) and macOS (arm64) packages are built by GitHub
+The Windows (x64), Linux (x64, ARM64), macOS (arm64) and iOS packages are built by GitHub
 Actions, see [`.github/workflows`](.github/workflows). Pushing a `v*` tag builds all of
 them and attaches them to the release. See [CONTRIBUTING.md](CONTRIBUTING.md) for
 building the desktop version locally.
@@ -278,7 +298,9 @@ Rekordbox USB drives no longer crash the app.
 ## Known limitations
 
 - Four decks need a screen of tablet or laptop size to be comfortable.
-- The Windows and macOS packages are not signed.
+- The Windows, macOS and iOS packages are not signed.
+- iOS: no HID / Bulk controllers, no Rekordbox USB drives and no Apple Music. Not tested on
+  many devices yet.
 - Controllers with a built-in sound card (e.g. Denon MC7000) may only play the Master
   output on Android; separate headphone cueing is not supported there yet.
 - Controllers plugged in while the app is running are only detected after a restart.

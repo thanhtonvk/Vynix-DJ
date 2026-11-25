@@ -6,7 +6,7 @@
 
 <p align="center">
   Biến DJ controller của bạn thành <b>máy DJ all-in-one</b>.<br>
-  Phần mềm DJ mã nguồn mở cho Android, Windows, Linux và macOS, thiết kế cho màn hình
+  Phần mềm DJ mã nguồn mở cho Android, iOS, Windows, Linux và macOS, thiết kế cho màn hình
   cảm ứng và DJ controller USB. Phát triển từ <a href="https://mixxx.org">Mixxx</a>.
 </p>
 
@@ -34,8 +34,8 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 - **Dành cho dân mod.** Giao diện thiết kế cho màn hình gắn trên hoặc cạnh controller:
   nút bấm lớn, hiển thị toàn màn hình, điều khiển ưu tiên bằng controller, có thể chơi
   cả set chỉ bằng controller.
-- **Chạy trên thiết bị bạn có.** Cùng một phần mềm và giao diện trên Android, Windows,
-  Linux (x64 và ARM64) và macOS. Chọn phần cứng phù hợp với bản mod của bạn.
+- **Chạy trên thiết bị bạn có.** Cùng một phần mềm và giao diện trên Android, iPhone và
+  iPad, Windows, Linux (x64 và ARM64) và macOS. Chọn phần cứng phù hợp với bản mod của bạn.
 - **Cắm là chạy.** Có sẵn hơn 140 mapping controller từ Mixxx, mapping được tự chọn
   khi cắm controller.
 - **Dùng thư viện nhạc sẵn có.** Phát nhạc từ thư mục trên máy hoặc từ USB Rekordbox,
@@ -49,6 +49,7 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 | Cấu hình | Nền tảng | Ghi chú |
 |---|---|---|
 | Controller + điện thoại hoặc máy tính bảng | Android | Nối controller qua cáp hoặc hub USB OTG. Gọn nhất. |
+| Controller + iPhone hoặc iPad | iOS | Nối qua USB-C, hoặc Lightning với đầu chuyển camera. Chỉ controller MIDI. |
 | Controller + máy tính ARM64 có màn hình cảm ứng (ví dụ Raspberry Pi) | Linux ARM64 | Làm thành máy cố định "kiểu XDJ", có thể lắp bo mạch vào hộp. |
 | Controller + mini PC hoặc laptop cũ | Windows / Linux x64 | Mạnh nhất, hợp với thư viện nhạc lớn. |
 | Controller + Mac | macOS | Mac chip Apple Silicon. |
@@ -110,6 +111,7 @@ có màn hình cảm ứng hoặc một PC nhỏ, controller sẽ trở thành m
 
 - **Android:** Android 9 (API 28) trở lên, CPU **arm64-v8a**. Cần quyền **truy cập mọi
   tệp** để đọc nhạc và cáp hoặc đầu chuyển **USB OTG** để nối controller.
+- **iOS:** iPhone hoặc iPad chạy iOS / iPadOS 16 trở lên, và một máy tính để cài app.
 - **Windows:** Windows 10 trở lên, 64-bit.
 - **Linux:** các bản phân phối dựa trên Debian / Ubuntu, x86_64 hoặc ARM64.
 - **macOS:** macOS 11 trở lên, chip Apple Silicon (M1 trở lên).
@@ -122,6 +124,7 @@ Tải bản cho nền tảng của bạn ở trang
 | Nền tảng | File |
 |---|---|
 | Android | `VynixDJ-<version>-android-arm64.apk` |
+| iOS / iPadOS | `VynixDJ-<version>-ios-unsigned.ipa` |
 | Windows | `VynixDJ-<version>-windows-x64.msi` |
 | Linux (PC) | `VynixDJ-<version>-linux-x64.deb` |
 | Linux (ARM64, ví dụ Raspberry Pi) | `VynixDJ-<version>-linux-arm64.deb` |
@@ -130,6 +133,24 @@ Tải bản cho nền tảng của bạn ở trang
 **Android:** mở file APK trên thiết bị và cho phép cài ứng dụng từ nguồn không xác định,
 hoặc cài từ máy tính bằng `adb install VynixDJ-<version>-android-arm64.apk`. Mở Vynix DJ
 và cấp quyền truy cập tệp khi được hỏi.
+
+**iOS / iPadOS:** app không có trên App Store, bạn tự ký và cài bằng Apple ID của mình.
+Không cần jailbreak.
+
+1. Cài [Sideloadly](https://sideloadly.io) trên máy Windows hoặc Mac (trên Windows cần thêm
+   iTunes và iCloud tải từ apple.com, không dùng bản Microsoft Store). Cắm iPhone hoặc iPad
+   bằng cáp và chọn **Tin cậy** trên máy.
+2. Kéo file IPA vào Sideloadly, nhập Apple ID rồi bấm **Start**.
+3. Trên iPhone, bật **Cài đặt → Quyền riêng tư & Bảo mật → Chế độ nhà phát triển** và khởi
+   động lại máy.
+4. **Cài đặt → Cài đặt chung → VPN & Quản lý thiết bị** → Apple ID của bạn → **Tin cậy**.
+5. Mở Vynix DJ. Sau đó dùng app **Tệp (Files)** chép nhạc vào **Trên iPhone → Vynix DJ →
+   Music** (hoặc dùng Finder / iTunes) rồi mở lại Vynix DJ.
+
+Với Apple ID miễn phí, cứ 7 ngày phải ký lại (cài lại IPA như trên, thư viện nhạc vẫn giữ)
+và mỗi máy chỉ cài được 3 app như vậy. [AltStore](https://altstore.io) và
+[SideStore](https://sidestore.io) có thể tự gia hạn. Với tài khoản Apple Developer trả phí
+thì dùng được một năm.
 
 **Windows:** mở file MSI và làm theo trình cài đặt, rồi mở Vynix DJ từ menu Start hoặc
 desktop. Bộ cài chưa được ký: nếu SmartScreen chặn, chọn **More info** → **Run anyway**.
@@ -192,9 +213,9 @@ Apple Developer ID nên lần đầu mở macOS sẽ chặn: chuột phải vào
 
 ## Build từ mã nguồn
 
-### Windows, Linux và macOS
+### Windows, Linux, macOS và iOS
 
-Các bản Windows (x64), Linux (x64, ARM64) và macOS (arm64) được build bằng GitHub
+Các bản Windows (x64), Linux (x64, ARM64), macOS (arm64) và iOS được build bằng GitHub
 Actions, xem [`.github/workflows`](.github/workflows). Push một tag `v*` sẽ build tất
 cả và đính vào release. Xem [CONTRIBUTING.md](CONTRIBUTING.md) để build bản desktop trên
 máy của bạn.
@@ -275,7 +296,9 @@ làm app bị crash.
 ## Hạn chế hiện tại
 
 - Dùng 4 deck nên có màn hình cỡ máy tính bảng hoặc laptop.
-- Bản Windows và macOS chưa được ký.
+- Bản Windows, macOS và iOS chưa được ký.
+- iOS: chưa hỗ trợ controller HID / Bulk, USB Rekordbox và Apple Music. Chưa được thử trên
+  nhiều máy.
 - Controller có sound card riêng (ví dụ Denon MC7000) trên Android có thể chỉ phát được
   đường Master; chưa hỗ trợ nghe thử (cue) tai nghe riêng.
 - Controller cắm vào khi app đang chạy chỉ được nhận sau khi khởi động lại app.
