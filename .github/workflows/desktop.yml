@@ -84,6 +84,7 @@ jobs:
           }
           $msi = Get-ChildItem *.msi | Select-Object -First 1
           Rename-Item $msi.FullName "VynixDJ-$tag-windows-x64.msi"
+          "RELEASE_NAME=Vynix DJ $tag" >> $env:GITHUB_ENV
 
       - name: Test the installer
         working-directory: build
@@ -111,3 +112,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: build/VynixDJ-*-windows-x64.msi
+          name: ${{ env.RELEASE_NAME }}
+          body_path: .github/release-notes.md
