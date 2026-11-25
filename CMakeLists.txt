@@ -4843,7 +4843,7 @@ elseif(WIN32)
   endif()
 endif()
 
-if(APPLE OR WIN32)
+if((APPLE AND NOT IOS) OR WIN32)
   # qt_de.qm is just one arbitrary file in the directory that needs to be located;
   # there is no particular reason to look for this file versus any other one in the directory.
   if(QT6)
